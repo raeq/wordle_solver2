@@ -3,14 +3,12 @@
 A simple demonstration of the Wordle Solver application with the new modular architecture.
 This is not a formal unit test but rather a simple showcase of the modules working together.
 """
-import sys
-import os
-from pathlib import Path
 
 # Use relative imports instead of absolute imports
 from ...modules.backend.word_manager import WordManager
 from ...modules.backend.solver import Solver
 from ...modules.backend.game_engine import GameEngine
+
 
 def run_simple_test():
     """Run a simple test of the core components."""
@@ -21,7 +19,9 @@ def run_simple_test():
     word_manager = WordManager()
     all_words_count = len(word_manager.all_words)
     common_words_count = len(word_manager.common_words)
-    print(f"   Loaded {all_words_count} total words and {common_words_count} common words")
+    print(
+        f"   Loaded {all_words_count} total words and {common_words_count} common words"
+    )
 
     # Filter words with a sample guess
     print("\n   Testing word filtering...")
@@ -57,13 +57,16 @@ def run_simple_test():
 
     # Make a sample guess
     try:
-        result, is_solved = game_engine.make_guess(target[:4] + "X")  # Almost correct guess
+        result, is_solved = game_engine.make_guess(
+            target[:4] + "X"
+        )  # Almost correct guess
         print(f"   Made guess: {target[:4] + 'X'}")
         print(f"   Result: {result}, Solved: {is_solved}")
     except ValueError:
         print("   Invalid guess (not in word list)")
 
     print("\nSimple test completed successfully!")
+
 
 if __name__ == "__main__":
     run_simple_test()

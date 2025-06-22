@@ -5,7 +5,6 @@ Unit tests for the WordManager class.
 import unittest
 import os
 import tempfile
-from pathlib import Path
 
 from ..backend.word_manager import WordManager
 from ..backend.result_color import ResultColor
@@ -27,12 +26,13 @@ class TestWordManager(unittest.TestCase):
         # Create a test all words file with only 5-letter words
         self.all_words_path = os.path.join(self.temp_dir.name, "words.txt")
         with open(self.all_words_path, "w") as f:
-            f.write("APPLE\nDATES\nELDER\nFRUIT\nGRAPE\nHONEY\nIGLOO\nJELLY\nLIMON\nMOUSE\n")
+            f.write(
+                "APPLE\nDATES\nELDER\nFRUIT\nGRAPE\nHONEY\nIGLOO\nJELLY\nLIMON\nMOUSE\n"
+            )
 
         # Initialize word manager with test files
         self.word_manager = WordManager(
-            common_words_file=self.common_words_path,
-            all_words_file=self.all_words_path
+            common_words_file=self.common_words_path, all_words_file=self.all_words_path
         )
 
     def tearDown(self):
@@ -58,7 +58,9 @@ class TestWordManager(unittest.TestCase):
         self.word_manager._is_test_mode = True
 
         # Using P as a yellow letter with artificial characters that won't affect the test
-        result_pattern = ResultColor.YELLOW.value + ResultColor.BLACK.value * 4  # "YBBBB"
+        result_pattern = (
+            ResultColor.YELLOW.value + ResultColor.BLACK.value * 4
+        )  # "YBBBB"
         self.word_manager.filter_words("PXYZQ", result_pattern)
 
         # Should match words with P but not in first position
@@ -66,13 +68,18 @@ class TestWordManager(unittest.TestCase):
         self.assertIn("APPLE", possible)  # P is in first position
 
         # Find a word in our test data that has P not in first position
-        p_words = [word for word in self.word_manager.all_words
-                   if 'P' in word and word[0] != 'P']
+        p_words = [
+            word
+            for word in self.word_manager.all_words
+            if "P" in word and word[0] != "P"
+        ]
 
         # If we have any such words in our test data, one should remain in the filtered list
         if p_words:
-            self.assertTrue(any(word in possible for word in p_words),
-                            f"Expected at least one of {p_words} to pass the filter")
+            self.assertTrue(
+                any(word in possible for word in p_words),
+                f"Expected at least one of {p_words} to pass the filter",
+            )
 
     def test_filter_words_black(self):
         """Test filtering words with black letters."""
@@ -96,7 +103,9 @@ class TestWordManager(unittest.TestCase):
     def test_is_valid_word(self):
         """Test checking if a word is valid."""
         self.assertTrue(self.word_manager.is_valid_word("APPLE"))
-        self.assertTrue(self.word_manager.is_valid_word("apple"))  # Should be case-insensitive
+        self.assertTrue(
+            self.word_manager.is_valid_word("apple")
+        )  # Should be case-insensitive
         self.assertFalse(self.word_manager.is_valid_word("NOTAWORD"))
 
 

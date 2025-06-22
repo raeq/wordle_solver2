@@ -2,8 +2,6 @@
 """
 Main application module that coordinates the backend and frontend components.
 """
-import os
-from typing import Dict, List
 
 from .backend.word_manager import WordManager
 from .backend.solver import Solver
@@ -11,8 +9,12 @@ from .backend.game_engine import GameEngine
 from .backend.stats_manager import StatsManager
 from .backend.result_color import ResultColor
 from .backend.exceptions import (
-    WordleError, GameStateError, InvalidGuessError, InvalidWordError,
-    InvalidResultError, InvalidColorError, InputLengthError
+    WordleError,
+    GameStateError,
+    InvalidGuessError,
+    InvalidWordError,
+    InvalidResultError,
+    InvalidColorError,
 )
 from .frontend.cli_interface import CLIInterface
 
@@ -44,7 +46,9 @@ class WordleSolverApp:
                 break
 
         self.ui.display_game_stats(self.stats_manager.get_stats())
-        self.ui.console.print("\n[bold blue]Thanks for using Wordle Solver! Goodbye! 👋[/bold blue]")
+        self.ui.console.print(
+            "\n[bold blue]Thanks for using Wordle Solver! Goodbye! 👋[/bold blue]"
+        )
 
     def _run_solver_mode(self) -> None:
         """Run the solver mode (user plays externally and gets suggestions)."""
@@ -56,9 +60,7 @@ class WordleSolverApp:
             suggestions = self.solver.get_top_suggestions(10)
             common_words = self.word_manager.get_common_possible_words()
             self.ui.display_suggestions(
-                suggestions,
-                len(self.word_manager.get_possible_words()),
-                common_words
+                suggestions, len(self.word_manager.get_possible_words()), common_words
             )
 
             guesses_history = []
@@ -80,9 +82,7 @@ class WordleSolverApp:
                         possible_words = self.word_manager.get_possible_words()
 
                         self.ui.display_suggestions(
-                            suggestions,
-                            len(possible_words),
-                            common_words
+                            suggestions, len(possible_words), common_words
                         )
                         continue
 
@@ -102,13 +102,19 @@ class WordleSolverApp:
                     attempt += 1
 
                 except InvalidGuessError as e:
-                    self.ui.console.print(f"[bold red]Invalid Guess: {str(e)}[/bold red]")
+                    self.ui.console.print(
+                        f"[bold red]Invalid Guess: {str(e)}[/bold red]"
+                    )
                     continue
                 except InvalidResultError as e:
-                    self.ui.console.print(f"[bold red]Invalid Result: {str(e)}[/bold red]")
+                    self.ui.console.print(
+                        f"[bold red]Invalid Result: {str(e)}[/bold red]"
+                    )
                     continue
                 except InvalidColorError as e:
-                    self.ui.console.print(f"[bold red]Invalid Color: {str(e)}[/bold red]")
+                    self.ui.console.print(
+                        f"[bold red]Invalid Color: {str(e)}[/bold red]"
+                    )
                     continue
                 except WordleError as e:
                     self.ui.console.print(f"[bold red]Error: {str(e)}[/bold red]")
@@ -129,14 +135,18 @@ class WordleSolverApp:
 
         except Exception as e:
             self.ui.console.print(f"[bold red]Unexpected error: {str(e)}[/bold red]")
-            self.ui.console.print("[bold yellow]The application will continue, but the current game has been aborted.[/bold yellow]")
+            self.ui.console.print(
+                "[bold yellow]The application will continue, but the current game has been aborted.[/bold yellow]"
+            )
 
     def _run_game_mode(self) -> None:
         """Run the game mode (computer selects a word for the user to guess)."""
         try:
             # Start a new game
             target_word = self.game_engine.start_new_game()
-            self.ui.display_play_mode_start()
+            self.ui.display_play_mode_start(
+                f"The word has {len(set(target_word))} unique letters"
+            )
 
             guesses_history = []
             attempt = 1
@@ -146,7 +156,10 @@ class WordleSolverApp:
             # Main game loop
             while attempt <= max_attempts:
                 # Get guess from user (already handles input validation)
-                guess = self.ui.get_guess_input("Enter your guess (5-letter word) or type 'hint' for suggestions:", self.word_manager)
+                guess = self.ui.get_guess_input(
+                    "Enter your guess (5-letter word) or type 'hint' for suggestions:",
+                    self.word_manager,
+                )
 
                 # Handle hint command
                 if guess == "HINT":
@@ -158,7 +171,7 @@ class WordleSolverApp:
                     self.ui.display_suggestions(
                         possible_words[:10],  # Show top 10 possible words
                         len(possible_words),
-                        common_possible
+                        common_possible,
                     )
                     continue
 
@@ -179,9 +192,13 @@ class WordleSolverApp:
                 except GameStateError as e:
                     self.ui.console.print(f"[bold red]Game Error: {str(e)}[/bold red]")
                 except InvalidGuessError as e:
-                    self.ui.console.print(f"[bold red]Invalid Guess: {str(e)}[/bold red]")
+                    self.ui.console.print(
+                        f"[bold red]Invalid Guess: {str(e)}[/bold red]"
+                    )
                 except InvalidWordError as e:
-                    self.ui.console.print(f"[bold red]Invalid Word: {str(e)}[/bold red]")
+                    self.ui.console.print(
+                        f"[bold red]Invalid Word: {str(e)}[/bold red]"
+                    )
                 except WordleError as e:
                     self.ui.console.print(f"[bold red]Error: {str(e)}[/bold red]")
 
@@ -193,9 +210,11 @@ class WordleSolverApp:
                 won,
                 self.game_engine.target_word,
                 attempt if won else max_attempts,
-                max_attempts
+                max_attempts,
             )
 
         except Exception as e:
             self.ui.console.print(f"[bold red]Unexpected error: {str(e)}[/bold red]")
-            self.ui.console.print("[bold yellow]The application will continue, but the current game has been aborted.[/bold yellow]")
+            self.ui.console.print(
+                "[bold yellow]The application will continue, but the current game has been aborted.[/bold yellow]"
+            )

@@ -2,8 +2,7 @@
 """
 Module for managing word lists and word filtering logic.
 """
-import os
-from typing import List, Set, Dict
+from typing import List, Set
 from pathlib import Path
 
 from .result_color import ResultColor
@@ -28,7 +27,7 @@ class WordManager:
     def _load_words(self, filename: str) -> Set[str]:
         """Load words from file."""
         try:
-            with open(filename, 'r') as f:
+            with open(filename, "r") as f:
                 return {word.strip().upper() for word in f if len(word.strip()) == 5}
         except FileNotFoundError:
             print(f"Warning: {filename} not found. Using empty word list.")
@@ -68,9 +67,6 @@ class WordManager:
         if len(word) != 5 or len(guess) != 5 or len(result) != 5:
             return False
 
-        # Make a copy of the word and guess for tracking
-        remaining_word = list(word)
-
         # First pass: Check green letters (exact matches)
         for i in range(5):
             if result[i] == ResultColor.GREEN.value:
@@ -93,9 +89,12 @@ class WordManager:
         for i in range(5):
             if result[i] == ResultColor.BLACK.value:
                 # Count occurrences of this letter that are marked yellow/green
-                marked_occurrences = sum(1 for j in range(5) if
-                                         guess[j] == guess[i] and
-                                         result[j] in [ResultColor.YELLOW.value, ResultColor.GREEN.value])
+                marked_occurrences = sum(
+                    1
+                    for j in range(5)
+                    if guess[j] == guess[i]
+                    and result[j] in [ResultColor.YELLOW.value, ResultColor.GREEN.value]
+                )
 
                 # Count occurrences in the word
                 word_occurrences = word.count(guess[i])
@@ -112,7 +111,9 @@ class WordManager:
 
     def get_common_possible_words(self) -> List[str]:
         """Get list of common words that are still possible."""
-        return sorted([word for word in self.possible_words if word in self.common_words])
+        return sorted(
+            [word for word in self.possible_words if word in self.common_words]
+        )
 
     def is_valid_word(self, word: str) -> bool:
         """Check if a word is in the word list."""

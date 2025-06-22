@@ -3,4 +3,3 @@
 Wordle Solver application package.
 A modular implementation of a Wordle game solver and player.
 """
-

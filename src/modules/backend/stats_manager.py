@@ -3,7 +3,6 @@
 Module for managing game statistics and history.
 """
 import json
-import os
 from datetime import datetime
 from typing import Dict, List, Any
 
@@ -11,7 +10,11 @@ from typing import Dict, List, Any
 class StatsManager:
     """Handles game statistics and history storage/retrieval."""
 
-    def __init__(self, stats_file: str = "game_stats.json", history_file: str = "game_history.json"):
+    def __init__(
+        self,
+        stats_file: str = "game_stats.json",
+        history_file: str = "game_history.json",
+    ):
         self.stats_file = stats_file
         self.history_file = history_file
         self.stats = self._load_stats()
@@ -20,32 +23,32 @@ class StatsManager:
     def _load_stats(self) -> Dict[str, Any]:
         """Load statistics from file."""
         try:
-            with open(self.stats_file, 'r') as f:
+            with open(self.stats_file, "r") as f:
                 return json.load(f)
         except (FileNotFoundError, json.JSONDecodeError):
             return {
                 "games_played": 0,
                 "games_won": 0,
                 "win_rate": 0.0,
-                "avg_attempts": 0.0
+                "avg_attempts": 0.0,
             }
 
     def _load_history(self) -> List[Dict[str, Any]]:
         """Load game history from file."""
         try:
-            with open(self.history_file, 'r') as f:
+            with open(self.history_file, "r") as f:
                 return json.load(f)
         except (FileNotFoundError, json.JSONDecodeError):
             return []
 
     def save_stats(self) -> None:
         """Save statistics to file."""
-        with open(self.stats_file, 'w') as f:
+        with open(self.stats_file, "w") as f:
             json.dump(self.stats, f, indent=2)
 
     def save_history(self) -> None:
         """Save game history to file."""
-        with open(self.history_file, 'w') as f:
+        with open(self.history_file, "w") as f:
             json.dump(self.history, f, indent=2)
 
     def record_game(self, guesses: List[List[str]], won: bool, attempts: int) -> None:
@@ -55,7 +58,7 @@ class StatsManager:
             "timestamp": datetime.now().isoformat(),
             "guesses": guesses,
             "won": won,
-            "attempts": attempts
+            "attempts": attempts,
         }
         self.history.append(game_record)
         self.save_history()
@@ -66,7 +69,9 @@ class StatsManager:
             self.stats["games_won"] += 1
 
         # Recalculate win rate and average attempts
-        self.stats["win_rate"] = (self.stats["games_won"] / self.stats["games_played"]) * 100.0
+        self.stats["win_rate"] = (
+            self.stats["games_won"] / self.stats["games_played"]
+        ) * 100.0
 
         total_attempts = 0
         completed_games = 0

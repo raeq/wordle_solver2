@@ -2,7 +2,7 @@
 """
 Enumeration of result colors for Wordle feedback.
 """
-from enum import Enum, auto
+from enum import Enum
 from typing import List
 
 from .exceptions import InvalidColorError
@@ -10,12 +10,13 @@ from .exceptions import InvalidColorError
 
 class ResultColor(Enum):
     """Enumeration of possible letter result colors in Wordle."""
-    GREEN = 'G'   # Letter is correct and in the right position
-    YELLOW = 'Y'  # Letter is in the word but in the wrong position
-    BLACK = 'B'   # Letter is not in the word
+
+    GREEN = "G"  # Letter is correct and in the right position
+    YELLOW = "Y"  # Letter is in the word but in the wrong position
+    BLACK = "B"  # Letter is not in the word
 
     @classmethod
-    def from_char(cls, char: str) -> 'ResultColor':
+    def from_char(cls, char: str) -> "ResultColor":
         """Convert a character representation to the corresponding ResultColor."""
         char = char.upper()
         for color in cls:
@@ -39,19 +40,19 @@ class ResultColor(Enum):
         emoji_map = {
             cls.GREEN.value: "🟩",
             cls.YELLOW.value: "🟨",
-            cls.BLACK.value: "⬛"
+            cls.BLACK.value: "⬛",
         }
-        return ''.join(emoji_map.get(char.upper(), "❓") for char in result)
+        return "".join(emoji_map.get(char.upper(), "❓") for char in result)
 
     @classmethod
-    def parse_result(cls, result_str: str) -> List['ResultColor']:
+    def parse_result(cls, result_str: str) -> List["ResultColor"]:
         """Parse a string of result characters into a list of ResultColor objects."""
         return [cls.from_char(char) for char in result_str]
 
     @classmethod
-    def format_result(cls, colors: List['ResultColor']) -> str:
+    def format_result(cls, colors: List["ResultColor"]) -> str:
         """Convert a list of ResultColor objects to a string representation."""
-        return ''.join(color.value for color in colors)
+        return "".join(color.value for color in colors)
 
     def to_style(self) -> str:
         """Get the Rich style string for this color."""

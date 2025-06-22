@@ -3,7 +3,7 @@
 Unit tests for the Solver class.
 """
 import unittest
-from unittest.mock import Mock, patch
+from unittest.mock import Mock
 
 from ..backend.solver import Solver
 from ..backend.word_manager import WordManager
@@ -20,18 +20,26 @@ class TestSolver(unittest.TestCase):
 
         # Configure the mock
         self.word_manager.get_possible_words.return_value = [
-            "CREAM", "BREAD", "CLEAR", "DESERT", "DREAM"
+            "CREAM",
+            "BREAD",
+            "CLEAR",
+            "DESERT",
+            "DREAM",
         ]
-        self.word_manager.get_common_possible_words.return_value = [
-            "CREAM", "BREAD"
-        ]
+        self.word_manager.get_common_possible_words.return_value = ["CREAM", "BREAD"]
 
         # Create solver instance with mock word manager
         self.solver = Solver(self.word_manager)
 
     def test_add_guess(self):
         """Test adding a guess and result."""
-        result_pattern = ResultColor.GREEN.value + ResultColor.YELLOW.value + ResultColor.BLACK.value + ResultColor.YELLOW.value + ResultColor.BLACK.value  # "GYBYB"
+        result_pattern = (
+            ResultColor.GREEN.value
+            + ResultColor.YELLOW.value
+            + ResultColor.BLACK.value
+            + ResultColor.YELLOW.value
+            + ResultColor.BLACK.value
+        )  # "GYBYB"
         self.solver.add_guess("BREAD", result_pattern)
 
         # Check that the guess was added to history
@@ -65,7 +73,13 @@ class TestSolver(unittest.TestCase):
 
     def test_reset(self):
         """Test resetting the solver."""
-        result_pattern = ResultColor.GREEN.value + ResultColor.YELLOW.value + ResultColor.BLACK.value + ResultColor.YELLOW.value + ResultColor.BLACK.value  # "GYBYB"
+        result_pattern = (
+            ResultColor.GREEN.value
+            + ResultColor.YELLOW.value
+            + ResultColor.BLACK.value
+            + ResultColor.YELLOW.value
+            + ResultColor.BLACK.value
+        )  # "GYBYB"
         self.solver.add_guess("BREAD", result_pattern)
         self.assertEqual(len(self.solver.guesses), 1)
 
@@ -96,7 +110,13 @@ class TestSolver(unittest.TestCase):
 
         # Game is over when max guesses reached
         self.solver.reset()
-        result_pattern = ResultColor.GREEN.value + ResultColor.YELLOW.value + ResultColor.BLACK.value + ResultColor.BLACK.value + ResultColor.BLACK.value  # "GYBBB"
+        result_pattern = (
+            ResultColor.GREEN.value
+            + ResultColor.YELLOW.value
+            + ResultColor.BLACK.value
+            + ResultColor.BLACK.value
+            + ResultColor.BLACK.value
+        )  # "GYBBB"
         for _ in range(6):
             self.solver.add_guess("BREAD", result_pattern)
         self.assertTrue(self.solver.is_game_over())

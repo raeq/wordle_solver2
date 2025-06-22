@@ -7,12 +7,10 @@ Tests the sequence:
 3. THRUM GGGGG
 """
 import unittest
-from unittest.mock import patch
 
 from ..backend.word_manager import WordManager
 from ..backend.solver import Solver
 from ..backend.game_engine import GameEngine
-from ..backend.result_color import ResultColor
 
 
 class TestGameSequence(unittest.TestCase):
@@ -33,14 +31,16 @@ class TestGameSequence(unittest.TestCase):
         self.test_sequence = [
             ("SOARE", "BBBYB"),
             ("PURIN", "BYGBB"),
-            ("THRUM", "GGGGG")
+            ("THRUM", "GGGGG"),
         ]
 
     def test_successful_game_sequence(self):
         """Test that the specified sequence leads to a successful game."""
         # Make sure THRUM is in the word list
-        self.assertTrue("THRUM" in self.word_manager.all_words,
-                       "Test word 'THRUM' must be in the word list")
+        self.assertTrue(
+            "THRUM" in self.word_manager.all_words,
+            "Test word 'THRUM' must be in the word list",
+        )
 
         # Reset the solver to start a new game
         self.solver.reset()
@@ -50,16 +50,22 @@ class TestGameSequence(unittest.TestCase):
             self.solver.add_guess(guess, result)
 
         # Verify that the final state is a won game
-        self.assertTrue(self.solver.is_game_won(), "Game should be won after the sequence")
+        self.assertTrue(
+            self.solver.is_game_won(), "Game should be won after the sequence"
+        )
 
         # Check that THRUM is in the remaining possible words
         possible_words = self.word_manager.get_possible_words()
-        self.assertIn("THRUM", possible_words,
-                     "THRUM should be in the possible words after filtering")
+        self.assertIn(
+            "THRUM",
+            possible_words,
+            "THRUM should be in the possible words after filtering",
+        )
 
         # Ideally there should only be one possible word left
-        self.assertEqual(len(possible_words), 1,
-                        "There should be exactly one possible word left")
+        self.assertEqual(
+            len(possible_words), 1, "There should be exactly one possible word left"
+        )
 
     def test_game_engine_with_target_word(self):
         """Test the same sequence against the game engine with THRUM as target."""
@@ -76,8 +82,11 @@ class TestGameSequence(unittest.TestCase):
             result, is_solved = self.game_engine.make_guess(guess)
 
             # Verify the result matches expected
-            self.assertEqual(result, expected_result,
-                           f"Result for guess {i+1} ({guess}) should be {expected_result}")
+            self.assertEqual(
+                result,
+                expected_result,
+                f"Result for guess {i+1} ({guess}) should be {expected_result}",
+            )
 
             # Check if we won on this guess
             if is_solved:
@@ -87,8 +96,10 @@ class TestGameSequence(unittest.TestCase):
         # Verify we won the game
         self.assertTrue(won, "Game should be won after the sequence")
         self.assertTrue(self.game_engine.is_game_won(), "Game should report as won")
-        self.assertEqual(len(self.game_engine.guesses), 3, "Game should have 3 guesses recorded")
+        self.assertEqual(
+            len(self.game_engine.guesses), 3, "Game should have 3 guesses recorded"
+        )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()

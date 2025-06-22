@@ -6,7 +6,13 @@ import random
 from typing import Dict, List, Tuple
 from .word_manager import WordManager
 from .result_color import ResultColor
-from .exceptions import GameStateError, InvalidGuessError, InvalidWordError, InputLengthError
+from .exceptions import (
+    GameStateError,
+    InvalidGuessError,
+    InvalidWordError,
+    InputLengthError,
+)
+
 
 class GameEngine:
     """Handles the computer vs player game mode."""
@@ -86,11 +92,15 @@ class GameEngine:
 
         # Second pass: Mark misplaced letters (yellows)
         for i, g_char in enumerate(guess):
-            if result[i] != ResultColor.GREEN.value and g_char in target_chars and target_chars[g_char] > 0:
+            if (
+                result[i] != ResultColor.GREEN.value
+                and g_char in target_chars
+                and target_chars[g_char] > 0
+            ):
                 result[i] = ResultColor.YELLOW.value
                 target_chars[g_char] -= 1
 
-        return ''.join(result)
+        return "".join(result)
 
     def get_remaining_guesses(self) -> int:
         """Get number of remaining guesses."""
@@ -102,7 +112,11 @@ class GameEngine:
 
     def is_game_over(self) -> bool:
         """Check if the game is over (won or max guesses reached)."""
-        return self.is_game_won() or len(self.guesses) >= self.max_guesses or not self.game_active
+        return (
+            self.is_game_won()
+            or len(self.guesses) >= self.max_guesses
+            or not self.game_active
+        )
 
     def get_game_state(self) -> Dict:
         """Get current game state."""
@@ -116,7 +130,7 @@ class GameEngine:
             "is_won": is_won,
             "is_over": is_over,
             "guesses_history": self.guesses.copy(),
-            "target_word": self.target_word if is_over else None
+            "target_word": self.target_word if is_over else None,
         }
 
     def get_hint(self) -> str:
@@ -135,7 +149,7 @@ class GameEngine:
         # Find positions that haven't been guessed correctly
         last_guess = self.guesses[-1]
         for i, result_char in enumerate(last_guess[1]):
-            if result_char != 'G':
+            if result_char != "G":
                 incorrect_positions.append(i)
 
         if not incorrect_positions:

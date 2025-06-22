@@ -7,6 +7,7 @@ from typing import List, Tuple, Dict
 from .word_manager import WordManager
 from .result_color import ResultColor
 
+
 class Solver:
     """Core solver that manages game state and suggests optimal guesses."""
 
@@ -52,18 +53,30 @@ class Solver:
         other_scored = self._score_words(other_possible, letter_freq)
 
         # Sort by score (highest first)
-        common_sorted = [word for word, score in sorted(common_scored.items(), key=lambda x: x[1], reverse=True)]
-        other_sorted = [word for word, score in sorted(other_scored.items(), key=lambda x: x[1], reverse=True)]
+        common_sorted = [
+            word
+            for word, score in sorted(
+                common_scored.items(), key=lambda x: x[1], reverse=True
+            )
+        ]
+        other_sorted = [
+            word
+            for word, score in sorted(
+                other_scored.items(), key=lambda x: x[1], reverse=True
+            )
+        ]
 
         # Combine with common words first, then fill with other words
         suggestions = []
 
         # Add common words first (up to count/2 or all common words)
-        common_count = min(len(common_sorted), max(count // 2, count - len(other_sorted)))
+        common_count = min(
+            len(common_sorted), max(count // 2, count - len(other_sorted))
+        )
         suggestions.extend(common_sorted[:common_count])
 
         # Add other words to fill up to count
-        suggestions.extend(other_sorted[:count - len(suggestions)])
+        suggestions.extend(other_sorted[: count - len(suggestions)])
 
         return suggestions[:count]
 
@@ -90,7 +103,9 @@ class Solver:
 
         return letter_count
 
-    def _score_words(self, words: List[str], letter_freq: Dict[str, int]) -> Dict[str, float]:
+    def _score_words(
+        self, words: List[str], letter_freq: Dict[str, int]
+    ) -> Dict[str, float]:
         """Score words based on letter frequency and uniqueness."""
         word_scores = {}
 
@@ -101,7 +116,9 @@ class Solver:
 
             # Penalty for repeated letters (less information gain)
             if len(unique_letters) < 5:
-                score *= 0.8 + (0.04 * len(unique_letters))  # Scale penalty by uniqueness
+                score *= 0.8 + (
+                    0.04 * len(unique_letters)
+                )  # Scale penalty by uniqueness
 
             # Special scoring for first guesses
             if not self.guesses:
@@ -110,7 +127,7 @@ class Solver:
                 score *= 1.0 + (vowels * 0.05)
 
                 # Hard-coded preferred starters
-                if word in ['ADIEU', 'AUDIO', 'AROSE', 'RAISE', 'SOARE']:
+                if word in ["ADIEU", "AUDIO", "AROSE", "RAISE", "SOARE"]:
                     score *= 1.25
 
             word_scores[word] = score
@@ -142,5 +159,5 @@ class Solver:
             "possible_words_count": len(self.word_manager.get_possible_words()),
             "is_game_won": self.is_game_won(),
             "is_game_over": self.is_game_over(),
-            "guesses_history": self.guesses.copy()
+            "guesses_history": self.guesses.copy(),
         }

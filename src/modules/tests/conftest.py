@@ -2,7 +2,6 @@
 """
 Pytest configuration file for the Wordle Solver tests.
 """
-import os
 import sys
 from pathlib import Path
 
