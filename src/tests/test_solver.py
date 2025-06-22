@@ -1,13 +1,13 @@
-# src/modules/tests/test_solver.py
+# src/tests/test_solver.py
 """
 Unit tests for the Solver class.
 """
 import unittest
 from unittest.mock import Mock
 
-from ..backend.solver import Solver
-from ..backend.word_manager import WordManager
-from ..backend.result_color import ResultColor
+from src.modules.backend.result_color import ResultColor
+from src.modules.backend.solver import Solver
+from src.modules.backend.word_manager import WordManager
 
 
 class TestSolver(unittest.TestCase):

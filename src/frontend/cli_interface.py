@@ -1,4 +1,4 @@
-# src/modules/frontend/cli_interface.py
+# src/frontend/cli_interface.py
 """
 Command line interface for the Wordle Solver application.
 """
@@ -10,14 +10,14 @@ from rich.prompt import Confirm, Prompt
 from rich.table import Table
 from rich.text import Text
 
-from ..backend.exceptions import (
+from src.modules.backend.exceptions import (
     InputLengthError,
     InvalidGuessError,
     InvalidResultError,
     InvalidWordError,
 )
-from ..backend.result_color import ResultColor
-from ..backend.word_manager import WordManager
+from src.modules.backend.result_color import ResultColor
+from src.modules.backend.word_manager import WordManager
 
 
 class CLIInterface:

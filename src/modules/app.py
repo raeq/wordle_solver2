@@ -3,6 +3,7 @@
 Main application module that coordinates the backend and frontend components.
 """
 
+from ..frontend.cli_interface import CLIInterface
 from .backend.exceptions import (
     GameStateError,
     InvalidColorError,
@@ -16,7 +17,6 @@ from .backend.result_color import ResultColor
 from .backend.solver import Solver
 from .backend.stats_manager import StatsManager
 from .backend.word_manager import WordManager
-from .frontend.cli_interface import CLIInterface
 
 
 class WordleSolverApp:
