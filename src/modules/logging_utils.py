@@ -43,6 +43,27 @@ def setup_logging(log_level: str = "INFO") -> None:
     # Load logging configuration from YAML file
     config_file = os.path.join(os_path, "..", "logging_config.yaml")
 
+    # Configure structlog first
+    structlog.configure(
+        processors=[
+            # Add context from structlog to log entries
+            structlog.contextvars.merge_contextvars,
+            structlog.stdlib.filter_by_level,
+            structlog.stdlib.add_logger_name,
+            structlog.stdlib.add_log_level,
+            structlog.stdlib.PositionalArgumentsFormatter(),
+            structlog.processors.TimeStamper(fmt="iso"),
+            structlog.processors.StackInfoRenderer(),
+            structlog.processors.format_exc_info,
+            structlog.processors.UnicodeDecoder(),
+            structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
+        ],
+        context_class=dict,
+        logger_factory=structlog.stdlib.LoggerFactory(),
+        wrapper_class=structlog.stdlib.BoundLogger,
+        cache_logger_on_first_use=True,
+    )
+
     if os.path.exists(config_file):
         with open(config_file) as f:
             config = yaml.safe_load(f)
@@ -58,24 +79,6 @@ def setup_logging(log_level: str = "INFO") -> None:
         # Configure standard logging
         logging.config.dictConfig(config)
 
-        # Configure structlog
-        structlog.configure(
-            processors=[
-                # Add context from structlog to log entries
-                structlog.stdlib.add_log_level,
-                structlog.stdlib.add_logger_name,
-                structlog.processors.TimeStamper(fmt="iso"),
-                structlog.processors.StackInfoRenderer(),
-                structlog.processors.format_exc_info,
-                # Format the log message in a manner compatible with standard logging
-                structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
-            ],
-            context_class=dict,
-            logger_factory=structlog.stdlib.LoggerFactory(),
-            wrapper_class=structlog.stdlib.BoundLogger,
-            cache_logger_on_first_use=True,
-        )
-
         # Create a logger for our application
         logger = structlog.get_logger("wordle_solver")
         logger.info("Logging configured from YAML", config_file=config_file)
@@ -86,19 +89,6 @@ def setup_logging(log_level: str = "INFO") -> None:
             level=getattr(logging, log_level.upper(), logging.INFO),
             format="%(message)s",
             handlers=[logging.FileHandler(log_file), logging.StreamHandler()],
-        )
-
-        structlog.configure(
-            processors=[
-                structlog.stdlib.add_log_level,
-                structlog.stdlib.add_logger_name,
-                structlog.processors.TimeStamper(fmt="iso"),
-                structlog.processors.JSONRenderer(),
-            ],
-            context_class=dict,
-            logger_factory=structlog.stdlib.LoggerFactory(),
-            wrapper_class=structlog.stdlib.BoundLogger,
-            cache_logger_on_first_use=True,
         )
 
         logger = structlog.get_logger("wordle_solver")

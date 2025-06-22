@@ -1,36 +1,24 @@
 ---
-# Logging configuration for Wordle Solver application
+# Basic logging configuration for Wordle Solver application
 version: 1
 disable_existing_loggers: false
 
 formatters:
-  json:
-    (): structlog.stdlib.ProcessorFormatter
-    processor: structlog.processors.JSONRenderer()
-    foreign_pre_chain:
-      - structlog.stdlib.add_log_level
-      - structlog.stdlib.add_logger_name
-      - structlog.processors.TimeStamper(fmt="iso")
-
-  console:
-    (): structlog.stdlib.ProcessorFormatter
-    processor: structlog.dev.ConsoleRenderer(colors=True)
-    foreign_pre_chain:
-      - structlog.stdlib.add_log_level
-      - structlog.stdlib.add_logger_name
-      - structlog.processors.TimeStamper(fmt="iso")
+  simple:
+    format: '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+    datefmt: '%Y-%m-%d %H:%M:%S'
 
 handlers:
   file_handler:
     class: logging.FileHandler
     level: DEBUG
-    formatter: json
+    formatter: simple
     filename: null  # Will be set dynamically in code
 
   console_handler:
     class: logging.StreamHandler
     level: INFO
-    formatter: console
+    formatter: simple
     stream: ext://sys.stdout
 
 loggers:
