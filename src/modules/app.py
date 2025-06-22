@@ -9,7 +9,6 @@ from .backend.exceptions import (
     InvalidColorError,
     InvalidGuessError,
     InvalidResultError,
-    InvalidWordError,
     WordleError,
 )
 from .backend.game_engine import GameEngine
@@ -55,11 +54,7 @@ class WordleSolverApp:
             self.solver.reset()
 
             # Get initial suggestions (show these once at the beginning)
-            suggestions = self.solver.get_top_suggestions(10)
-            common_words = self.word_manager.get_common_possible_words()
-            self.ui.display_suggestions(
-                suggestions, len(self.word_manager.get_possible_words()), common_words
-            )
+            self._show_suggestions()
 
             guesses_history = []
             attempt = 1
@@ -74,12 +69,7 @@ class WordleSolverApp:
 
                     # Check if the user asked for a hint
                     if guess == "HINT":
-                        # Get and show suggestions
-                        suggestions = self.solver.get_top_suggestions(10)
-                        common_words = self.word_manager.get_common_possible_words()
-                        possible_words = self.word_manager.get_possible_words()
-
-                        self.ui.display_suggestions(suggestions, len(possible_words), common_words)
+                        self._show_suggestions()
                         continue
 
                     # Update solver state
@@ -114,13 +104,7 @@ class WordleSolverApp:
             self.stats_manager.record_game(guesses_history, won, attempt)
 
             # Display game result
-            if won:
-                self.ui.console.print(
-                    f"\n[bold green]Congratulations! "
-                    f"You solved it in {attempt}/{max_attempts} attempts![/bold green]"
-                )
-            else:
-                self.ui.console.print("\n[bold red]Game over! You didn't find the solution.[/bold red]")
+            self._display_solver_result(won, attempt, max_attempts)
 
         except Exception as e:
             self.ui.console.print(f"[bold red]Unexpected error: {str(e)}[/bold red]")
@@ -128,6 +112,23 @@ class WordleSolverApp:
                 "[bold yellow]The application will continue, "
                 "but the current game has been aborted.[/bold yellow]"
             )
+
+    def _show_suggestions(self) -> None:
+        """Show word suggestions to the user."""
+        suggestions = self.solver.get_top_suggestions(10)
+        common_words = self.word_manager.get_common_possible_words()
+        possible_words = self.word_manager.get_possible_words()
+        self.ui.display_suggestions(suggestions, len(possible_words), common_words)
+
+    def _display_solver_result(self, won: bool, attempt: int, max_attempts: int) -> None:
+        """Display the result of the solver mode game."""
+        if won:
+            self.ui.console.print(
+                f"\n[bold green]Congratulations! "
+                f"You solved it in {attempt}/{max_attempts} attempts![/bold green]"
+            )
+        else:
+            self.ui.console.print("\n[bold red]Game over! You didn't find the solution.[/bold red]")
 
     def _run_game_mode(self) -> None:
         """Run the game mode (computer selects a word for the user to guess)."""
@@ -186,8 +187,6 @@ class WordleSolverApp:
                     self.ui.console.print(f"[bold red]Game Error: {str(e)}[/bold red]")
                 except InvalidGuessError as e:
                     self.ui.console.print(f"[bold red]Invalid Guess: {str(e)}[/bold red]")
-                except InvalidWordError as e:
-                    self.ui.console.print(f"[bold red]Invalid Word: {str(e)}[/bold red]")
                 except WordleError as e:
                     self.ui.console.print(f"[bold red]Error: {str(e)}[/bold red]")
 

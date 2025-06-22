@@ -123,23 +123,22 @@ Example: "AUDIO {black}{yellow}{black}{green}{black}"
                 if guess.strip() == "HINT":
                     return "HINT"
 
-                if len(guess) != 5:
-                    raise InputLengthError("Guess", len(guess))
-
-                if not guess.isalpha():
-                    raise InvalidGuessError(guess, "must contain only letters")
-
-                if word_manager and not word_manager.is_valid_word(guess):
-                    raise InvalidWordError(guess)
-
+                self._validate_input_guess(guess, word_manager)
                 return guess
 
-            except InputLengthError as e:
+            except (InputLengthError, InvalidGuessError) as e:
                 self.console.print(f"[bold red]Error: {str(e)}[/bold red]")
-            except InvalidGuessError as e:
-                self.console.print(f"[bold red]Error: {str(e)}[/bold red]")
-            except InvalidWordError as e:
-                self.console.print(f"[bold red]Error: {str(e)}[/bold red]")
+
+    def _validate_input_guess(self, guess: str, word_manager: Optional[WordManager] = None) -> None:
+        """Validate a user's guess input."""
+        if len(guess) != 5:
+            raise InputLengthError("Guess", len(guess))
+
+        if not guess.isalpha():
+            raise InvalidGuessError(guess, "must contain only letters")
+
+        if word_manager and not word_manager.is_valid_word(guess):
+            raise InvalidWordError(guess)
 
     def get_guess_and_result(self) -> Tuple[str, str]:
         """Get guess and result from user input, or recognize 'hint' command."""
