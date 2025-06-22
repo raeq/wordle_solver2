@@ -7,23 +7,23 @@ import inspect
 import logging
 import logging.config
 import os
+import sys
 import time
 from datetime import datetime
 from typing import Any, Callable, TypeVar, cast
 
 import structlog
-import yaml
 
 # Type variables for better type hinting
 F = TypeVar("F", bound=Callable[..., Any])
 
-# Global logger instance, will be configured in setup_logging()
+# Global logger instance
 logger = None
 
 
 def setup_logging(log_level: str = "INFO") -> None:
     """
-    Set up structured logging configuration from YAML file.
+    Set up structured logging for the application.
 
     Args:
         log_level: Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
@@ -40,59 +40,36 @@ def setup_logging(log_level: str = "INFO") -> None:
     timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
     log_file = os.path.join(logs_dir, f"wordle_solver_{timestamp}.log")
 
-    # Load logging configuration from YAML file
-    config_file = os.path.join(os_path, "..", "logging_config.yaml")
-
-    # Configure structlog first
-    structlog.configure(
-        processors=[
-            # Add context from structlog to log entries
-            structlog.contextvars.merge_contextvars,
-            structlog.stdlib.filter_by_level,
-            structlog.stdlib.add_logger_name,
-            structlog.stdlib.add_log_level,
-            structlog.stdlib.PositionalArgumentsFormatter(),
-            structlog.processors.TimeStamper(fmt="iso"),
-            structlog.processors.StackInfoRenderer(),
-            structlog.processors.format_exc_info,
-            structlog.processors.UnicodeDecoder(),
-            structlog.stdlib.ProcessorFormatter.wrap_for_formatter,
+    # Basic standard logging configuration for the file handler
+    logging.basicConfig(
+        level=getattr(logging, log_level.upper(), logging.INFO),
+        format="%(message)s",
+        handlers=[
+            logging.FileHandler(log_file),
+            logging.StreamHandler(sys.stdout),
         ],
-        context_class=dict,
+    )
+
+    # Configure structlog
+    timestamper = structlog.processors.TimeStamper(fmt="%Y-%m-%d %H:%M:%S")
+    shared_processors = [
+        structlog.stdlib.filter_by_level,
+        timestamper,
+        structlog.processors.StackInfoRenderer(),
+        structlog.processors.format_exc_info,
+        structlog.processors.UnicodeDecoder(),
+    ]
+
+    # Configure structure for console output
+    structlog.configure(
+        processors=shared_processors + [structlog.processors.JSONRenderer()],
         logger_factory=structlog.stdlib.LoggerFactory(),
         wrapper_class=structlog.stdlib.BoundLogger,
         cache_logger_on_first_use=True,
     )
 
-    if os.path.exists(config_file):
-        with open(config_file) as f:
-            config = yaml.safe_load(f)
-
-        # Set the dynamic log file path in the config
-        if "handlers" in config and "file_handler" in config["handlers"]:
-            config["handlers"]["file_handler"]["filename"] = log_file
-
-        # Override the root logger level if specified
-        if "root" in config:
-            config["root"]["level"] = log_level.upper()
-
-        # Configure standard logging
-        logging.config.dictConfig(config)
-
-        # Create a logger for our application
-        logger = structlog.get_logger("wordle_solver")
-        logger.info("Logging configured from YAML", config_file=config_file)
-
-    else:
-        # Basic setup for structlog if YAML file is not found
-        logging.basicConfig(
-            level=getattr(logging, log_level.upper(), logging.INFO),
-            format="%(message)s",
-            handlers=[logging.FileHandler(log_file), logging.StreamHandler()],
-        )
-
-        logger = structlog.get_logger("wordle_solver")
-        logger.warning("Config file not found, using basic configuration", config_file=config_file)
+    logger = structlog.get_logger("wordle_solver")
+    logger.info("Logging initialized", log_level=log_level, log_file=log_file)
 
 
 def log_method(level: str = "DEBUG") -> Callable[[F], F]:
@@ -118,10 +95,14 @@ def log_method(level: str = "DEBUG") -> Callable[[F], F]:
             class_name = args[0].__class__.__name__ if args else None
             func_name = func.__name__
 
-            # Create bound logger with method context
-            bound_logger = logger.bind(module=module_name, class_name=class_name, method=func_name)
+            # Create the structured log data
+            log_data = {
+                "module": module_name,
+                "class": class_name,
+                "method": func_name,
+            }
 
-            # Prepare parameter info for logging if debug
+            # Add parameters if debug level
             if level.upper() == "DEBUG":
                 params = {}
                 if args and len(args) > 1:  # Skip 'self' parameter
@@ -138,24 +119,35 @@ def log_method(level: str = "DEBUG") -> Callable[[F], F]:
 
                 # Add keyword arguments
                 params.update({k: repr(v) for k, v in kwargs.items()})
+                log_data["params"] = params
 
-                # Log method call with parameters
-                getattr(bound_logger, level.lower())("Method call", params=params)
+                # Log method call
+                getattr(logger, level.lower())("Method call", **log_data)
 
             start_time = time.time()
             try:
                 result = func(*args, **kwargs)
                 return result
             except Exception as exc:
-                # Log the exception
-                bound_logger.exception("Exception in method", exc_info=exc)
+                # Log exception
+                logger.exception(
+                    "Exception in method",
+                    module=module_name,
+                    class_name=class_name,
+                    method=func_name,
+                    error=str(exc),
+                    error_type=type(exc).__name__,
+                )
                 raise
             finally:
-                # Log execution time for performance monitoring
-                execution_time = (time.time() - start_time) * 1000  # Convert to ms
+                # Log performance metrics
+                execution_time = (time.time() - start_time) * 1000  # ms
                 if level.upper() == "DEBUG":
-                    bound_logger.debug(
+                    logger.debug(
                         "Method execution completed",
+                        module=module_name,
+                        class_name=class_name,
+                        method=func_name,
                         execution_time_ms=round(execution_time, 2),
                     )
 
@@ -201,8 +193,8 @@ def log_game_outcome(func: F) -> F:
                 attempt = args[3] if len(args) > 3 else kwargs.get("attempt", None)
                 max_attempts = args[4] if len(args) > 4 else kwargs.get("max_attempts", None)
 
-            # Log game outcome with structlog
-            event_data = {
+            # Create the structured log data
+            log_data = {
                 "class": class_name,
                 "event": "game_outcome",
                 "won": won,
@@ -212,9 +204,9 @@ def log_game_outcome(func: F) -> F:
 
             # Add target word if available
             if target_word:
-                event_data["target_word"] = target_word
+                log_data["target_word"] = target_word
 
-            logger.info("Game outcome", **event_data)
+            logger.info("Game outcome", **log_data)
 
         return result
 
