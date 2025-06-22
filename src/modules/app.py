@@ -16,6 +16,7 @@ from .backend.result_color import ResultColor
 from .backend.solver import Solver
 from .backend.stats_manager import StatsManager
 from .backend.word_manager import WordManager
+from .logging_utils import log_game_outcome, log_method
 
 
 class WordleSolverApp:
@@ -29,6 +30,7 @@ class WordleSolverApp:
         self.stats_manager = StatsManager()
         self.ui = CLIInterface()
 
+    @log_method("DEBUG")
     def run(self) -> None:
         """Main application loop."""
         self.ui.display_welcome()
@@ -47,6 +49,7 @@ class WordleSolverApp:
         self.ui.display_game_stats(self.stats_manager.get_stats())
         self.ui.console.print("\n[bold blue]Thanks for using Wordle Solver! Goodbye! 👋[/bold blue]")
 
+    @log_method("DEBUG")
     def _run_solver_mode(self) -> None:
         """Run the solver mode (user plays externally and gets suggestions)."""
         try:
@@ -113,6 +116,7 @@ class WordleSolverApp:
                 "but the current game has been aborted.[/bold yellow]"
             )
 
+    @log_method("DEBUG")
     def _show_suggestions(self) -> None:
         """Show word suggestions to the user."""
         suggestions = self.solver.get_top_suggestions(10)
@@ -120,6 +124,8 @@ class WordleSolverApp:
         possible_words = self.word_manager.get_possible_words()
         self.ui.display_suggestions(suggestions, len(possible_words), common_words)
 
+    @log_method("INFO")
+    @log_game_outcome
     def _display_solver_result(self, won: bool, attempt: int, max_attempts: int) -> None:
         """Display the result of the solver mode game."""
         if won:
@@ -130,6 +136,7 @@ class WordleSolverApp:
         else:
             self.ui.console.print("\n[bold red]Game over! You didn't find the solution.[/bold red]")
 
+    @log_method("DEBUG")
     def _run_game_mode(self) -> None:
         """Run the game mode (computer selects a word for the user to guess)."""
         try:
@@ -194,11 +201,8 @@ class WordleSolverApp:
             self.stats_manager.record_game(guesses_history, won, attempt)
 
             # Display game result
-            self.ui.display_game_over(
-                won,
-                self.game_engine.target_word,
-                attempt if won else max_attempts,
-                max_attempts,
+            self._display_game_result(
+                won, self.game_engine.target_word, attempt if won else max_attempts, max_attempts
             )
 
         except Exception as e:
@@ -207,3 +211,9 @@ class WordleSolverApp:
                 "[bold yellow]The application will continue, "
                 "but the current game has been aborted.[/bold yellow]"
             )
+
+    @log_method("INFO")
+    @log_game_outcome
+    def _display_game_result(self, won: bool, target_word: str, attempt: int, max_attempts: int) -> None:
+        """Display the result of the play mode game."""
+        self.ui.display_game_over(won, target_word, attempt, max_attempts)
