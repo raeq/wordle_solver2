@@ -4,7 +4,7 @@ Module for managing game statistics and history.
 """
 import json
 from datetime import datetime
-from typing import Dict, List, Any
+from typing import Any, Dict, List, Optional
 
 
 class StatsManager:
@@ -23,8 +23,8 @@ class StatsManager:
     def _load_stats(self) -> Dict[str, Any]:
         """Load statistics from file."""
         try:
-            with open(self.stats_file, "r") as f:
-                return json.load(f)
+            with open(self.stats_file) as f:
+                return json.load(f)  # type: Dict[str, Any]
         except (FileNotFoundError, json.JSONDecodeError):
             return {
                 "games_played": 0,
@@ -36,8 +36,8 @@ class StatsManager:
     def _load_history(self) -> List[Dict[str, Any]]:
         """Load game history from file."""
         try:
-            with open(self.history_file, "r") as f:
-                return json.load(f)
+            with open(self.history_file) as f:
+                return json.load(f)  # type: List[Dict[str, Any]]
         except (FileNotFoundError, json.JSONDecodeError):
             return []
 
@@ -69,9 +69,7 @@ class StatsManager:
             self.stats["games_won"] += 1
 
         # Recalculate win rate and average attempts
-        self.stats["win_rate"] = (
-            self.stats["games_won"] / self.stats["games_played"]
-        ) * 100.0
+        self.stats["win_rate"] = (self.stats["games_won"] / self.stats["games_played"]) * 100.0
 
         total_attempts = 0
         completed_games = 0
@@ -90,7 +88,7 @@ class StatsManager:
         """Get current statistics."""
         return self.stats
 
-    def get_history(self, limit: int = None) -> List[Dict[str, Any]]:
+    def get_history(self, limit: Optional[int] = None) -> List[Dict[str, Any]]:
         """Get game history, optionally limited to the most recent games."""
         if limit is None:
             return self.history

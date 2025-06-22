@@ -60,5 +60,4 @@ class ResultColor(Enum):
             return "black on green"
         elif self == self.YELLOW:
             return "black on yellow"
-        else:  # BLACK
-            return "white on grey23"
+        return "white on grey23"  # BLACK case

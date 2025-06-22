@@ -105,7 +105,7 @@ class GameEngine:
 
     def is_game_won(self) -> bool:
         """Check if the game has been won."""
-        return self.guesses and self.guesses[-1][1] == ResultColor.GREEN.value * 5
+        return bool(self.guesses and self.guesses[-1][1] == ResultColor.GREEN.value * 5)
 
     def is_game_over(self) -> bool:
         """Check if the game is over (won or max guesses reached)."""
