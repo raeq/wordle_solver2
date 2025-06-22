@@ -2,27 +2,28 @@
 """
 Command line interface for the Wordle Solver application.
 """
+from typing import Dict, List, Optional, Tuple
+
 from rich.console import Console
+from rich.panel import Panel
+from rich.prompt import Confirm, Prompt
 from rich.table import Table
 from rich.text import Text
-from rich.panel import Panel
-from rich.prompt import Prompt, Confirm
-from typing import List, Dict, Optional, Tuple
 
-from ..backend.word_manager import WordManager
-from ..backend.result_color import ResultColor
 from ..backend.exceptions import (
-    InvalidGuessError,
-    InvalidWordError,
-    InvalidResultError,
     InputLengthError,
+    InvalidGuessError,
+    InvalidResultError,
+    InvalidWordError,
 )
+from ..backend.result_color import ResultColor
+from ..backend.word_manager import WordManager
 
 
 class CLIInterface:
     """Rich-based command line interface for the Wordle Solver."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.console = Console()
 
     def display_welcome(self) -> None:
@@ -83,16 +84,20 @@ Enter your guess (5-letter word):
 
     def display_solver_mode_start(self) -> None:
         """Display start message for solver mode."""
+        green = ResultColor.GREEN.value
+        yellow = ResultColor.YELLOW.value
+        black = ResultColor.BLACK.value
+
         start_text = f"""
 🧠 Solver Mode Started! 🧠
 
 Play Wordle in your favorite app, and I'll help you!
 Enter your guess and the result pattern using:
-  {ResultColor.GREEN.value} = Green (correct position)
-  {ResultColor.YELLOW.value} = Yellow (right letter, wrong position)
-  {ResultColor.BLACK.value} = Black (not in the word)
+  {green} = Green (correct position)
+  {yellow} = Yellow (right letter, wrong position)
+  {black} = Black (not in the word)
 
-Example: "AUDIO {ResultColor.BLACK.value}{ResultColor.YELLOW.value}{ResultColor.BLACK.value}{ResultColor.GREEN.value}{ResultColor.BLACK.value}"
+Example: "AUDIO {black}{yellow}{black}{green}{black}"
         """
 
         self.console.print(
@@ -140,65 +145,81 @@ Example: "AUDIO {ResultColor.BLACK.value}{ResultColor.YELLOW.value}{ResultColor.
         """Get guess and result from user input, or recognize 'hint' command."""
         while True:
             try:
-                user_input = Prompt.ask(
-                    f"[bold cyan]Enter your guess and result (e.g., 'AUDIO {ResultColor.BLACK.value}{ResultColor.YELLOW.value}{ResultColor.BLACK.value}{ResultColor.GREEN.value}{ResultColor.BLACK.value}') or type 'hint' for a hint[/bold cyan]"
-                ).upper()
+                user_input = self._get_user_input_for_guess_result()
 
                 # Check for hint command
                 if user_input.strip().upper() == "HINT":
                     return "HINT", ""
 
-                # Split input into guess and result parts
-                parts = user_input.split()
-                if len(parts) != 2:
-                    raise InvalidGuessError(
-                        user_input, "must follow 'GUESS RESULT' format"
-                    )
-
-                guess, result = parts
-
-                # Validate guess length and format
-                if len(guess) != 5:
-                    raise InputLengthError("Guess", len(guess))
-
-                if not guess.isalpha():
-                    raise InvalidGuessError(guess, "must contain only letters")
-
-                # Validate result length and format
-                if len(result) != 5:
-                    raise InputLengthError("Result", len(result))
-
-                if not ResultColor.is_valid_result_string(result):
-                    raise InvalidResultError(
-                        result,
-                        f"must contain only {ResultColor.GREEN.value}, {ResultColor.YELLOW.value}, or {ResultColor.BLACK.value} characters",
-                    )
-
+                # Split and validate the input
+                guess, result = self._parse_and_validate_guess_result(user_input)
                 return guess, result
 
-            except InputLengthError as e:
-                self.console.print(f"[bold red]Error: {str(e)}[/bold red]")
-            except InvalidGuessError as e:
-                self.console.print(f"[bold red]Error: {str(e)}[/bold red]")
-            except InvalidResultError as e:
+            except (InputLengthError, InvalidGuessError, InvalidResultError) as e:
                 self.console.print(f"[bold red]Error: {str(e)}[/bold red]")
 
-    def display_guess_result(
-        self, guess: str, result: str, attempt: int, max_attempts: int
-    ) -> None:
+    def _get_user_input_for_guess_result(self) -> str:
+        """Get user input for guess and result."""
+        green = ResultColor.GREEN.value
+        yellow = ResultColor.YELLOW.value
+        black = ResultColor.BLACK.value
+
+        example = f"AUDIO {black}{yellow}{black}{green}{black}"
+        prompt_text = (
+            f"[bold cyan]Enter your guess and result (e.g., '{example}') "
+            f"or type 'hint' for a hint[/bold cyan]"
+        )
+        return Prompt.ask(prompt_text).upper()
+
+    def _parse_and_validate_guess_result(self, user_input: str) -> Tuple[str, str]:
+        """Parse and validate the guess and result from user input."""
+        # Split input into guess and result parts
+        parts = user_input.split()
+        if len(parts) != 2:
+            raise InvalidGuessError(user_input, "must follow 'GUESS RESULT' format")
+
+        guess, result = parts
+
+        # Validate guess
+        self._validate_guess(guess)
+
+        # Validate result
+        self._validate_result(result)
+
+        return guess, result
+
+    def _validate_guess(self, guess: str) -> None:
+        """Validate the guess string."""
+        if len(guess) != 5:
+            raise InputLengthError("Guess", len(guess))
+
+        if not guess.isalpha():
+            raise InvalidGuessError(guess, "must contain only letters")
+
+    def _validate_result(self, result: str) -> None:
+        """Validate the result string."""
+        if len(result) != 5:
+            raise InputLengthError("Result", len(result))
+
+        if not ResultColor.is_valid_result_string(result):
+            raise InvalidResultError(
+                result,
+                f"must contain only {ResultColor.GREEN.value}, "
+                f"{ResultColor.YELLOW.value}, or {ResultColor.BLACK.value} characters",
+            )
+
+    def display_guess_result(self, guess: str, result: str, attempt: int, max_attempts: int) -> None:
         """Display colored result of a guess."""
         colored_result = self._colorize_result(guess, result)
         emoji_result = ResultColor.result_to_emoji(result)
 
-        self.console.print(
-            f"\n[bold]Guess {attempt}/{max_attempts}:[/bold] {colored_result} {emoji_result}"
-        )
+        self.console.print(f"\n[bold]Guess {attempt}/{max_attempts}:[/bold] {colored_result} {emoji_result}")
 
     def _colorize_result(self, guess: str, result: str) -> Text:
         """Convert result to colored text."""
         styled_text = Text()
 
-        for i, (letter, code) in enumerate(zip(guess, result)):
+        for _, (letter, code) in enumerate(zip(guess, result)):
             if code == ResultColor.GREEN.value:
                 styled_text.append(letter, style="black on green")
             elif code == ResultColor.YELLOW.value:
@@ -216,15 +237,11 @@ Example: "AUDIO {ResultColor.BLACK.value}{ResultColor.YELLOW.value}{ResultColor.
     ) -> None:
         """Display suggestions to the user."""
         if not suggestions:
-            self.console.print(
-                "\n[bold red]No valid words remain that match your constraints.[/bold red]"
-            )
+            self.console.print("\n[bold red]No valid words remain that match your constraints.[/bold red]")
             return
 
         # Create results table
-        table = Table(
-            title=f"Suggestions (from {remaining_words_count} possible words)"
-        )
+        table = Table(title=f"Suggestions (from {remaining_words_count} possible words)")
 
         table.add_column("Word", style="bold")
         table.add_column("Common?", style="green")
@@ -235,9 +252,7 @@ Example: "AUDIO {ResultColor.BLACK.value}{ResultColor.YELLOW.value}{ResultColor.
 
         self.console.print(table)
 
-    def display_game_over(
-        self, won: bool, target_word: str, attempts: int, max_attempts: int
-    ) -> None:
+    def display_game_over(self, won: bool, target_word: str, attempts: int, max_attempts: int) -> None:
         """Display game over message."""
         if won:
             message = f"""
@@ -263,7 +278,7 @@ Better luck next time!
     def display_game_stats(self, stats: Dict) -> None:
         """Display game statistics."""
         panel_content = f"""
-📊 Game Statistics 📊
+📊 Game Statistics ��
 
 🎮 Games Played: {stats['games_played']}
 🏆 Games Won: {stats['games_won']}
@@ -271,9 +286,7 @@ Better luck next time!
 ��� Average Attempts: {stats['avg_attempts']:.1f}
         """
 
-        self.console.print(
-            Panel(panel_content, title="Statistics", border_style="blue")
-        )
+        self.console.print(Panel(panel_content, title="Statistics", border_style="blue"))
 
     def display_hint(self, hint: str) -> None:
         """Display a hint to the user."""
@@ -285,6 +298,4 @@ Better luck next time!
 
     def ask_for_hint(self) -> bool:
         """Ask if the user wants a hint."""
-        return Confirm.ask(
-            "[bold yellow]Would you like a hint? (costs you one guess)[/bold yellow]"
-        )
+        return Confirm.ask("[bold yellow]Would you like a hint? (costs you one guess)[/bold yellow]")

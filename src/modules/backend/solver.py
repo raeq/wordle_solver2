@@ -3,9 +3,10 @@
 Module containing the core Wordle solver logic.
 """
 from collections import Counter
-from typing import List, Tuple, Dict
-from .word_manager import WordManager
+from typing import Dict, List, Tuple
+
 from .result_color import ResultColor
+from .word_manager import WordManager
 
 
 class Solver:
@@ -54,25 +55,17 @@ class Solver:
 
         # Sort by score (highest first)
         common_sorted = [
-            word
-            for word, score in sorted(
-                common_scored.items(), key=lambda x: x[1], reverse=True
-            )
+            word for word, score in sorted(common_scored.items(), key=lambda x: x[1], reverse=True)
         ]
         other_sorted = [
-            word
-            for word, score in sorted(
-                other_scored.items(), key=lambda x: x[1], reverse=True
-            )
+            word for word, score in sorted(other_scored.items(), key=lambda x: x[1], reverse=True)
         ]
 
         # Combine with common words first, then fill with other words
         suggestions = []
 
         # Add common words first (up to count/2 or all common words)
-        common_count = min(
-            len(common_sorted), max(count // 2, count - len(other_sorted))
-        )
+        common_count = min(len(common_sorted), max(count // 2, count - len(other_sorted)))
         suggestions.extend(common_sorted[:common_count])
 
         # Add other words to fill up to count
@@ -82,8 +75,8 @@ class Solver:
 
     def _calculate_letter_frequency(self, words: List[str]) -> Dict[str, int]:
         """Calculate letter frequency in the given list of words."""
-        letter_count = Counter()
-        position_count = [{} for _ in range(5)]  # Position-specific counts
+        letter_count: Dict[str, int] = Counter()
+        position_count: List[Dict[str, int]] = [{} for _ in range(5)]  # Position-specific counts
 
         for word in words:
             # Skip words that aren't exactly 5 letters
@@ -103,22 +96,18 @@ class Solver:
 
         return letter_count
 
-    def _score_words(
-        self, words: List[str], letter_freq: Dict[str, int]
-    ) -> Dict[str, float]:
+    def _score_words(self, words: List[str], letter_freq: Dict[str, int]) -> Dict[str, float]:
         """Score words based on letter frequency and uniqueness."""
-        word_scores = {}
+        word_scores: Dict[str, float] = {}
 
         for word in words:
             # Base score: sum of letter frequencies for unique letters
             unique_letters = set(word)
-            score = sum(letter_freq.get(letter, 0) for letter in unique_letters)
+            score: float = sum(letter_freq.get(letter, 0) for letter in unique_letters)
 
             # Penalty for repeated letters (less information gain)
             if len(unique_letters) < 5:
-                score *= 0.8 + (
-                    0.04 * len(unique_letters)
-                )  # Scale penalty by uniqueness
+                score *= 0.8 + (0.04 * len(unique_letters))  # Scale penalty by uniqueness
 
             # Special scoring for first guesses
             if not self.guesses:
@@ -149,9 +138,9 @@ class Solver:
     def reset(self) -> None:
         """Reset the solver for a new game."""
         self.guesses = []
-        self.word_manager.reset()
+        self.word_manager.reset()  # Reset the word manager's possible_words list
 
-    def get_game_state(self) -> Dict:
+    def get_game_state(self) -> Dict[str, object]:
         """Get current game state."""
         return {
             "guesses_made": len(self.guesses),

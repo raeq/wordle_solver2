@@ -4,14 +4,15 @@ Game engine module for handling the game logic when the computer selects a targe
 """
 import random
 from typing import Dict, List, Tuple
-from .word_manager import WordManager
-from .result_color import ResultColor
+
 from .exceptions import (
     GameStateError,
+    InputLengthError,
     InvalidGuessError,
     InvalidWordError,
-    InputLengthError,
 )
+from .result_color import ResultColor
+from .word_manager import WordManager
 
 
 class GameEngine:
@@ -92,11 +93,7 @@ class GameEngine:
 
         # Second pass: Mark misplaced letters (yellows)
         for i, g_char in enumerate(guess):
-            if (
-                result[i] != ResultColor.GREEN.value
-                and g_char in target_chars
-                and target_chars[g_char] > 0
-            ):
+            if result[i] != ResultColor.GREEN.value and g_char in target_chars and target_chars[g_char] > 0:
                 result[i] = ResultColor.YELLOW.value
                 target_chars[g_char] -= 1
 
@@ -112,13 +109,9 @@ class GameEngine:
 
     def is_game_over(self) -> bool:
         """Check if the game is over (won or max guesses reached)."""
-        return (
-            self.is_game_won()
-            or len(self.guesses) >= self.max_guesses
-            or not self.game_active
-        )
+        return self.is_game_won() or len(self.guesses) >= self.max_guesses or not self.game_active
 
-    def get_game_state(self) -> Dict:
+    def get_game_state(self) -> Dict[str, object]:
         """Get current game state."""
         is_won = self.is_game_won()
         is_over = self.is_game_over()
@@ -144,7 +137,10 @@ class GameEngine:
         if not self.guesses:
             # For first guess, hint at a random letter from the target
             pos = random.randint(0, 4)
-            return f"The word contains the letter '{self.target_word[pos]}'. Try starting with a word like 'ADIEU' or 'AUDIO' that contains many vowels."
+            return (
+                f"The word contains the letter '{self.target_word[pos]}'. "
+                f"Try starting with a word like 'ADIEU' or 'AUDIO' that contains many vowels."
+            )
 
         # Find positions that haven't been guessed correctly
         last_guess = self.guesses[-1]
