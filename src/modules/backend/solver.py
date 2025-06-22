@@ -3,7 +3,7 @@
 Module containing the core Wordle solver logic.
 """
 from collections import Counter
-from typing import List, Tuple, Dict, Optional
+from typing import List, Tuple, Dict
 from .word_manager import WordManager
 from .result_color import ResultColor
 

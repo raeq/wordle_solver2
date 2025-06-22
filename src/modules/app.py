@@ -3,8 +3,7 @@
 Main application module that coordinates the backend and frontend components.
 """
 import os
-import sys
-from typing import Dict, List, Any, Optional
+from typing import Dict, List
 
 from .backend.word_manager import WordManager
 from .backend.solver import Solver

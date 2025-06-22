@@ -5,7 +5,7 @@ Module for managing game statistics and history.
 import json
 import os
 from datetime import datetime
-from typing import Dict, List, Any, Optional
+from typing import Dict, List, Any
 
 
 class StatsManager:
@@ -85,7 +85,7 @@ class StatsManager:
         """Get current statistics."""
         return self.stats
 
-    def get_history(self, limit: Optional[int] = None) -> List[Dict[str, Any]]:
+    def get_history(self, limit: int = None) -> List[Dict[str, Any]]:
         """Get game history, optionally limited to the most recent games."""
         if limit is None:
             return self.history

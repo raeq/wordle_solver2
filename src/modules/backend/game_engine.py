@@ -3,7 +3,7 @@
 Game engine module for handling the game logic when the computer selects a target word.
 """
 import random
-from typing import List, Tuple, Dict, Optional
+from typing import Dict, List, Tuple
 from .word_manager import WordManager
 from .result_color import ResultColor
 from .exceptions import GameStateError, InvalidGuessError, InvalidWordError, InputLengthError

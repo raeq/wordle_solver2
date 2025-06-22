@@ -7,13 +7,9 @@ from rich.table import Table
 from rich.text import Text
 from rich.panel import Panel
 from rich.prompt import Prompt, Confirm
-from rich.columns import Columns
-from typing import List, Dict, Tuple, Optional
-import re
+from typing import List, Dict, Optional, Tuple
 
 from ..backend.word_manager import WordManager
-from ..backend.solver import Solver
-from ..backend.game_engine import GameEngine
 from ..backend.result_color import ResultColor
 from ..backend.exceptions import (
     WordleError, GameStateError, InvalidGuessError, InvalidWordError,
@@ -28,7 +24,7 @@ class CLIInterface:
         self.console = Console()
 
     def display_welcome(self) -> None:
-        """Display welcome message."""
+        """Display a welcome message."""
         welcome_text = """
 🎯 Welcome to Wordle Solver! 🎯
 
