@@ -48,19 +48,15 @@ python -m src.main
 
 ### 2.20 Application Modes
 
-2.21 **Solver Mode**
-- Select this mode when you need help solving an external Wordle puzzle
-- The application will suggest optimal words to guess
-- After each guess, enter the result pattern using:
-  - G: Green (correct letter, correct position)
-  - Y: Yellow (correct letter, wrong position)
-  - B: Black (letter not in word)
+#### Solver Mode
+- Use this mode to get suggestions while playing Wordle elsewhere.
+- Enter your guess and the result pattern (G, Y, B) after each attempt.
+- The top 10 most likely word suggestions will be shown automatically after every guess—no need to type 'hint'.
 
-2.22 **Game Mode**
-- Play a complete Wordle game against the computer
-- The application selects a random word for you to guess
-- You have 6 attempts to guess the word
-- The application automatically evaluates and displays results
+#### Game Mode
+- Play Wordle directly in the terminal against the computer.
+- Enter your guesses; the application will provide feedback after each guess.
+- You have 6 attempts to guess the word.
 
 ### 2.30 Command Line Arguments
 
@@ -217,4 +213,3 @@ python -m unittest discover src/modules/tests
 ```
 
 If you encounter issues not listed here, check the log file or consult the documentation.
-

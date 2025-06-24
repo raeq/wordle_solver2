@@ -1,0 +1,6 @@
+# Development dependencies for local development and testing
+mypy==1.8.0
+pytest==7.4.3
+coverage==7.4.1
+isort
+

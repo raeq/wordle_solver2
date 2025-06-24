@@ -56,7 +56,7 @@ class WordleSolverApp:
             self.ui.display_solver_mode_start()
             self.solver.reset()
 
-            # Get initial suggestions (show these once at the beginning)
+            # Show initial suggestions
             self._show_suggestions()
 
             guesses_history = []
@@ -70,11 +70,6 @@ class WordleSolverApp:
                     # Get guess and result from user
                     guess, result = self.ui.get_guess_and_result()
 
-                    # Check if the user asked for a hint
-                    if guess == "HINT":
-                        self._show_suggestions()
-                        continue
-
                     # Update solver state
                     self.solver.add_guess(guess, result)
                     guesses_history.append([guess, result])
@@ -82,12 +77,14 @@ class WordleSolverApp:
                     # Display colored result
                     self.ui.display_guess_result(guess, result, attempt, max_attempts)
 
+                    # Show top 10 suggestions after every guess
+                    self._show_suggestions()
+
                     # Check if solved
                     if all(color == ResultColor.GREEN.value for color in result):
                         won = True
                         break
 
-                    # No longer automatically showing suggestions after each guess
                     attempt += 1
 
                 except InvalidGuessError as e:

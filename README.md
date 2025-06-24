@@ -45,14 +45,19 @@ python run_wordle_solver.py
    - G = Green (correct position)
    - Y = Yellow (right letter, wrong position)
    - B = Black (not in the word)
-3. Get suggestions for your next guess
+3. The top 10 most likely word suggestions will be shown automatically after every guess—no need to type 'hint'.
 
 ### Game Mode
 
-1. The application selects a random 5-letter word
-2. You have 6 attempts to guess the word
-3. After each guess, you'll see the result pattern
-4. Use hints if you need assistance (costs one guess)
+1. Select Game Mode from the main menu
+2. The computer will randomly select a 5-letter word
+3. Enter your guesses (must be valid 5-letter words)
+4. After each guess, the application will display the result pattern:
+   - G = Green (correct position)
+   - Y = Yellow (right letter, wrong position)
+   - B = Black (not in the word)
+5. You have 6 attempts to guess the word
+6. Game statistics are tracked and displayed after each game
 
 ## Development
 
@@ -125,7 +130,7 @@ In this mode, you play Wordle in your favorite app or website, and the solver su
    - G = Green (correct position)
    - Y = Yellow (right letter, wrong position)
    - B = Black (not in the word)
-3. Get suggestions for your next guess
+3. The top 10 most likely word suggestions will be shown automatically after every guess—no need to type 'hint'.
 
 ### Play Mode
 
@@ -152,11 +157,10 @@ mypy src
 ## License
 
 MIT
-Run the tests using:
 
-```bash
-python -m unittest discover src/modules/tests
-```
+## Contributing
+
+Contributions are welcome! Please see the [docs/Requirements.md](docs/Requirements.md) and [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for more information on the project structure and requirements.
 
 ## Future Improvements
 
