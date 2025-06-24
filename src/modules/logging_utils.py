@@ -11,22 +11,35 @@ import os
 import sys
 import time
 from contextvars import ContextVar
-from typing import Any, Callable, Dict, Generator, Optional, TypeVar, cast
+from typing import (
+    Any,
+    Callable,
+    Generator,
+    Mapping,
+    MutableMapping,
+    Optional,
+    TypeVar,
+    Union,
+    cast,
+)
 
 import structlog
 import yaml
+from structlog.stdlib import BoundLogger
 
 # Type variables for better type hinting
 F = TypeVar("F", bound=Callable[..., Any])
 
 # Global logger instance
-logger: structlog.types.BindableLogger = None
+logger: Optional[BoundLogger] = None
 
 # Context variable to store the current game ID
 _game_id_context: ContextVar[Optional[str]] = ContextVar("game_id", default=None)
 
 
-def add_game_id_processor(_, __, event_dict: Dict[str, Any]) -> Dict[str, Any]:
+def add_game_id_processor(
+    logger: Any, method_name: str, event_dict: MutableMapping[str, Any]
+) -> Union[Mapping[str, Any], str, bytes, bytearray, tuple[Any, ...]]:
     """
     Processor that adds the game ID to the event dictionary if one is set in the context.
     """
@@ -143,17 +156,95 @@ def setup_logging(log_level: str = "INFO") -> None:
         ],
         context_class=dict,
         logger_factory=structlog.stdlib.LoggerFactory(),
-        wrapper_class=structlog.stdlib.BoundLogger,
+        wrapper_class=BoundLogger,  # FIX: Use BoundLogger, not BindableLogger
         cache_logger_on_first_use=True,
     )
 
     logger = structlog.get_logger("wordle_solver")
-    logger.info(
-        "Logging initialized",
-        log_level=log_level,
-        log_file=log_file,
-        rotation="daily",
-    )
+    if logger is not None:
+        logger.info(
+            "Logging initialized",
+            log_level=log_level,
+            log_file=log_file,
+            rotation="daily",
+        )
+
+
+def _extract_log_data(func: Callable, args: Any, kwargs: Any, level: str) -> dict:
+    """
+    Extracts and prepares log data from the function, its arguments, and the logging level.
+
+    Args:
+        func: The function being logged
+        args: The positional arguments passed to the function
+        kwargs: The keyword arguments passed to the function
+        level: The logging level as a string (e.g., "DEBUG", "INFO")
+
+    Returns:
+        A dictionary containing the extracted log data
+    """
+    module_name = func.__module__
+    class_name = args[0].__class__.__name__ if args else None
+    func_name = func.__name__
+    log_data = {
+        "module": module_name,
+        "class": class_name,
+        "method": func_name,
+    }
+    if level.upper() == "DEBUG":
+        params = {}
+        if args and len(args) > 1:  # Skip 'self' parameter
+            # Get parameter names from function signature
+            sig = inspect.signature(func)
+            param_names = list(sig.parameters.keys())
+
+            # Map positional args to their parameter names (excluding 'self')
+            for i, arg in enumerate(args[1:], 1):
+                if i < len(param_names):
+                    params[param_names[i]] = repr(arg)
+                else:
+                    params[f"arg{i}"] = repr(arg)
+
+        # Add keyword arguments
+        params.update({k: repr(v) for k, v in kwargs.items()})
+        log_data["params"] = params
+    return log_data
+
+
+def _log_exception(logger, exc, log_data):
+    """
+    Logs the exception information using the provided logger.
+
+    Args:
+        logger: The logger instance to use for logging
+        exc: The exception instance
+        log_data: The log data dictionary containing contextual information
+    """
+    if logger is not None:
+        logger.exception(
+            "Exception in method",
+            **log_data,
+            error=str(exc),
+            error_type=type(exc).__name__,
+        )
+
+
+def _log_performance(logger, log_data, execution_time, level):
+    """
+    Logs the performance metrics of the method execution.
+
+    Args:
+        logger: The logger instance to use for logging
+        log_data: The log data dictionary containing contextual information
+        execution_time: The execution time of the method in milliseconds
+        level: The logging level as a string (e.g., "DEBUG", "INFO")
+    """
+    if level.upper() == "DEBUG" and logger is not None:
+        logger.debug(
+            "Method execution completed",
+            **log_data,
+            execution_time_ms=round(execution_time, 2),
+        )
 
 
 def log_method(level: str = "DEBUG") -> Callable[[F], F]:
@@ -174,66 +265,26 @@ def log_method(level: str = "DEBUG") -> Callable[[F], F]:
             if logger is None:
                 setup_logging()
 
-            # Extract method information
-            module_name = func.__module__
-            class_name = args[0].__class__.__name__ if args else None
-            func_name = func.__name__
+            # Extract method information and log data
+            log_data = _extract_log_data(func, args, kwargs, level)
 
-            # Create the structured log data
-            log_data = {
-                "module": module_name,
-                "class": class_name,
-                "method": func_name,
-            }
-
-            # Add parameters if debug level
-            if level.upper() == "DEBUG":
-                params = {}
-                if args and len(args) > 1:  # Skip 'self' parameter
-                    # Get parameter names from function signature
-                    sig = inspect.signature(func)
-                    param_names = list(sig.parameters.keys())
-
-                    # Map positional args to their parameter names (excluding 'self')
-                    for i, arg in enumerate(args[1:], 1):
-                        if i < len(param_names):
-                            params[param_names[i]] = repr(arg)
-                        else:
-                            params[f"arg{i}"] = repr(arg)
-
-                # Add keyword arguments
-                params.update({k: repr(v) for k, v in kwargs.items()})
-                log_data["params"] = params
-
-                # Log method call
+            # Log method entry at the specified log level
+            if logger is not None and level.upper() == "DEBUG":
                 getattr(logger, level.lower())("Method call", **log_data)
 
             start_time = time.time()
             try:
+                # Call the actual method
                 result = func(*args, **kwargs)
                 return result
             except Exception as exc:
-                # Log exception
-                logger.exception(
-                    "Exception in method",
-                    module=module_name,
-                    class_name=class_name,
-                    method=func_name,
-                    error=str(exc),
-                    error_type=type(exc).__name__,
-                )
+                # Log exception details
+                _log_exception(logger, exc, log_data)
                 raise
             finally:
-                # Log performance metrics
+                # Calculate and log performance metrics
                 execution_time = (time.time() - start_time) * 1000  # ms
-                if level.upper() == "DEBUG":
-                    logger.debug(
-                        "Method execution completed",
-                        module=module_name,
-                        class_name=class_name,
-                        method=func_name,
-                        execution_time_ms=round(execution_time, 2),
-                    )
+                _log_performance(logger, log_data, execution_time, level)
 
         return cast(F, wrapper)
 
@@ -291,12 +342,9 @@ def log_game_outcome(func: F) -> F:
                 log_data["target_word"] = target_word
 
             # Use "Game outcome" as the event parameter, and pass the rest as kwargs
-            logger.info("Game outcome", **log_data)
+            if logger is not None:
+                logger.info("Game outcome", **log_data)
 
         return result
 
     return cast(F, wrapper)
-
-
-# Initialize logging when the module is imported
-setup_logging()

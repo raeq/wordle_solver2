@@ -4,7 +4,7 @@ Module for managing game statistics and history.
 """
 import json
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, cast
 
 from ..logging_utils import log_method
 
@@ -27,7 +27,7 @@ class StatsManager:
         """Load statistics from file."""
         try:
             with open(self.stats_file) as f:
-                return json.load(f)
+                return cast(Dict[str, Any], json.load(f))
         except (FileNotFoundError, json.JSONDecodeError):
             return {
                 "games_played": 0,
@@ -41,7 +41,7 @@ class StatsManager:
         """Load game history from file."""
         try:
             with open(self.history_file) as f:
-                return json.load(f)
+                return cast(List[Dict[str, Any]], json.load(f))
         except (FileNotFoundError, json.JSONDecodeError):
             return []
 
