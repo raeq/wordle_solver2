@@ -20,7 +20,7 @@ import yaml
 F = TypeVar("F", bound=Callable[..., Any])
 
 # Global logger instance
-logger = None
+logger: structlog.types.BindableLogger = None
 
 # Context variable to store the current game ID
 _game_id_context: ContextVar[Optional[str]] = ContextVar("game_id", default=None)
