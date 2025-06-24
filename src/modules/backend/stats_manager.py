@@ -41,7 +41,7 @@ class StatsManager:
         """Load game history from file."""
         try:
             with open(self.history_file) as f:
-                return json.load(f)  # type: List[Dict[str, Any]]
+                return json.load(f)
         except (FileNotFoundError, json.JSONDecodeError):
             return []
 
