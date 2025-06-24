@@ -2,7 +2,6 @@
 """
 Main entry point for the Wordle Solver application.
 """
-
 import os
 import sys
 
