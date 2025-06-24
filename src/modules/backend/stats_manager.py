@@ -27,7 +27,7 @@ class StatsManager:
         """Load statistics from file."""
         try:
             with open(self.stats_file) as f:
-                return json.load(f)  # type: Dict[str, Any]
+                return json.load(f)
         except (FileNotFoundError, json.JSONDecodeError):
             return {
                 "games_played": 0,

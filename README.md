@@ -62,7 +62,96 @@ python run_wordle_solver.py
 - Rich library
 
 ### Testing
+# Wordle Solver
 
+A Python application that helps you solve Wordle puzzles and lets you play the game.
+
+## Features
+
+- **Solver Mode**: Get suggestions while playing Wordle on any platform
+- **Play Mode**: Play Wordle against the computer
+- **Advanced Algorithm**: Sophisticated word suggestion algorithm
+- **Rich CLI Interface**: Beautiful terminal interface with colored feedback
+
+## Installation
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/yourusername/wordle-solver.git
+cd wordle-solver
+```
+
+### 2. Create and activate a virtual environment
+
+```bash
+python -m venv venv
+
+# On Windows
+venv\Scripts\activate
+
+# On macOS/Linux
+source venv/bin/activate
+```
+
+### 3. Install dependencies
+
+```bash
+pip install -e .
+```
+
+## Usage
+
+Run the application:
+
+```bash
+python -m src.main
+```
+
+Or if you installed it with pip:
+
+```bash
+wordle-solver
+```
+
+## Game Modes
+
+### Solver Mode
+
+In this mode, you play Wordle in your favorite app or website, and the solver suggests words to try.
+
+1. Enter your guess
+2. Enter the result using:
+   - G = Green (correct position)
+   - Y = Yellow (right letter, wrong position)
+   - B = Black (not in the word)
+3. Get suggestions for your next guess
+
+### Play Mode
+
+Play Wordle directly in the terminal:
+
+1. The computer picks a 5-letter word
+2. You have 6 attempts to guess it
+3. After each guess, you'll see colored feedback
+
+## Development
+
+### Running Tests
+
+```bash
+pytest
+```
+
+### Type Checking
+
+```bash
+mypy src
+```
+
+## License
+
+MIT
 Run the tests using:
 
 ```bash
