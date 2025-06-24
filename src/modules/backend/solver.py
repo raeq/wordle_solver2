@@ -5,6 +5,7 @@ Module containing the core Wordle solver logic.
 from collections import Counter
 from typing import Dict, List, Tuple
 
+from ..logging_utils import log_method
 from .result_color import ResultColor
 from .word_manager import WordManager
 
@@ -17,6 +18,7 @@ class Solver:
         self.guesses: List[Tuple[str, str]] = []  # (guess, result) pairs
         self.max_guesses = 6
 
+    @log_method("DEBUG")
     def add_guess(self, guess: str, result: str) -> None:
         """Add a guess and its result to the history and filter words."""
         guess = guess.upper()
@@ -24,11 +26,13 @@ class Solver:
         self.guesses.append((guess, result))
         self.word_manager.filter_words(guess, result)
 
+    @log_method("DEBUG")
     def suggest_next_guess(self) -> str:
         """Suggest the next best guess using advanced logic."""
         suggestions = self.get_top_suggestions(1)
         return suggestions[0] if suggestions else "No valid words remaining"
 
+    @log_method("DEBUG")
     def get_top_suggestions(self, count: int = 10) -> List[str]:
         """Get top N suggestions in order of likelihood, common words first."""
         possible_words = self.word_manager.get_possible_words()
@@ -73,6 +77,7 @@ class Solver:
 
         return suggestions[:count]
 
+    @log_method("DEBUG")
     def _calculate_letter_frequency(self, words: List[str]) -> Dict[str, int]:
         """Calculate letter frequency in the given list of words."""
         letter_count: Dict[str, int] = Counter()
@@ -96,6 +101,7 @@ class Solver:
 
         return letter_count
 
+    @log_method("DEBUG")
     def _score_words(self, words: List[str], letter_freq: Dict[str, int]) -> Dict[str, float]:
         """Score words based on letter frequency and uniqueness."""
         word_scores: Dict[str, float] = {}
@@ -123,23 +129,33 @@ class Solver:
 
         return word_scores
 
+    @log_method("DEBUG")
     def get_remaining_guesses(self) -> int:
         """Get number of remaining guesses."""
         return self.max_guesses - len(self.guesses)
 
+    @log_method("DEBUG")
     def is_game_won(self) -> bool:
         """Check if the game has been won."""
         return self.guesses and self.guesses[-1][1] == ResultColor.GREEN.value * 5
 
+    @log_method("DEBUG")
     def is_game_over(self) -> bool:
         """Check if the game is over (won or max guesses reached)."""
         return self.is_game_won() or len(self.guesses) >= self.max_guesses
 
+    @log_method("DEBUG")
     def reset(self) -> None:
         """Reset the solver for a new game."""
         self.guesses = []
         self.word_manager.reset()  # Reset the word manager's possible_words list
 
+        # Clear the game ID from the logging context
+        from ...modules.logging_utils import set_game_id
+
+        set_game_id(None)  # Reset the game ID to None
+
+    @log_method("DEBUG")
     def get_game_state(self) -> Dict[str, object]:
         """Get current game state."""
         return {

@@ -108,6 +108,7 @@ class WordleSolverApp:
 
             # Display game result
             self._display_solver_result(won, attempt, max_attempts)
+            self.word_manager.reset()
 
         except Exception as e:
             self.ui.console.print(f"[bold red]Unexpected error: {str(e)}[/bold red]")
@@ -143,7 +144,13 @@ class WordleSolverApp:
             # Start a new game
             target_word = self.game_engine.start_new_game()
             self.solver.reset()  # Reset the solver to clear previous game state
-            self.ui.display_play_mode_start(f"The word has {len(set(target_word))} unique letters")
+
+            # Get the game ID from the game engine
+            game_state = self.game_engine.get_game_state()
+            game_id = game_state["game_id"]
+
+            # Display the start message with the game ID
+            self.ui.display_play_mode_start(game_id, f"The word has {len(set(target_word))} unique letters")
 
             guesses_history = []
             attempt = 1
@@ -198,12 +205,21 @@ class WordleSolverApp:
                     self.ui.console.print(f"[bold red]Error: {str(e)}[/bold red]")
 
             # Record game statistics
-            self.stats_manager.record_game(guesses_history, won, attempt)
+            game_state = self.game_engine.get_game_state()
+            self.stats_manager.record_game(
+                guesses_history,
+                won,
+                attempt,
+                game_id=game_state["game_id"],
+                target_word=self.game_engine.target_word,
+            )
 
             # Display game result
             self._display_game_result(
                 won, self.game_engine.target_word, attempt if won else max_attempts, max_attempts
             )
+
+            self.word_manager.reset()
 
         except Exception as e:
             self.ui.console.print(f"[bold red]Unexpected error: {str(e)}[/bold red]")
@@ -216,4 +232,7 @@ class WordleSolverApp:
     @log_game_outcome
     def _display_game_result(self, won: bool, target_word: str, attempt: int, max_attempts: int) -> None:
         """Display the result of the play mode game."""
-        self.ui.display_game_over(won, target_word, attempt, max_attempts)
+        game_state = self.game_engine.get_game_state()
+        self.ui.display_game_over(
+            won, target_word, attempt, max_attempts, game_state["game_id"], self.game_engine.guesses
+        )

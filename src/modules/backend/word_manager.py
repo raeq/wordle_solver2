@@ -5,6 +5,7 @@ Module for managing word lists and word filtering logic.
 from pathlib import Path
 from typing import List, Optional, Set
 
+from ..logging_utils import log_method
 from .exceptions import InputLengthError, InvalidResultError, InvalidWordError
 from .result_color import ResultColor
 
@@ -26,6 +27,7 @@ class WordManager:
         self.possible_words = self.all_words.copy()
         self._is_test_mode = False  # Added attribute for test mode
 
+    @log_method("DEBUG")
     def _load_words(self, filename: str) -> Set[str]:
         """Load words from file."""
         words = set()
@@ -58,6 +60,7 @@ class WordManager:
 
         return words
 
+    @log_method("DEBUG")
     def _word_matches_result(self, word: str, guess: str, result: str) -> bool:
         """Check if a word matches the given guess result."""
         if len(word) != 5 or len(guess) != 5 or len(result) != 5:
@@ -77,6 +80,7 @@ class WordManager:
 
         return True
 
+    @log_method("DEBUG")
     def _matches_green_positions(self, word: str, guess: str, result: str) -> bool:
         """Check if word matches the green positions from the guess."""
         for i in range(5):
@@ -84,6 +88,7 @@ class WordManager:
                 return False
         return True
 
+    @log_method("DEBUG")
     def _matches_yellow_positions(self, word: str, guess: str, result: str) -> bool:
         """Check if word matches the yellow positions from the guess."""
         for i in range(5):
@@ -96,6 +101,7 @@ class WordManager:
                     return False
         return True
 
+    @log_method("DEBUG")
     def _matches_black_positions(self, word: str, guess: str, result: str) -> bool:
         """Check if word correctly handles black letters from the guess."""
         for i in range(5):
@@ -116,26 +122,32 @@ class WordManager:
                     return False
         return True
 
+    @log_method("DEBUG")
     def get_possible_words(self) -> List[str]:
         """Get current list of possible words."""
         return sorted(list(self.possible_words))
 
+    @log_method("DEBUG")
     def get_common_possible_words(self) -> List[str]:
         """Get list of common words that are still possible."""
         return sorted([word for word in self.possible_words if word in self.common_words])
 
+    @log_method("DEBUG")
     def is_valid_word(self, word: str) -> bool:
         """Check if a word is in the word list."""
         return word.upper() in self.all_words
 
+    @log_method("DEBUG")
     def reset(self) -> None:
         """Reset the list of possible words."""
         self.possible_words = self.all_words.copy()
 
+    @log_method("DEBUG")
     def get_word_count(self) -> int:
         """Return the number of possible words."""
         return len(self.possible_words)
 
+    @log_method("DEBUG")
     def filter_words(self, guess: str, result: str) -> None:
         """Filter possible words based on the guess and result."""
         guess = guess.upper()

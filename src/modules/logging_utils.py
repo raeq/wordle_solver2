@@ -2,6 +2,7 @@
 Structured logging utilities for the Wordle Solver application using structlog.
 """
 
+import contextlib
 import functools
 import inspect
 import logging
@@ -9,16 +10,76 @@ import logging.config
 import os
 import sys
 import time
-from datetime import datetime
-from typing import Any, Callable, TypeVar, cast
+from contextvars import ContextVar
+from typing import Any, Callable, Dict, Generator, Optional, TypeVar, cast
 
 import structlog
+import yaml
 
 # Type variables for better type hinting
 F = TypeVar("F", bound=Callable[..., Any])
 
 # Global logger instance
 logger = None
+
+# Context variable to store the current game ID
+_game_id_context: ContextVar[Optional[str]] = ContextVar("game_id", default=None)
+
+
+def add_game_id_processor(_, __, event_dict: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Processor that adds the game ID to the event dictionary if one is set in the context.
+    """
+    game_id = _game_id_context.get()
+    if game_id:
+        event_dict["game_id"] = game_id
+    return event_dict
+
+
+@contextlib.contextmanager
+def game_id_context(game_id: Optional[str] = None) -> Generator[None, None, None]:
+    """
+    Context manager for setting the game ID for a block of code.
+
+    Args:
+        game_id: The game ID to set for logs within this context
+
+    Example:
+        with game_id_context("ABC123"):
+            logger.info("This log will include the game ID")
+    """
+    if game_id:
+        token = _game_id_context.set(game_id)
+        try:
+            yield
+        finally:
+            _game_id_context.reset(token)
+    else:
+        yield
+
+
+def set_game_id(game_id: Optional[str] = None) -> None:
+    """
+    Set the game ID for the current context.
+
+    Args:
+        game_id: The game ID to set for subsequent log entries
+    """
+    if game_id:
+        _game_id_context.set(game_id)
+    else:
+        # Reset to default (None) if no game ID provided
+        _game_id_context.set(None)
+
+
+def get_current_game_id() -> Optional[str]:
+    """
+    Get the current game ID from the context.
+
+    Returns:
+        The current game ID or None if not set
+    """
+    return _game_id_context.get()
 
 
 def setup_logging(log_level: str = "INFO") -> None:
@@ -36,40 +97,63 @@ def setup_logging(log_level: str = "INFO") -> None:
     logs_dir = os.path.join(project_root, "logs")
     os.makedirs(logs_dir, exist_ok=True)
 
-    # Configure log file path with timestamp
-    timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
-    log_file = os.path.join(logs_dir, f"wordle_solver_{timestamp}.log")
+    # Configure base log file path (without timestamp - will use rotation instead)
+    log_file = os.path.join(logs_dir, "wordle_solver.log")
 
-    # Basic standard logging configuration for the file handler
-    logging.basicConfig(
-        level=getattr(logging, log_level.upper(), logging.INFO),
-        format="%(message)s",
-        handlers=[
-            logging.FileHandler(log_file),
-            logging.StreamHandler(sys.stdout),
-        ],
-    )
+    # Load logging configuration from YAML file
+    config_file = os.path.join(os_path, "..", "logging_config.yaml")
+
+    if os.path.exists(config_file):
+        with open(config_file) as f:
+            config = yaml.safe_load(f)
+
+        # Set the log file path for the rotating file handler
+        if "handlers" in config and "rotating_file_handler" in config["handlers"]:
+            config["handlers"]["rotating_file_handler"]["filename"] = log_file
+
+        # Override the root logger level if specified
+        if "root" in config:
+            config["root"]["level"] = log_level.upper()
+
+        # Configure standard logging
+        logging.config.dictConfig(config)
+    else:
+        # Fall back to basic configuration
+        logging.basicConfig(
+            level=getattr(logging, log_level.upper(), logging.INFO),
+            format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            handlers=[
+                logging.FileHandler(log_file),
+                logging.StreamHandler(sys.stdout),
+            ],
+        )
 
     # Configure structlog
-    timestamper = structlog.processors.TimeStamper(fmt="%Y-%m-%d %H:%M:%S")
-    shared_processors = [
-        structlog.stdlib.filter_by_level,
-        timestamper,
-        structlog.processors.StackInfoRenderer(),
-        structlog.processors.format_exc_info,
-        structlog.processors.UnicodeDecoder(),
-    ]
-
-    # Configure structure for console output
     structlog.configure(
-        processors=shared_processors + [structlog.processors.JSONRenderer()],
+        processors=[
+            structlog.stdlib.filter_by_level,
+            structlog.stdlib.add_logger_name,
+            structlog.stdlib.add_log_level,
+            structlog.processors.TimeStamper(fmt="%Y-%m-%d %H:%M:%S"),
+            add_game_id_processor,  # Add our custom processor to include game ID
+            structlog.processors.StackInfoRenderer(),
+            structlog.processors.format_exc_info,
+            structlog.processors.UnicodeDecoder(),
+            structlog.processors.JSONRenderer(),
+        ],
+        context_class=dict,
         logger_factory=structlog.stdlib.LoggerFactory(),
         wrapper_class=structlog.stdlib.BoundLogger,
         cache_logger_on_first_use=True,
     )
 
     logger = structlog.get_logger("wordle_solver")
-    logger.info("Logging initialized", log_level=log_level, log_file=log_file)
+    logger.info(
+        "Logging initialized",
+        log_level=log_level,
+        log_file=log_file,
+        rotation="daily",
+    )
 
 
 def log_method(level: str = "DEBUG") -> Callable[[F], F]:
@@ -193,10 +277,10 @@ def log_game_outcome(func: F) -> F:
                 attempt = args[3] if len(args) > 3 else kwargs.get("attempt", None)
                 max_attempts = args[4] if len(args) > 4 else kwargs.get("max_attempts", None)
 
-            # Create the structured log data
+            # Create the structured log data (don't include 'event' as a key)
             log_data = {
                 "class": class_name,
-                "event": "game_outcome",
+                "outcome_type": "game_outcome",
                 "won": won,
                 "attempts": attempt,
                 "max_attempts": max_attempts,
@@ -206,6 +290,7 @@ def log_game_outcome(func: F) -> F:
             if target_word:
                 log_data["target_word"] = target_word
 
+            # Use "Game outcome" as the event parameter, and pass the rest as kwargs
             logger.info("Game outcome", **log_data)
 
         return result

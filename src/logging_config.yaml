@@ -1,5 +1,5 @@
 ---
-# Basic logging configuration for Wordle Solver application
+# Logging configuration for Wordle Solver application with daily file rotation
 version: 1
 disable_existing_loggers: false
 
@@ -9,11 +9,15 @@ formatters:
     datefmt: '%Y-%m-%d %H:%M:%S'
 
 handlers:
-  file_handler:
-    class: logging.FileHandler
-    level: DEBUG
+  rotating_file_handler:
+    class: logging.handlers.TimedRotatingFileHandler
+    level: INFO
     formatter: simple
     filename: null  # Will be set dynamically in code
+    when: 'midnight'
+    interval: 1
+    backupCount: 30  # Keep logs for 30 days
+    encoding: 'utf8'
 
   console_handler:
     class: logging.StreamHandler
@@ -23,10 +27,10 @@ handlers:
 
 loggers:
   wordle_solver:
-    level: DEBUG
-    handlers: [file_handler, console_handler]
+    level: INFO
+    handlers: [rotating_file_handler, console_handler]
     propagate: false
 
 root:
   level: INFO
-  handlers: [file_handler, console_handler]
+  handlers: [rotating_file_handler, console_handler]

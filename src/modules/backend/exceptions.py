@@ -3,11 +3,38 @@ Custom exception classes for the Wordle Solver application.
 This module defines specialized exceptions for different error conditions in the game.
 """
 
+import inspect
+
+import structlog
+
+# Configure logger
+logger = structlog.get_logger("wordle_solver.exceptions")
+
 
 class WordleError(Exception):
     """Base class for all Wordle-related exceptions."""
 
-    pass
+    def __init__(self, message: str = ""):
+        super().__init__(message)
+        self._log_error(message)
+
+    def _log_error(self, message: str) -> None:
+        """Log error information using structlog."""
+        # Get caller information
+        frame = inspect.currentframe().f_back.f_back  # Go back two frames to get the actual caller
+        calling_module = frame.f_globals.get("__name__", "unknown")
+        calling_function = frame.f_code.co_name
+        calling_lineno = frame.f_lineno
+
+        # Log the exception with context
+        logger.error(
+            "Wordle error occurred",
+            error_type=self.__class__.__name__,
+            message=message,
+            module=calling_module,
+            function=calling_function,
+            line=calling_lineno,
+        )
 
 
 class GameStateError(WordleError):
@@ -56,6 +83,4 @@ class InputLengthError(WordleError):
         self.input_type = input_type
         self.actual_length = actual_length
         self.expected_length = expected_length
-        super().__init__(
-            f"{input_type} must be exactly {expected_length} characters (got {actual_length})"
-        )
+        super().__init__(f"{input_type} must be exactly {expected_length} characters (got {actual_length})")

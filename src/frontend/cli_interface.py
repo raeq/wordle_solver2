@@ -61,10 +61,12 @@ In Play Mode, the computer picks a word and you try to guess it!
         else:
             return "play"
 
-    def display_play_mode_start(self, difficulty_hint: str = "") -> None:
+    def display_play_mode_start(self, game_id: str, difficulty_hint: str = "") -> None:
         """Display start message for play mode."""
         start_text = f"""
 🎮 Play Mode Started! 🎮
+
+Game ID: {game_id}
 
 I've chosen a 5-letter word for you to guess.
 You have 6 attempts to find it!
@@ -251,11 +253,21 @@ Example: "AUDIO {black}{yellow}{black}{green}{black}"
 
         self.console.print(table)
 
-    def display_game_over(self, won: bool, target_word: str, attempts: int, max_attempts: int) -> None:
+    def display_game_over(
+        self,
+        won: bool,
+        target_word: str,
+        attempts: int,
+        max_attempts: int,
+        game_id: str,
+        guesses_history=None,
+    ) -> None:
         """Display game over message."""
         if won:
             message = f"""
 🎉 Congratulations! 🎉
+
+Game ID: {game_id}
 
 You correctly guessed the word: [bold green]{target_word}[/bold green]
 in {attempts}/{max_attempts} attempts!
@@ -266,6 +278,8 @@ in {attempts}/{max_attempts} attempts!
             message = f"""
 😢 Game Over 😢
 
+Game ID: {game_id}
+
 The word was: [bold red]{target_word}[/bold red]
 Better luck next time!
             """
@@ -273,6 +287,19 @@ Better luck next time!
             style = "bold red"
 
         self.console.print(Panel(message, title=title, style=style))
+
+        # Display guess history if available
+        if guesses_history:
+            self._display_guess_history(guesses_history)
+
+    def _display_guess_history(self, guesses_history) -> None:
+        """Display the history of guesses made during the game."""
+        self.console.print("\n[bold]Your Guesses:[/bold]")
+
+        for attempt, (guess, result) in enumerate(guesses_history, start=1):
+            colored_result = self._colorize_result(guess, result)
+            emoji_result = ResultColor.result_to_emoji(result)
+            self.console.print(f"Guess {attempt}: {colored_result} {emoji_result}")
 
     def display_game_stats(self, stats: Dict) -> None:
         """Display game statistics."""

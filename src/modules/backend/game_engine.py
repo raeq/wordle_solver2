@@ -3,8 +3,10 @@
 Game engine module for handling the game logic when the computer selects a target word.
 """
 import random
+import string
 from typing import Dict, List, Tuple
 
+from ..logging_utils import log_method, logger, set_game_id
 from .exceptions import (
     GameStateError,
     InputLengthError,
@@ -18,13 +20,38 @@ from .word_manager import WordManager
 class GameEngine:
     """Handles the computer vs player game mode."""
 
+    @log_method("DEBUG")
     def __init__(self, word_manager: WordManager):
         self.word_manager = word_manager
         self.target_word = ""
         self.guesses: List[Tuple[str, str]] = []
         self.max_guesses = 6
         self.game_active = False
+        self._game_id = ""
 
+    @property
+    def game_id(self) -> str:
+        """Get the current game ID or raise an exception if there is no active game."""
+        if not self._game_id:
+            raise GameStateError("No active game. Call start_new_game() first.")
+        return self._game_id
+
+    @game_id.setter
+    def game_id(self, value: str) -> None:
+        """
+        Set the game ID. If None or empty string is provided,
+        a new random 6-character alphanumeric ID will be generated automatically.
+        """
+        if value is None or value.strip() == "":
+            # Generate a new game ID
+            characters = string.ascii_uppercase + string.digits
+            self._game_id = "".join(random.choice(characters) for _ in range(6))
+        else:
+            self._game_id = value
+
+        logger.info(f"New game ID: {self._game_id}")
+
+    @log_method("DEBUG")
     def start_new_game(self) -> str:
         """Start a new game by selecting a random target word."""
         # Prefer common words for the target, but fall back to all words if needed
@@ -42,8 +69,14 @@ class GameEngine:
 
         self.guesses = []
         self.game_active = True
+        self.game_id = ""  # This will trigger the setter to generate a new ID
+
+        # Set the game ID in the logging context
+        set_game_id(self._game_id)
+
         return self.target_word
 
+    @log_method("DEBUG")
     def make_guess(self, guess: str) -> Tuple[str, bool]:
         """
         Make a guess and return the result pattern and whether the game is won.
@@ -72,6 +105,7 @@ class GameEngine:
 
         return result, is_solved
 
+    @log_method("DEBUG")
     def _calculate_result(self, guess: str, target: str) -> str:
         """Calculate the result pattern for a guess against the target word."""
         result = [ResultColor.BLACK.value] * 5
@@ -99,18 +133,22 @@ class GameEngine:
 
         return "".join(result)
 
+    @log_method("DEBUG")
     def get_remaining_guesses(self) -> int:
         """Get number of remaining guesses."""
         return self.max_guesses - len(self.guesses)
 
+    @log_method("DEBUG")
     def is_game_won(self) -> bool:
         """Check if the game has been won."""
         return bool(self.guesses and self.guesses[-1][1] == ResultColor.GREEN.value * 5)
 
+    @log_method("DEBUG")
     def is_game_over(self) -> bool:
         """Check if the game is over (won or max guesses reached)."""
         return self.is_game_won() or len(self.guesses) >= self.max_guesses or not self.game_active
 
+    @log_method("DEBUG")
     def get_game_state(self) -> Dict[str, object]:
         """Get current game state."""
         is_won = self.is_game_won()
@@ -124,8 +162,10 @@ class GameEngine:
             "is_over": is_over,
             "guesses_history": self.guesses.copy(),
             "target_word": self.target_word if is_over else None,
+            "game_id": self.game_id,
         }
 
+    @log_method("DEBUG")
     def get_hint(self) -> str:
         """Get a hint for the current game."""
         if not self.game_active:
