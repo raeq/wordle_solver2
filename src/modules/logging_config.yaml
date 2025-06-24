@@ -14,7 +14,7 @@ handlers:
 
   rotating_file_handler:
     class: logging.handlers.TimedRotatingFileHandler
-    level: DEBUG
+    level: INFO
     formatter: standard
     filename: logs/wordle_solver.log  # This will be overridden in code
     when: midnight
@@ -23,11 +23,11 @@ handlers:
 
 loggers:
   wordle_solver:
-    level: INFO
+    level: WARNING
     handlers: [console, rotating_file_handler]
     propagate: False
 
 root:
-  level: INFO
+  level: WARNING
   handlers: [console, rotating_file_handler]
   propagate: False

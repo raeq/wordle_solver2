@@ -170,10 +170,20 @@ Example: "AUDIO {black}{yellow}{black}{green}{black}"
             f"[bold cyan]Enter your guess and result (e.g., '{example}') "
             f"or type 'hint' for a hint[/bold cyan]"
         )
-        return Prompt.ask(prompt_text).upper()
+        user_input = Prompt.ask(prompt_text).upper()
+
+        # Special case for the winning result pattern
+        if user_input.strip() == "GGGGG":
+            return f"SOLVE {green}{green}{green}{green}{green}"
+
+        return user_input
 
     def _parse_and_validate_guess_result(self, user_input: str) -> Tuple[str, str]:
         """Parse and validate the guess and result from user input."""
+        # Special case for winning result
+        if user_input.startswith("SOLVE "):
+            return "SOLVE", user_input.split()[1]
+
         # Split input into guess and result parts
         parts = user_input.split()
         if len(parts) != 2:

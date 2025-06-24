@@ -87,9 +87,11 @@ python run_wordle_solver.py --mode game --difficulty easy
 Enter result (G=Green, Y=Yellow, B=Black): GYBBB
 ```
 
-3.13 Review the suggested next guesses
+3.13 If you've solved the puzzle (all green), you can simply enter "GGGGG" and the application will recognize it as a winning state.
 
-3.14 Continue until you solve the puzzle or exhaust your attempts
+3.14 Review the suggested next guesses (no suggestions will be displayed after entering "GGGGG")
+
+3.15 Continue until you solve the puzzle or exhaust your attempts
 
 ### 3.20 Game Mode
 

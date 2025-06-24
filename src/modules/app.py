@@ -77,13 +77,17 @@ class WordleSolverApp:
                     # Display colored result
                     self.ui.display_guess_result(guess, result, attempt, max_attempts)
 
-                    # Show top 10 suggestions after every guess
-                    self._show_suggestions()
-
                     # Check if solved
-                    if all(color == ResultColor.GREEN.value for color in result):
+                    if result == ResultColor.GREEN.value * 5:
                         won = True
+                        self.ui.console.print(
+                            "\n[bold green]Congratulations! You've found the solution![/bold green]"
+                        )
                         break
+
+                    # Show top 10 suggestions after every guess (if not solved)
+                    if not won:
+                        self._show_suggestions()
 
                     attempt += 1
 
@@ -104,7 +108,7 @@ class WordleSolverApp:
             self.stats_manager.record_game(guesses_history, won, attempt)
 
             # Display game result
-            self._display_solver_result(won, attempt, max_attempts)
+            self._display_solver_result(won, attempt, max_attempts, guesses_history)
             self.word_manager.reset()
 
         except Exception as e:
@@ -124,7 +128,9 @@ class WordleSolverApp:
 
     @log_method("INFO")
     @log_game_outcome
-    def _display_solver_result(self, won: bool, attempt: int, max_attempts: int) -> None:
+    def _display_solver_result(
+        self, won: bool, attempt: int, max_attempts: int, guesses_history=None
+    ) -> None:
         """Display the result of the solver mode game."""
         if won:
             self.ui.console.print(
@@ -133,6 +139,10 @@ class WordleSolverApp:
             )
         else:
             self.ui.console.print("\n[bold red]Game over! You didn't find the solution.[/bold red]")
+
+        # Display guess history if available
+        if guesses_history:
+            self.ui._display_guess_history(guesses_history)
 
     @log_method("DEBUG")
     def _run_game_mode(self) -> None:
