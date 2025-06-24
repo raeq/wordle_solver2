@@ -21,20 +21,38 @@ class WordleError(Exception):
     def _log_error(self, message: str) -> None:
         """Log error information using structlog."""
         # Get caller information
-        frame = inspect.currentframe().f_back.f_back  # Go back two frames to get the actual caller
-        calling_module = frame.f_globals.get("__name__", "unknown")
-        calling_function = frame.f_code.co_name
-        calling_lineno = frame.f_lineno
+        frame = inspect.currentframe()
+        if frame is not None:
+            # Try to go back two frames to get the actual caller
+            try:
+                if frame.f_back and frame.f_back.f_back:
+                    frame = frame.f_back.f_back
+                    calling_module = frame.f_globals.get("__name__", "unknown")
+                    calling_function = frame.f_code.co_name
+                    calling_lineno = frame.f_lineno
+                else:
+                    calling_module = "unknown"
+                    calling_function = "unknown"
+                    calling_lineno = 0
+            except AttributeError:
+                calling_module = "unknown"
+                calling_function = "unknown"
+                calling_lineno = 0
+        else:
+            calling_module = "unknown"
+            calling_function = "unknown"
+            calling_lineno = 0
 
-        # Log the exception with context
-        logger.error(
-            "Wordle error occurred",
-            error_type=self.__class__.__name__,
-            message=message,
-            module=calling_module,
-            function=calling_function,
-            line=calling_lineno,
-        )
+        # Log the exception with context if logger exists
+        if logger is not None:
+            logger.error(
+                "Wordle error occurred",
+                error_type=self.__class__.__name__,
+                message=message,
+                module=calling_module,
+                function=calling_function,
+                line=calling_lineno,
+            )
 
 
 class GameStateError(WordleError):

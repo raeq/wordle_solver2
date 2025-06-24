@@ -17,22 +17,12 @@ if __name__ == "__main__":
 
 @click.command()
 @click.option("--log-level", default="INFO", help="Set the logging level (DEBUG, INFO, WARNING, ERROR)")
-def main(log_level):
+def main(log_level="INFO"):
     """Run the Wordle Solver application."""
     # Setup logging with the specified level
     setup_logging(log_level=log_level)
 
     # Create and run the application
-    app = WordleSolverApp()
-    app.run()
-
-
-if __name__ == "__main__":
-    main()
-
-
-def main():
-    """Main function that starts the application."""
     app = WordleSolverApp()
     app.run()
 

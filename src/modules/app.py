@@ -147,7 +147,7 @@ class WordleSolverApp:
 
             # Get the game ID from the game engine
             game_state = self.game_engine.get_game_state()
-            game_id = game_state["game_id"]
+            game_id = str(game_state["game_id"])
 
             # Display the start message with the game ID
             self.ui.display_play_mode_start(game_id, f"The word has {len(set(target_word))} unique letters")
@@ -210,7 +210,7 @@ class WordleSolverApp:
                 guesses_history,
                 won,
                 attempt,
-                game_id=game_state["game_id"],
+                game_id=str(game_state["game_id"]),
                 target_word=self.game_engine.target_word,
             )
 
@@ -234,5 +234,5 @@ class WordleSolverApp:
         """Display the result of the play mode game."""
         game_state = self.game_engine.get_game_state()
         self.ui.display_game_over(
-            won, target_word, attempt, max_attempts, game_state["game_id"], self.game_engine.guesses
+            won, target_word, attempt, max_attempts, str(game_state["game_id"]), self.game_engine.guesses
         )

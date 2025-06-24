@@ -49,7 +49,8 @@ class GameEngine:
         else:
             self._game_id = value
 
-        logger.info(f"New game ID: {self._game_id}")
+        if logger is not None:
+            logger.info(f"New game ID: {self._game_id}")
 
     @log_method("DEBUG")
     def start_new_game(self) -> str:
