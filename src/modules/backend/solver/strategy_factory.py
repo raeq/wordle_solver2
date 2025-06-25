@@ -6,7 +6,10 @@ from typing import Dict, Type
 
 from .entropy_strategy import EntropyStrategy
 from .frequency_strategy import FrequencyStrategy
+from .minimax_strategy import MinimaxStrategy
 from .solver_strategy import SolverStrategy
+from .two_step_strategy import TwoStepStrategy
+from .weighted_gain_strategy import WeightedGainStrategy
 
 
 class StrategyFactory:
@@ -16,6 +19,9 @@ class StrategyFactory:
     _strategies: Dict[str, Type[SolverStrategy]] = {
         "frequency": FrequencyStrategy,
         "entropy": EntropyStrategy,
+        "minimax": MinimaxStrategy,
+        "two_step": TwoStepStrategy,
+        "weighted_gain": WeightedGainStrategy,
     }
 
     @classmethod

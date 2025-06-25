@@ -7,8 +7,8 @@ from collections import defaultdict
 from typing import Dict, List, Tuple
 
 from ...logging_utils import log_method
-from ..result_color import ResultColor
 from .solver_strategy import SolverStrategy
+from .solver_utils import calculate_pattern
 
 
 class EntropyStrategy(SolverStrategy):
@@ -129,7 +129,7 @@ class EntropyStrategy(SolverStrategy):
 
         # For each possible answer, determine what pattern the candidate would give
         for answer in possible_answers:
-            pattern = self._calculate_pattern(candidate, answer)
+            pattern = calculate_pattern(candidate, answer)
             pattern_counts[pattern] += 1
 
         # Calculate entropy using information theory
@@ -141,31 +141,3 @@ class EntropyStrategy(SolverStrategy):
             entropy -= probability * math.log2(probability)  # Shannon entropy formula
 
         return entropy
-
-    @log_method("DEBUG")
-    def _calculate_pattern(self, guess: str, target: str) -> str:
-        """Calculate the result pattern for a guess against a potential target word."""
-        result = [ResultColor.BLACK.value] * 5
-        guess = guess.upper()
-        target = target.upper()
-
-        # Create a dictionary to track remaining target letters
-        target_chars = {}
-        for char in target:
-            if char not in target_chars:
-                target_chars[char] = 0
-            target_chars[char] += 1
-
-        # First pass: Mark all correct positions (greens)
-        for i, (g_char, t_char) in enumerate(zip(guess, target)):
-            if g_char == t_char:
-                result[i] = ResultColor.GREEN.value
-                target_chars[g_char] -= 1
-
-        # Second pass: Mark misplaced letters (yellows)
-        for i, g_char in enumerate(guess):
-            if result[i] != ResultColor.GREEN.value and g_char in target_chars and target_chars[g_char] > 0:
-                result[i] = ResultColor.YELLOW.value
-                target_chars[g_char] -= 1
-
-        return "".join(result)

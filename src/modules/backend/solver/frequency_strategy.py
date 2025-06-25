@@ -2,11 +2,11 @@
 """
 Frequency-based solver strategy for Wordle.
 """
-from collections import Counter
 from typing import Dict, List, Tuple
 
 from ...logging_utils import log_method
 from .solver_strategy import SolverStrategy
+from .solver_utils import calculate_letter_frequencies
 
 
 class FrequencyStrategy(SolverStrategy):
@@ -30,14 +30,17 @@ class FrequencyStrategy(SolverStrategy):
             return common_words + other_possible
 
         # Calculate letter frequency scores
-        letter_freq = self._calculate_letter_frequency(possible_words)
+        letter_freq = calculate_letter_frequencies(possible_words)
+        # Convert from normalized frequencies to counts for scoring
+        total_words = len(possible_words)
+        letter_count = {letter: freq * total_words for letter, freq in letter_freq.items()}
 
         # Separate common and uncommon words
         other_possible = [w for w in possible_words if w not in common_words]
 
         # Score both groups separately
-        common_scored = self._score_words(common_words, letter_freq, guesses_so_far)
-        other_scored = self._score_words(other_possible, letter_freq, guesses_so_far)
+        common_scored = self._score_words(common_words, letter_count, guesses_so_far)
+        other_scored = self._score_words(other_possible, letter_count, guesses_so_far)
 
         # Sort by score (highest first)
         common_sorted = [
@@ -60,32 +63,8 @@ class FrequencyStrategy(SolverStrategy):
         return suggestions[:count]
 
     @log_method("DEBUG")
-    def _calculate_letter_frequency(self, words: List[str]) -> Dict[str, int]:
-        """Calculate letter frequency in the given list of words."""
-        letter_count: Dict[str, int] = Counter()
-        position_count: List[Dict[str, int]] = [{} for _ in range(5)]  # Position-specific counts
-
-        for word in words:
-            # Skip words that aren't exactly 5 letters
-            if len(word) != 5:
-                continue
-
-            # Count each unique letter in the word
-            for letter in set(word):
-                letter_count[letter] += 1
-
-            # Count letters at specific positions
-            for i, letter in enumerate(word):
-                if i < 5:  # Ensure we don't exceed the position_count length
-                    if letter not in position_count[i]:
-                        position_count[i][letter] = 0
-                    position_count[i][letter] += 1
-
-        return letter_count
-
-    @log_method("DEBUG")
     def _score_words(
-        self, words: List[str], letter_freq: Dict[str, int], guesses_so_far: List[Tuple[str, str]]
+        self, words: List[str], letter_freq: Dict[str, float], guesses_so_far: List[Tuple[str, str]]
     ) -> Dict[str, float]:
         """Score words based on letter frequency and uniqueness."""
         word_scores: Dict[str, float] = {}
