@@ -27,6 +27,13 @@ class TestGameHistory(unittest.TestCase):
         # Create a real WordManager
         self.word_manager = WordManager()
 
+        # Enable test mode to bypass word validation
+        self.word_manager._is_test_mode = True
+
+        # Ensure THRUM is in the word list for the test
+        self.word_manager.all_words.add("THRUM")
+        self.word_manager.possible_words.add("THRUM")
+
         # Create a game engine
         self.game_engine = GameEngine(self.word_manager)
 

@@ -10,7 +10,7 @@ Now includes a play mode where you can play against the computer!
 from .frontend.cli_interface import CLIInterface
 from .modules.app import WordleSolverApp
 from .modules.backend.game_engine import GameEngine
-from .modules.backend.solver import Solver
+from .modules.backend.game_state_manager import GameStateManager
 from .modules.backend.stats_manager import StatsManager
 from .modules.backend.word_manager import WordManager
 
@@ -19,7 +19,7 @@ __author__ = "AI Assistant"
 
 __all__ = [
     "WordManager",
-    "Solver",
+    "GameStateManager",
     "GameEngine",
     "StatsManager",
     "CLIInterface",

@@ -12,8 +12,8 @@ from .backend.exceptions import (
     WordleError,
 )
 from .backend.game_engine import GameEngine
+from .backend.game_state_manager import GameStateManager
 from .backend.result_color import ResultColor
-from .backend.solver import Solver
 from .backend.stats_manager import StatsManager
 from .backend.word_manager import WordManager
 from .logging_utils import log_game_outcome, log_method
@@ -25,7 +25,7 @@ class WordleSolverApp:
     def __init__(self) -> None:
         # Initialize components
         self.word_manager = WordManager()
-        self.solver = Solver(self.word_manager)
+        self.solver = GameStateManager(self.word_manager)
         self.game_engine = GameEngine(self.word_manager)
         self.stats_manager = StatsManager()
         self.ui = CLIInterface()

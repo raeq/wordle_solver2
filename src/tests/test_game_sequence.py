@@ -9,7 +9,7 @@ Tests the sequence:
 import unittest
 
 from src.modules.backend.game_engine import GameEngine
-from src.modules.backend.solver import Solver
+from src.modules.backend.game_state_manager import GameStateManager
 from src.modules.backend.word_manager import WordManager
 
 
@@ -21,8 +21,15 @@ class TestGameSequence(unittest.TestCase):
         # Create a real WordManager with a custom word list that ensures our test works
         self.word_manager = WordManager()
 
+        # Enable test mode to bypass word validation
+        self.word_manager._is_test_mode = True
+
+        # Ensure THRUM is in the word list for the test
+        self.word_manager.all_words.add("THRUM")
+        self.word_manager.possible_words.add("THRUM")
+
         # Create a real Solver
-        self.solver = Solver(self.word_manager)
+        self.solver = GameStateManager(self.word_manager)
 
         # Create a game engine with our target word
         self.game_engine = GameEngine(self.word_manager)

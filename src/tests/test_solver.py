@@ -5,8 +5,8 @@ Unit tests for the Solver class.
 import unittest
 from unittest.mock import Mock
 
+from src.modules.backend.game_state_manager import GameStateManager
 from src.modules.backend.result_color import ResultColor
-from src.modules.backend.solver import Solver
 from src.modules.backend.word_manager import WordManager
 
 
@@ -29,7 +29,7 @@ class TestSolver(unittest.TestCase):
         self.word_manager.get_common_possible_words.return_value = ["CREAM", "BREAD"]
 
         # Create solver instance with mock word manager
-        self.solver = Solver(self.word_manager)
+        self.solver = GameStateManager(self.word_manager)
 
     def test_add_guess(self):
         """Test adding a guess and result."""
