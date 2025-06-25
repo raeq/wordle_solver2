@@ -6,7 +6,7 @@ from typing import Dict, List, Optional, Tuple
 
 from ..logging_utils import log_method, set_game_id
 from .result_color import ResultColor
-from .solver.frequency_strategy import FrequencyStrategy
+from .solver import EntropyStrategy
 from .solver.solver_strategy import SolverStrategy
 from .word_manager import WordManager
 
@@ -19,7 +19,7 @@ class GameStateManager:
         self.guesses: List[Tuple[str, str]] = []  # (guess, result) pairs
         self.max_guesses = 6
         # Default to frequency strategy if none provided
-        self.strategy = strategy or FrequencyStrategy()
+        self.strategy = strategy or EntropyStrategy()
 
     def set_strategy(self, strategy: SolverStrategy) -> None:
         """Change the solver strategy."""
