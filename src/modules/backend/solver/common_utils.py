@@ -7,6 +7,13 @@ import math
 from collections import defaultdict
 from typing import TYPE_CHECKING, Any, Dict, Generator, List, Optional, Tuple
 
+from .constants import (
+    COMMON_WORDS_HALF_RATIO,
+    DEFAULT_EARLY_TERMINATION_CHECK_INTERVAL,
+    DEFAULT_MAX_ADDITIONAL_COMMON_WORDS,
+    DEFAULT_MAX_POSSIBLE_CANDIDATES,
+    ENTROPY_MIN_EVALUATIONS,
+)
 from .solver_utils import calculate_pattern
 
 if TYPE_CHECKING:
@@ -53,7 +60,8 @@ class WordSorter:
 
         # Use about half for common words, but ensure we fill the count
         common_to_include = min(
-            len(common_matches), max(count // 2, count - len(other_matches))
+            len(common_matches),
+            max(count // COMMON_WORDS_HALF_RATIO, count - len(other_matches)),
         )
 
         result = []
@@ -127,7 +135,10 @@ class EntropyCalculator:
             patterns_seen += 1
 
             # Early termination check every 20 evaluations for performance
-            if patterns_seen % 20 == 0 and patterns_seen > 40:
+            if (
+                patterns_seen % DEFAULT_EARLY_TERMINATION_CHECK_INTERVAL == 0
+                and patterns_seen > ENTROPY_MIN_EVALUATIONS
+            ):
                 estimated_entropy = EntropyCalculator._estimate_final_entropy(
                     pattern_counts, patterns_seen, total_answers
                 )
@@ -171,8 +182,8 @@ class CandidateSelector:
     def get_limited_candidates(
         possible_words: List[str],
         common_words: List[str],
-        max_possible: int = 100,
-        max_additional_common: int = 10,
+        max_possible: int = DEFAULT_MAX_POSSIBLE_CANDIDATES,
+        max_additional_common: int = DEFAULT_MAX_ADDITIONAL_COMMON_WORDS,
     ) -> List[str]:
         """Get a limited set of candidates for evaluation to improve performance."""
         candidates_to_evaluate = possible_words.copy()

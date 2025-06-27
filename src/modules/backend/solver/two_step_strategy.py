@@ -14,6 +14,17 @@ from .common_utils import (
     get_pattern_counter,
     return_pattern_counter,
 )
+from .constants import (
+    DEFAULT_SUGGESTIONS_COUNT,
+    PERFECT_SCORE,
+    TWO_STEP_COUNT_MULTIPLIER,
+    TWO_STEP_FEW_WORDS_THRESHOLD,
+    TWO_STEP_LARGE_SEARCH_THRESHOLD,
+    TWO_STEP_MAX_ADDITIONAL_COMMON,
+    TWO_STEP_MAX_PATTERNS_DEFAULT,
+    TWO_STEP_MAX_POSSIBLE_CANDIDATES,
+    TWO_STEP_SECOND_STEP_CANDIDATE_LIMIT,
+)
 from .entropy_strategy import EntropyStrategy
 from .memory_profiler import profile_memory
 from .solver_strategy import SolverStrategy
@@ -33,7 +44,7 @@ class TwoStepStrategy(SolverStrategy):
     outcome after two steps.
     """
 
-    def __init__(self, max_patterns_to_evaluate: int = 10):
+    def __init__(self, max_patterns_to_evaluate: int = TWO_STEP_MAX_PATTERNS_DEFAULT):
         """
         Initialize the two-step strategy.
 
@@ -49,7 +60,7 @@ class TwoStepStrategy(SolverStrategy):
         possible_words: List[str],
         common_words: List[str],
         guesses_so_far: List[Tuple[str, str]],
-        count: int = 10,
+        count: int = DEFAULT_SUGGESTIONS_COUNT,
         word_manager: Optional["WordManager"] = None,
     ) -> List[str]:
         """Get top N suggestions based on two-step lookahead."""
@@ -57,13 +68,13 @@ class TwoStepStrategy(SolverStrategy):
             return []
 
         # For very few words, use simple sorting
-        if len(possible_words) <= 3:
+        if len(possible_words) <= TWO_STEP_FEW_WORDS_THRESHOLD:
             return WordSorter.sort_by_commonness_priority(
                 possible_words, common_words, word_manager
             )
 
         # For early game or large search spaces, fallback to entropy
-        if not guesses_so_far or len(possible_words) > 50:
+        if not guesses_so_far or len(possible_words) > TWO_STEP_LARGE_SEARCH_THRESHOLD:
             result = self.entropy_fallback.get_top_suggestions(
                 possible_words, common_words, guesses_so_far, count, word_manager
             )
@@ -71,7 +82,10 @@ class TwoStepStrategy(SolverStrategy):
 
         # Use memory-optimized candidate selection for two-step analysis
         candidates_to_evaluate = CandidateSelector.get_limited_candidates(
-            possible_words, common_words, max_possible=20, max_additional_common=5
+            possible_words,
+            common_words,
+            max_possible=TWO_STEP_MAX_POSSIBLE_CANDIDATES,
+            max_additional_common=TWO_STEP_MAX_ADDITIONAL_COMMON,
         )
 
         # Use memory-optimized processing for two-step scoring
@@ -83,7 +97,9 @@ class TwoStepStrategy(SolverStrategy):
         )
 
         sorted_words = MemoryOptimizedWordProcessor.get_top_n_words(
-            word_score_gen, min(count * 2, len(candidates_to_evaluate)), reverse=True
+            word_score_gen,
+            min(count * TWO_STEP_COUNT_MULTIPLIER, len(candidates_to_evaluate)),
+            reverse=True,
         )
 
         # Use common utility for balanced distribution
@@ -128,7 +144,7 @@ class TwoStepStrategy(SolverStrategy):
 
                 if len(remaining_words) <= 1:
                     # If only one word remains, perfect outcome
-                    second_step_score = 10.0
+                    second_step_score = PERFECT_SCORE
                 else:
                     # Calculate best entropy for remaining words
                     second_step_score = self._get_best_second_step_entropy(
@@ -158,10 +174,12 @@ class TwoStepStrategy(SolverStrategy):
     def _get_best_second_step_entropy(self, remaining_words: List[str]) -> float:
         """Get the best entropy score for the second step with limited candidates."""
         if len(remaining_words) <= 1:
-            return 10.0  # Perfect score for single word
+            return PERFECT_SCORE  # Perfect score for single word
 
         # For performance, only evaluate a subset of candidates for second step
-        candidates = remaining_words[: min(10, len(remaining_words))]
+        candidates = remaining_words[
+            : min(TWO_STEP_SECOND_STEP_CANDIDATE_LIMIT, len(remaining_words))
+        ]
 
         best_entropy = 0.0
         for candidate in candidates:

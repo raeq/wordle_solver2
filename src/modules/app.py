@@ -4,7 +4,7 @@ Main application module that coordinates the backend and frontend components.
 """
 
 from src.common.di_container import get_container
-from src.config.settings import get_config
+from src.config.settings import get_settings
 from src.frontend.cli_interface import CLIInterface
 
 from .backend.exceptions import (
@@ -28,12 +28,12 @@ class WordleSolverApp:
 
     def __init__(self) -> None:
         # Get configuration and DI container
-        self.config = get_config()
+        self.config = get_settings()
         self.container = get_container()
 
         # Group related components to reduce instance attribute count
         self._components = self._initialize_components()
-        self.current_strategy_name = self.config.game.default_strategy
+        self.current_strategy_name = self.config.solver.default_strategy
 
     def _initialize_components(self) -> dict:
         """Initialize and return all application components."""

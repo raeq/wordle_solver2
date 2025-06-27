@@ -1,104 +1,135 @@
 """
-Centralized configuration settings for the Wordle Solver application.
+Configuration settings for the Wordle solver application.
 """
 
-import os
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
+from typing import Any, Dict, Optional
 
 import yaml
 
+from ..modules.backend.solver.constants import (
+    DEFAULT_BACKUP_COUNT,
+    DEFAULT_ENCODING,
+    DEFAULT_MAX_ATTEMPTS,
+    DEFAULT_SUGGESTIONS_COUNT,
+    DEFAULT_WORD_LENGTH,
+)
+
 
 @dataclass
-class GameConfig:
-    """Game-related configuration."""
+class GameSettings:
+    """Settings for the Wordle game."""
 
-    max_attempts: int = 6
-    word_length: int = 5
-    default_strategy: str = "weighted_gain"
+    max_attempts: int = DEFAULT_MAX_ATTEMPTS
+    word_length: int = DEFAULT_WORD_LENGTH
 
 
 @dataclass
-class LoggingConfig:
-    """Logging configuration."""
+class LoggingSettings:
+    """Settings for logging configuration."""
 
     level: str = "INFO"
-    log_dir: str = "logs"
-    log_file: str = "wordle_solver.log"
-    backup_count: int = 30
     format: str = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-    date_format: str = "%Y-%m-%d %H:%M:%S"
+    file_handler: bool = True
+    console_handler: bool = True
+    backup_count: int = DEFAULT_BACKUP_COUNT
 
 
 @dataclass
-class UIConfig:
-    """User interface configuration."""
+class SolverSettings:
+    """Settings for the solver strategies."""
 
-    suggestions_count: int = 10
-    enable_colors: bool = True
-    enable_progress_bar: bool = True
+    default_strategy: str = "entropy"
+    suggestions_count: int = DEFAULT_SUGGESTIONS_COUNT
+    enable_memory_optimization: bool = True
+    enable_performance_profiling: bool = False
 
 
 @dataclass
-class AppConfig:
-    """Main application configuration."""
+class AppSettings:
+    """Main application settings."""
 
-    game: GameConfig
-    logging: LoggingConfig
-    ui: UIConfig
-    project_root: Path
+    game: GameSettings
+    logging: LoggingSettings
+    solver: SolverSettings
+
+    def __init__(
+        self,
+        game: Optional[GameSettings] = None,
+        logging: Optional[LoggingSettings] = None,
+        solver: Optional[SolverSettings] = None,
+    ):
+        self.game = game or GameSettings()
+        self.logging = logging or LoggingSettings()
+        self.solver = solver or SolverSettings()
 
     @classmethod
-    def load(cls, config_path: Optional[str] = None) -> "AppConfig":
-        """Load configuration from file or use defaults."""
-        project_root = Path(__file__).parent.parent.parent
+    def load_from_file(cls, config_path: Path) -> "AppSettings":
+        """Load settings from a YAML configuration file."""
+        try:
+            with open(config_path, encoding=DEFAULT_ENCODING) as f:
+                data = yaml.safe_load(f)
 
-        # Default configuration
-        game = GameConfig()
-        logging = LoggingConfig()
-        ui = UIConfig()
+            # Create settings instances from loaded data
+            game_data = data.get("game", {})
+            logging_data = data.get("logging", {})
+            solver_data = data.get("solver", {})
 
-        # Load from file if provided
-        if config_path and os.path.exists(config_path):
-            with open(config_path, encoding="utf-8") as f:
-                config_data = yaml.safe_load(f)
+            game_settings = GameSettings(**game_data)
+            logging_settings = LoggingSettings(**logging_data)
+            solver_settings = SolverSettings(**solver_data)
 
-            # Update configurations with file data
-            if "game" in config_data:
-                game = GameConfig(**config_data["game"])
-            if "logging" in config_data:
-                logging = LoggingConfig(**config_data["logging"])
-            if "ui" in config_data:
-                ui = UIConfig(**config_data["ui"])
+            return cls(
+                game=game_settings, logging=logging_settings, solver=solver_settings
+            )
 
-        return cls(game=game, logging=logging, ui=ui, project_root=project_root)
+        except FileNotFoundError:
+            # Return default settings if file doesn't exist
+            return cls()
+        except (yaml.YAMLError, TypeError) as e:
+            # Log error and return default settings
+            print(f"Error loading configuration: {e}")
+            return cls()
 
-    @property
-    def log_file_path(self) -> Path:
-        """Get the full path to the log file."""
-        return self.project_root / self.logging.log_dir / self.logging.log_file
+    def to_dict(self) -> Dict[str, Any]:
+        """Convert settings to dictionary format."""
+        return {
+            "game": {
+                "max_attempts": self.game.max_attempts,
+                "word_length": self.game.word_length,
+            },
+            "logging": {
+                "level": self.logging.level,
+                "format": self.logging.format,
+                "file_handler": self.logging.file_handler,
+                "console_handler": self.logging.console_handler,
+                "backup_count": self.logging.backup_count,
+            },
+            "solver": {
+                "default_strategy": self.solver.default_strategy,
+                "suggestions_count": self.solver.suggestions_count,
+                "enable_memory_optimization": self.solver.enable_memory_optimization,
+                "enable_performance_profiling": self.solver.enable_performance_profiling,
+            },
+        }
 
-    @property
-    def words_file_path(self) -> Path:
-        """Get the full path to the words file."""
-        return self.project_root / "src" / "words.txt"
+
+# Global settings instance
+_app_settings: Optional[AppSettings] = None
 
 
-# Global configuration instance
-config: Optional[AppConfig] = None
+def get_settings() -> AppSettings:
+    """Get the global application settings instance."""
+    global _app_settings
+    if _app_settings is None:
+        # Try to load from config file in the project root
+        config_path = Path(__file__).parent.parent.parent / "config.yaml"
+        _app_settings = AppSettings.load_from_file(config_path)
+    return _app_settings
 
 
-def get_config() -> AppConfig:
-    """Get the global configuration instance."""
-    global config
-    if config is None:
-        config = AppConfig.load()
-    return config
-
-
-def initialize_config(config_path: Optional[str] = None) -> AppConfig:
-    """Initialize the global configuration."""
-    global config
-    config = AppConfig.load(config_path)
-    return config
+def reset_settings() -> None:
+    """Reset the global settings instance (useful for testing)."""
+    global _app_settings
+    _app_settings = None

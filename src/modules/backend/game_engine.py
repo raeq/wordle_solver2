@@ -14,6 +14,7 @@ from .exceptions import (
     InvalidWordError,
 )
 from .result_color import ResultColor
+from .solver.constants import DEFAULT_GAME_ID_LENGTH, DEFAULT_MAX_ATTEMPTS
 from .word_manager import WordManager
 
 
@@ -25,7 +26,7 @@ class GameEngine:
         self.word_manager = word_manager
         self.target_word = ""
         self.guesses: List[Tuple[str, str]] = []
-        self.max_guesses = 6
+        self.max_guesses = DEFAULT_MAX_ATTEMPTS
         self.game_active = False
         self._game_id = ""
 
@@ -45,7 +46,9 @@ class GameEngine:
         if value is None or value.strip() == "":
             # Generate a new game ID
             characters = string.ascii_uppercase + string.digits
-            self._game_id = "".join(random.choice(characters) for _ in range(6))
+            self._game_id = "".join(
+                random.choice(characters) for _ in range(DEFAULT_GAME_ID_LENGTH)
+            )
         else:
             self._game_id = value
 

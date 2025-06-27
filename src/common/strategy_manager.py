@@ -7,6 +7,10 @@ from typing import Any, Dict, List, Optional, Type
 
 from src.common.cache import cache_strategy_results
 from src.common.types import GuessHistory
+from src.modules.backend.solver.constants import (
+    DEFAULT_SUGGESTIONS_COUNT,
+    FIRST_ARRAY_INDEX,
+)
 
 # Import all strategy classes at module level to fix import-outside-toplevel warnings
 from src.modules.backend.solver.entropy_strategy import EntropyStrategy
@@ -34,7 +38,7 @@ class StrategyManager:
         """Register a new strategy class."""
         self._strategies[name] = strategy_class
         self._performance_stats[name] = {
-            "total_calls": 0,
+            "total_calls": FIRST_ARRAY_INDEX,
             "total_time": 0.0,
             "average_time": 0.0,
             "last_used": None,
@@ -58,7 +62,7 @@ class StrategyManager:
         possible_words: List[str],
         common_words: List[str],
         guesses_so_far: GuessHistory,
-        count: int = 10,
+        count: int = DEFAULT_SUGGESTIONS_COUNT,
         word_manager: Any = None,
     ) -> List[str]:
         """Get suggestions with performance monitoring."""

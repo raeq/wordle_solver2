@@ -5,6 +5,13 @@ Minimax strategy for Wordle that minimizes the worst-case number of remaining wo
 from collections import defaultdict
 from typing import TYPE_CHECKING, Dict, List, Optional, Tuple
 
+from .constants import (
+    DEFAULT_SUGGESTIONS_COUNT,
+    MINIMAX_LARGE_CANDIDATE_THRESHOLD,
+    MINIMAX_MAX_ADDITIONAL_CANDIDATES,
+    MINIMAX_MAX_CANDIDATES_FOR_EFFICIENCY,
+    MINIMAX_PERFORMANCE_CANDIDATE_LIMIT,
+)
 from .solver_strategy import SolverStrategy
 from .solver_utils import calculate_pattern
 
@@ -24,7 +31,7 @@ class MinimaxStrategy(SolverStrategy):
         possible_words: List[str],
         common_words: List[str],
         guesses_so_far: List[Tuple[str, str]],
-        count: int = 10,
+        count: int = DEFAULT_SUGGESTIONS_COUNT,
         word_manager: Optional["WordManager"] = None,
     ) -> List[str]:
         """Get top N suggestions based on minimax strategy."""
@@ -75,12 +82,12 @@ class MinimaxStrategy(SolverStrategy):
                 all_candidates.append(word)
 
         # For efficiency, if there are too many candidates, limit to a reasonable number
-        if len(all_candidates) > 1000:
+        if len(all_candidates) > MINIMAX_MAX_CANDIDATES_FOR_EFFICIENCY:
             # Always include all possible matches plus some common words
             additional_candidates = [w for w in common_words if w not in possible_words]
 
             # Limit the total number of candidates to evaluate
-            max_additional = 500 - len(possible_words)
+            max_additional = MINIMAX_MAX_ADDITIONAL_CANDIDATES - len(possible_words)
             if max_additional > 0:
                 additional_candidates = additional_candidates[:max_additional]
 
@@ -96,13 +103,15 @@ class MinimaxStrategy(SolverStrategy):
         candidates = possible_words.copy()
 
         # MAJOR OPTIMIZATION: Limit the number of candidates based on game state
-        if len(possible_words) > 50:
+        if len(possible_words) > MINIMAX_LARGE_CANDIDATE_THRESHOLD:
             # In mid-game with many possibilities, only evaluate a subset
-            candidates = possible_words[:25]  # Only top 25 possible words
+            candidates = possible_words[
+                :MINIMAX_PERFORMANCE_CANDIDATE_LIMIT
+            ]  # Only top 25 possible words
 
-            # Add a few strategic common words that aren't in possible words
-            additional_common = [w for w in common_words if w not in possible_words][:5]
-            candidates.extend(additional_common)
+            # Add a few common words for diversity
+            additional_common = [w for w in common_words if w not in possible_words]
+            candidates.extend(additional_common[:5])  # Only 5 additional common words
         elif len(possible_words) > 20:
             # With moderate possibilities, evaluate more but still limited
             candidates = possible_words[:35]

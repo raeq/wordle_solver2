@@ -13,6 +13,16 @@ from .common_utils import (
     get_word_score_dict,
     return_word_score_dict,
 )
+from .constants import (
+    DEFAULT_ENTROPY_WEIGHT,
+    DEFAULT_FREQUENCY_WEIGHT,
+    DEFAULT_POSITIONAL_WEIGHT,
+    DEFAULT_SUGGESTIONS_COUNT,
+    WEIGHT_DISPLAY_PRECISION,
+    WEIGHTED_GAIN_LARGE_WORDLIST_THRESHOLD,
+    WEIGHTED_GAIN_MAX_ADDITIONAL_COMMON,
+    WEIGHTED_GAIN_MAX_POSSIBLE_CANDIDATES,
+)
 from .memory_profiler import profile_memory
 from .solver_strategy import SolverStrategy
 from .solver_utils import calculate_position_frequencies
@@ -33,9 +43,9 @@ class WeightedGainStrategy(SolverStrategy):
 
     def __init__(
         self,
-        entropy_weight: float = 0.6,
-        positional_weight: float = 0.3,
-        frequency_weight: float = 0.1,
+        entropy_weight: float = DEFAULT_ENTROPY_WEIGHT,
+        positional_weight: float = DEFAULT_POSITIONAL_WEIGHT,
+        frequency_weight: float = DEFAULT_FREQUENCY_WEIGHT,
     ):
         """
         Initialize the weighted information gain strategy with customizable weights.
@@ -52,7 +62,7 @@ class WeightedGainStrategy(SolverStrategy):
         self.frequency_weight = frequency_weight / total
 
         # For debugging/testing: add small identifier to help differentiate strategies
-        self.weight_signature = f"E{self.entropy_weight:.1f}_P{self.positional_weight:.1f}_F{self.frequency_weight:.1f}"
+        self.weight_signature = f"E{self.entropy_weight:.{WEIGHT_DISPLAY_PRECISION}f}_P{self.positional_weight:.{WEIGHT_DISPLAY_PRECISION}f}_F{self.frequency_weight:.{WEIGHT_DISPLAY_PRECISION}f}"
 
     @profile_memory("WeightedGainStrategy.get_top_suggestions")
     def get_top_suggestions(
@@ -60,7 +70,7 @@ class WeightedGainStrategy(SolverStrategy):
         possible_words: List[str],
         common_words: List[str],
         guesses_so_far: List[Tuple[str, str]],
-        count: int = 10,
+        count: int = DEFAULT_SUGGESTIONS_COUNT,
         word_manager: Optional["WordManager"] = None,
     ) -> List[str]:
         """Get top N suggestions based on weighted information gain."""
@@ -75,14 +85,20 @@ class WeightedGainStrategy(SolverStrategy):
 
         # For the first guess with small word lists, use weighted scoring to show differences
         # Only use good starters for very large word lists to avoid expensive computation
-        if not guesses_so_far and len(possible_words) > 50:
+        if (
+            not guesses_so_far
+            and len(possible_words) > WEIGHTED_GAIN_LARGE_WORDLIST_THRESHOLD
+        ):
             return CandidateSelector.get_good_starters(
                 possible_words, common_words, count
             )
 
         # Use memory-optimized candidate selection
         candidates_to_evaluate = CandidateSelector.get_limited_candidates(
-            possible_words, common_words, max_possible=50, max_additional_common=10
+            possible_words,
+            common_words,
+            max_possible=WEIGHTED_GAIN_MAX_POSSIBLE_CANDIDATES,
+            max_additional_common=WEIGHTED_GAIN_MAX_ADDITIONAL_COMMON,
         )
 
         # Use memory-optimized word processing with generators

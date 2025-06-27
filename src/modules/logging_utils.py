@@ -27,6 +27,18 @@ import structlog
 import yaml
 from structlog.stdlib import BoundLogger
 
+# Import constants for magic number replacement
+from .backend.solver.constants import (
+    FIFTH_ARRAY_INDEX,
+    FIRST_ARRAY_INDEX,
+    FOURTH_ARRAY_INDEX,
+    MILLISECONDS_CONVERSION_FACTOR,
+    ROUND_PRECISION_DIGITS,
+    SECOND_ARRAY_INDEX,
+    SKIP_SELF_PARAMETER_INDEX,
+    THIRD_ARRAY_INDEX,
+)
+
 # Type variables for better type hinting
 F = TypeVar("F", bound=Callable[..., Any])
 
@@ -191,7 +203,7 @@ def _extract_log_data(func: Callable, args: Any, kwargs: Any, level: str) -> dic
         A dictionary containing the extracted log data
     """
     module_name = func.__module__
-    class_name = args[0].__class__.__name__ if args else None
+    class_name = args[FIRST_ARRAY_INDEX].__class__.__name__ if args else None
     func_name = func.__name__
     log_data = {
         "module": module_name,
@@ -200,13 +212,15 @@ def _extract_log_data(func: Callable, args: Any, kwargs: Any, level: str) -> dic
     }
     if level.upper() == "DEBUG":
         params = {}
-        if args and len(args) > 1:  # Skip 'self' parameter
+        if args and len(args) > SKIP_SELF_PARAMETER_INDEX:  # Skip 'self' parameter
             # Get parameter names from function signature
             sig = inspect.signature(func)
             param_names = list(sig.parameters.keys())
 
             # Map positional args to their parameter names (excluding 'self')
-            for i, arg in enumerate(args[1:], 1):
+            for i, arg in enumerate(
+                args[SKIP_SELF_PARAMETER_INDEX:], SKIP_SELF_PARAMETER_INDEX
+            ):
                 if i < len(param_names):
                     params[param_names[i]] = repr(arg)
                 else:
@@ -250,7 +264,7 @@ def _log_performance(_logger_instance, log_data, execution_time, level):
         _logger_instance.debug(
             "Method execution completed",
             **log_data,
-            execution_time_ms=round(execution_time, 2),
+            execution_time_ms=round(execution_time, ROUND_PRECISION_DIGITS),
         )
 
 
@@ -314,7 +328,9 @@ def log_method(level: str = "DEBUG") -> Callable[[F], F]:
                     and start_time is not None
                     and log_data is not None
                 ):
-                    execution_time = (time.time() - start_time) * 1000  # ms
+                    execution_time = (
+                        time.time() - start_time
+                    ) * MILLISECONDS_CONVERSION_FACTOR  # ms
                     _log_performance(current_logger, log_data, execution_time, level)
 
         return cast(F, wrapper)
@@ -344,7 +360,7 @@ def log_game_outcome(func: F) -> F:
         result = func(*args, **kwargs)
 
         # Extract game result information
-        class_name = args[0].__class__.__name__ if args else None
+        class_name = args[FIRST_ARRAY_INDEX].__class__.__name__ if args else None
         method_name = func.__name__
 
         # For specific outcome methods, log more detailed information
@@ -353,22 +369,38 @@ def log_game_outcome(func: F) -> F:
             "_display_game_result",
             "display_game_over",
         ):
-            won = args[1] if len(args) > 1 else kwargs.get("won", None)
+            won = (
+                args[SECOND_ARRAY_INDEX]
+                if len(args) > SECOND_ARRAY_INDEX
+                else kwargs.get("won", None)
+            )
 
             # Different parameter order depending on the method
             if method_name == "_display_solver_result":
-                attempt = args[2] if len(args) > 2 else kwargs.get("attempt", None)
-                max_attempts = (
-                    args[3] if len(args) > 3 else kwargs.get("max_attempts", None)
+                attempt = (
+                    args[THIRD_ARRAY_INDEX]
+                    if len(args) > THIRD_ARRAY_INDEX
+                    else kwargs.get("attempt", None)
                 )
-                target_word = None
-            else:
+                max_attempts = (
+                    args[FOURTH_ARRAY_INDEX]
+                    if len(args) > FOURTH_ARRAY_INDEX
+                    else kwargs.get("max_attempts", None)
+                )
                 target_word = (
-                    args[2] if len(args) > 2 else kwargs.get("target_word", None)
+                    args[THIRD_ARRAY_INDEX]
+                    if len(args) > THIRD_ARRAY_INDEX
+                    else kwargs.get("target_word", None)
                 )
-                attempt = args[3] if len(args) > 3 else kwargs.get("attempt", None)
+                attempt = (
+                    args[FOURTH_ARRAY_INDEX]
+                    if len(args) > FOURTH_ARRAY_INDEX
+                    else kwargs.get("attempt", None)
+                )
                 max_attempts = (
-                    args[4] if len(args) > 4 else kwargs.get("max_attempts", None)
+                    args[FIFTH_ARRAY_INDEX]
+                    if len(args) > FIFTH_ARRAY_INDEX
+                    else kwargs.get("max_attempts", None)
                 )
 
             # Create the structured log data (don't include 'event' as a key)
