@@ -15,7 +15,7 @@ setup(
             "wordle-solver=src.main:main",
         ],
     },
-    author="Wordle Solver Team",
+    author="Richard Quinn",
     author_email="example@example.com",
     description="A Wordle game and solver application",
     keywords="wordle, game, solver, puzzle",
