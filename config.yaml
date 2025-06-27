@@ -1,0 +1,30 @@
+# Consolidated configuration for Wordle Solver
+# This replaces the duplicate logging_config.yaml files
+
+game:
+  max_attempts: 6
+  word_length: 5
+  default_strategy: "weighted_gain"
+
+logging:
+  level: "INFO"
+  log_dir: "logs"
+  log_file: "wordle_solver.log"
+  backup_count: 30
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  date_format: "%Y-%m-%d %H:%M:%S"
+
+ui:
+  suggestions_count: 10
+  enable_colors: true
+  enable_progress_bar: true
+
+strategies:
+  available:
+    - "frequency"
+    - "entropy"
+    - "weighted_gain"
+    - "minimax"
+    - "two_step"
+    - "hybrid_frequency_entropy"
+  default: "weighted_gain"

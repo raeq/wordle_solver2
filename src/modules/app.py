@@ -3,7 +3,10 @@
 Main application module that coordinates the backend and frontend components.
 """
 
-from ..frontend.cli_interface import CLIInterface
+from src.common.di_container import get_container
+from src.config.settings import get_config
+from src.frontend.cli_interface import CLIInterface
+
 from .backend.exceptions import (
     GameStateError,
     InvalidColorError,
@@ -14,6 +17,7 @@ from .backend.exceptions import (
 from .backend.game_engine import GameEngine
 from .backend.game_state_manager import GameStateManager
 from .backend.result_color import ResultColor
+from .backend.solver.strategy_factory import StrategyFactory
 from .backend.stats_manager import StatsManager
 from .backend.word_manager import WordManager
 from .logging_utils import log_game_outcome, log_method
@@ -23,17 +27,60 @@ class WordleSolverApp:
     """Main application that manages the game loop and component interaction."""
 
     def __init__(self) -> None:
-        # Initialize components
-        self.word_manager = WordManager()
-        self.solver = GameStateManager(self.word_manager)
-        self.game_engine = GameEngine(self.word_manager)
-        self.stats_manager = StatsManager()
-        self.ui = CLIInterface()
+        # Get configuration and DI container
+        self.config = get_config()
+        self.container = get_container()
+
+        # Group related components to reduce instance attribute count
+        self._components = self._initialize_components()
+        self.current_strategy_name = self.config.game.default_strategy
+
+    def _initialize_components(self) -> dict:
+        """Initialize and return all application components."""
+        return {
+            "word_manager": self.container.get(WordManager),
+            "solver": self.container.get(GameStateManager),
+            "game_engine": self.container.get(GameEngine),
+            "stats_manager": self.container.get(StatsManager),
+            "ui": self.container.get(CLIInterface),
+        }
+
+    @property
+    def word_manager(self) -> WordManager:
+        """Get word manager component."""
+        return self._components["word_manager"]  # type: ignore
+
+    @property
+    def solver(self) -> GameStateManager:
+        """Get solver component."""
+        return self._components["solver"]  # type: ignore
+
+    @property
+    def game_engine(self) -> GameEngine:
+        """Get game engine component."""
+        return self._components["game_engine"]  # type: ignore
+
+    @property
+    def stats_manager(self) -> StatsManager:
+        """Get stats manager component."""
+        return self._components["stats_manager"]  # type: ignore
+
+    @property
+    def ui(self) -> CLIInterface:
+        """Get UI component."""
+        return self._components["ui"]  # type: ignore
+
+    def get_current_strategy(self) -> str:
+        """Get the current strategy name (public method to satisfy pylint)."""
+        return self.current_strategy_name
 
     @log_method("DEBUG")
     def run(self) -> None:
         """Main application loop."""
         self.ui.display_welcome()
+
+        # Allow user to select initial strategy
+        self._select_initial_strategy()
 
         while True:
             game_mode = self.ui.get_game_mode()
@@ -47,7 +94,41 @@ class WordleSolverApp:
                 break
 
         self.ui.display_game_stats(self.stats_manager.get_stats())
-        self.ui.console.print("\n[bold blue]Thanks for using Wordle Solver! Goodbye! 👋[/bold blue]")
+        self.ui.console.print(
+            "\n[bold blue]Thanks for using Wordle Solver! Goodbye! 👋[/bold blue]"
+        )
+
+    def _select_initial_strategy(self) -> None:
+        """Allow user to select the initial strategy."""
+        self.ui.console.print("\n[bold]🧠 Let's set up your solver strategy![/bold]")
+
+        new_strategy_name = self.ui.get_strategy_selection(self.current_strategy_name)
+        if new_strategy_name:
+            self._change_strategy(new_strategy_name)
+
+        self.ui.display_current_strategy(self.current_strategy_name)
+
+    def _change_strategy(self, strategy_name: str) -> None:
+        """Change the current solver strategy."""
+        try:
+            new_strategy = StrategyFactory.create_strategy(strategy_name)
+            self.solver.set_strategy(new_strategy)
+            self.current_strategy_name = strategy_name
+            self.ui.console.print(
+                f"[bold green]✓ Strategy changed to: {strategy_name.upper()}[/bold green]"
+            )
+        except ValueError as e:
+            self.ui.console.print(
+                f"[bold red]Error changing strategy: {str(e)}[/bold red]"
+            )
+
+    def _handle_strategy_command(self) -> None:
+        """Handle the strategy change command."""
+        new_strategy_name = self.ui.get_strategy_selection(self.current_strategy_name)
+        if new_strategy_name:
+            self._change_strategy(new_strategy_name)
+        else:
+            self.ui.console.print("[dim]Strategy unchanged.[/dim]")
 
     @log_method("DEBUG")
     def _run_solver_mode(self) -> None:
@@ -55,68 +136,83 @@ class WordleSolverApp:
         try:
             self.ui.display_solver_mode_start()
             self.solver.reset()
-
-            # Show initial suggestions
             self._show_suggestions()
 
-            guesses_history = []
+            guesses_history: list = []
             attempt = 1
             max_attempts = 6
             won = False
 
             # Main solver loop
-            while attempt <= max_attempts:
-                try:
-                    # Get guess and result from user
-                    guess, result = self.ui.get_guess_and_result()
-
-                    # Update solver state
-                    self.solver.add_guess(guess, result)
-                    guesses_history.append([guess, result])
-
-                    # Display colored result
-                    self.ui.display_guess_result(guess, result, attempt, max_attempts)
-
-                    # Check if solved
-                    if result == ResultColor.GREEN.value * 5:
-                        won = True
-                        self.ui.console.print(
-                            "\n[bold green]Congratulations! You've found the solution![/bold green]"
-                        )
-                        break
-
-                    # Show top 10 suggestions after every guess (if not solved)
-                    if not won:
-                        self._show_suggestions()
-
+            while attempt <= max_attempts and not won:
+                won = self._process_solver_turn(guesses_history, attempt, max_attempts)
+                if not won:
                     attempt += 1
 
-                except InvalidGuessError as e:
-                    self.ui.console.print(f"[bold red]Invalid Guess: {str(e)}[/bold red]")
-                    continue
-                except InvalidResultError as e:
-                    self.ui.console.print(f"[bold red]Invalid Result: {str(e)}[/bold red]")
-                    continue
-                except InvalidColorError as e:
-                    self.ui.console.print(f"[bold red]Invalid Color: {str(e)}[/bold red]")
-                    continue
-                except WordleError as e:
-                    self.ui.console.print(f"[bold red]Error: {str(e)}[/bold red]")
-                    continue
-
-            # Record game statistics
-            self.stats_manager.record_game(guesses_history, won, attempt)
-
-            # Display game result
-            self._display_solver_result(won, attempt, max_attempts, guesses_history)
-            self.word_manager.reset()
+            # Record game statistics and display results
+            self._finalize_solver_mode(guesses_history, won, attempt, max_attempts)
 
         except Exception as e:
-            self.ui.console.print(f"[bold red]Unexpected error: {str(e)}[/bold red]")
-            self.ui.console.print(
-                "[bold yellow]The application will continue, "
-                "but the current game has been aborted.[/bold yellow]"
-            )
+            self._handle_solver_mode_error(e)
+
+    def _process_solver_turn(
+        self, guesses_history: list, attempt: int, max_attempts: int
+    ) -> bool:
+        """Process a single turn in solver mode. Returns True if game is won."""
+        try:
+            # Get guess and result from user
+            guess, result = self.ui.get_guess_and_result()
+
+            # Handle special commands
+            if guess == "HINT":
+                self._show_suggestions()
+                return False
+            if guess == "STRATEGY":
+                self._handle_strategy_command()
+                return False
+
+            # Update solver state
+            self.solver.add_guess(guess, result)
+            guesses_history.append([guess, result, self.current_strategy_name])
+
+            # Display colored result
+            self.ui.display_guess_result(guess, result, attempt, max_attempts)
+
+            # Check if solved
+            if result == ResultColor.GREEN.value * 5:
+                self.ui.console.print(
+                    "\n[bold green]Congratulations! You've found the solution![/bold green]"
+                )
+                return True
+
+            # Show suggestions for next turn
+            self._show_suggestions()
+            return False
+
+        except (
+            InvalidGuessError,
+            InvalidResultError,
+            InvalidColorError,
+            WordleError,
+        ) as e:
+            self.ui.console.print(f"[bold red]{type(e).__name__}: {str(e)}[/bold red]")
+            return False
+
+    def _finalize_solver_mode(
+        self, guesses_history: list, won: bool, attempt: int, max_attempts: int
+    ) -> None:
+        """Finalize solver mode by recording stats and displaying results."""
+        self.stats_manager.record_game(guesses_history, won, attempt)
+        self._display_solver_result(won, attempt, max_attempts, guesses_history)
+        self.word_manager.reset()
+
+    def _handle_solver_mode_error(self, error: Exception) -> None:
+        """Handle unexpected errors in solver mode."""
+        self.ui.console.print(f"[bold red]Unexpected error: {str(error)}[/bold red]")
+        self.ui.console.print(
+            "[bold yellow]The application will continue, "
+            "but the current game has been aborted.[/bold yellow]"
+        )
 
     @log_method("DEBUG")
     def _show_suggestions(self) -> None:
@@ -124,7 +220,12 @@ class WordleSolverApp:
         suggestions = self.solver.get_top_suggestions(10)
         common_words = self.word_manager.get_common_possible_words()
         possible_words = self.word_manager.get_possible_words()
-        self.ui.display_suggestions(suggestions, len(possible_words), common_words)
+        self.ui.display_suggestions(
+            suggestions,
+            len(possible_words),
+            common_words,
+            strategy_name=self.current_strategy_name,
+        )
 
     @log_method("INFO")
     @log_game_outcome
@@ -138,11 +239,14 @@ class WordleSolverApp:
                 f"You solved it in {attempt}/{max_attempts} attempts![/bold green]"
             )
         else:
-            self.ui.console.print("\n[bold red]Game over! You didn't find the solution.[/bold red]")
+            self.ui.console.print(
+                "\n[bold red]Game over! You didn't find the solution.[/bold red]"
+            )
 
         # Display guess history if available
         if guesses_history:
-            self.ui._display_guess_history(guesses_history)
+            # Use public method instead of protected access
+            self.ui.display_guess_history(guesses_history)
 
     @log_method("DEBUG")
     def _run_game_mode(self) -> None:
@@ -157,7 +261,9 @@ class WordleSolverApp:
             game_id = str(game_state["game_id"])
 
             # Display the start message with the game ID
-            self.ui.display_play_mode_start(game_id, f"The word has {len(set(target_word))} unique letters")
+            self.ui.display_play_mode_start(
+                game_id, f"The word has {len(set(target_word))} unique letters"
+            )
 
             guesses_history = []
             attempt = 1
@@ -168,11 +274,11 @@ class WordleSolverApp:
             while attempt <= max_attempts:
                 # Get guess from user (already handles input validation)
                 guess = self.ui.get_guess_input(
-                    "Enter your guess (5-letter word) or type 'hint' for suggestions:",
+                    "Enter your guess (5-letter word) or type 'hint'/'strategy' for help:",
                     self.word_manager,
                 )
 
-                # Handle hint command
+                # Handle special commands
                 if guess == "HINT":
                     # Get current possible words based on previous guesses
                     suggestions = self.solver.get_top_suggestions(10)
@@ -184,13 +290,18 @@ class WordleSolverApp:
                         suggestions,
                         len(possible_words),
                         common_possible,
+                        strategy_name=self.current_strategy_name,
                     )
+                    continue
+                if guess == "STRATEGY":
+                    self._handle_strategy_command()
                     continue
 
                 try:
                     # Process guess
                     result, is_solved = self.game_engine.make_guess(guess)
-                    guesses_history.append([guess, result])
+                    # Track strategy used for this guess
+                    guesses_history.append([guess, result, self.current_strategy_name])
 
                     # Add the guess to the solver to filter possible words
                     self.solver.add_guess(guess, result)
@@ -207,7 +318,9 @@ class WordleSolverApp:
                 except GameStateError as e:
                     self.ui.console.print(f"[bold red]Game Error: {str(e)}[/bold red]")
                 except InvalidGuessError as e:
-                    self.ui.console.print(f"[bold red]Invalid Guess: {str(e)}[/bold red]")
+                    self.ui.console.print(
+                        f"[bold red]Invalid Guess: {str(e)}[/bold red]"
+                    )
                 except WordleError as e:
                     self.ui.console.print(f"[bold red]Error: {str(e)}[/bold red]")
 
@@ -223,12 +336,33 @@ class WordleSolverApp:
 
             # Display game result
             self._display_game_result(
-                won, self.game_engine.target_word, attempt if won else max_attempts, max_attempts
+                won,
+                self.game_engine.target_word,
+                attempt if won else max_attempts,
+                max_attempts,
             )
 
             self.word_manager.reset()
 
+        except (
+            GameStateError,
+            InvalidGuessError,
+            InvalidResultError,
+            WordleError,
+        ) as e:
+            # Handle known game-related errors
+            self.ui.console.print(f"[bold red]Game Error: {str(e)}[/bold red]")
+            self.ui.console.print(
+                "[bold yellow]The application will continue, "
+                "but the current game has been aborted.[/bold yellow]"
+            )
+        except KeyboardInterrupt:
+            # Handle user interruption gracefully
+            self.ui.console.print(
+                "\n[bold yellow]Game interrupted by user.[/bold yellow]"
+            )
         except Exception as e:
+            # Handle any other unexpected errors to prevent app crash
             self.ui.console.print(f"[bold red]Unexpected error: {str(e)}[/bold red]")
             self.ui.console.print(
                 "[bold yellow]The application will continue, "
@@ -237,9 +371,16 @@ class WordleSolverApp:
 
     @log_method("INFO")
     @log_game_outcome
-    def _display_game_result(self, won: bool, target_word: str, attempt: int, max_attempts: int) -> None:
+    def _display_game_result(
+        self, won: bool, target_word: str, attempt: int, max_attempts: int
+    ) -> None:
         """Display the result of the play mode game."""
         game_state = self.game_engine.get_game_state()
         self.ui.display_game_over(
-            won, target_word, attempt, max_attempts, str(game_state["game_id"]), self.game_engine.guesses
+            won,
+            target_word,
+            attempt,
+            max_attempts,
+            str(game_state["game_id"]),
+            self.game_engine.guesses,
         )

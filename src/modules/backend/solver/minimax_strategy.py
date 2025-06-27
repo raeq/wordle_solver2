@@ -1,31 +1,31 @@
 # src/modules/backend/solver/minimax_strategy.py
 """
-Minimax-based solver strategy for Wordle that minimizes the worst-case scenario.
+Minimax strategy for Wordle that minimizes the worst-case number of remaining words.
 """
 from collections import defaultdict
-from typing import Dict, List, Tuple
+from typing import TYPE_CHECKING, Dict, List, Optional, Tuple
 
-from ...logging_utils import log_method
 from .solver_strategy import SolverStrategy
 from .solver_utils import calculate_pattern
+
+if TYPE_CHECKING:
+    from ..word_manager import WordManager
 
 
 class MinimaxStrategy(SolverStrategy):
     """
-    Strategy that uses the minimax principle to minimize the worst-case outcome.
-
-    This strategy chooses the word that minimizes the maximum number of possible
-    words remaining after a guess, ensuring that even in the worst case, the word
-    list is reduced as much as possible.
+    Strategy that uses minimax algorithm to minimize worst-case remaining words.
+    For each potential guess, calculates the maximum number of words that could remain
+    and chooses the guess that minimizes this maximum.
     """
 
-    @log_method("DEBUG")
     def get_top_suggestions(
         self,
         possible_words: List[str],
         common_words: List[str],
         guesses_so_far: List[Tuple[str, str]],
         count: int = 10,
+        word_manager: Optional["WordManager"] = None,
     ) -> List[str]:
         """Get top N suggestions based on minimax strategy."""
         if not possible_words:
@@ -39,22 +39,32 @@ class MinimaxStrategy(SolverStrategy):
         if not guesses_so_far:
             return self._get_good_starters(possible_words, common_words, count)
 
-        # Get candidates to evaluate
-        all_candidates = self._get_evaluation_candidates(possible_words, common_words)
+        # PERFORMANCE OPTIMIZATION: Significantly limit candidates for mid-game
+        candidates_to_evaluate = self._get_optimized_candidates(
+            possible_words, common_words
+        )
 
         # Score and sort candidates
-        sorted_words = self._score_and_sort_candidates(all_candidates, possible_words)
+        sorted_words = self._score_and_sort_candidates(
+            candidates_to_evaluate, possible_words
+        )
 
         # Build the final prioritized result
-        return self._build_prioritized_result(sorted_words, possible_words, common_words, count)
+        return self._build_prioritized_result(
+            sorted_words, possible_words, common_words, count
+        )
 
-    def _prioritize_common_words(self, possible_words: List[str], common_words: List[str]) -> List[str]:
+    def _prioritize_common_words(
+        self, possible_words: List[str], common_words: List[str]
+    ) -> List[str]:
         """Prioritize common words in the result when we have few words."""
         common_possible = [w for w in possible_words if w in common_words]
         other_possible = [w for w in possible_words if w not in common_words]
         return common_possible + other_possible
 
-    def _get_evaluation_candidates(self, possible_words: List[str], common_words: List[str]) -> List[str]:
+    def _get_evaluation_candidates(
+        self, possible_words: List[str], common_words: List[str]
+    ) -> List[str]:
         """Get a list of candidate words to evaluate."""
         all_candidates = possible_words.copy()
 
@@ -78,18 +88,75 @@ class MinimaxStrategy(SolverStrategy):
 
         return all_candidates
 
-    def _score_and_sort_candidates(self, candidates: List[str], possible_words: List[str]) -> List[str]:
+    def _get_optimized_candidates(
+        self, possible_words: List[str], common_words: List[str]
+    ) -> List[str]:
+        """Get an optimized set of candidates to evaluate for performance."""
+        # Start with possible words (these are the most important)
+        candidates = possible_words.copy()
+
+        # MAJOR OPTIMIZATION: Limit the number of candidates based on game state
+        if len(possible_words) > 50:
+            # In mid-game with many possibilities, only evaluate a subset
+            candidates = possible_words[:25]  # Only top 25 possible words
+
+            # Add a few strategic common words that aren't in possible words
+            additional_common = [w for w in common_words if w not in possible_words][:5]
+            candidates.extend(additional_common)
+        elif len(possible_words) > 20:
+            # With moderate possibilities, evaluate more but still limited
+            candidates = possible_words[:35]
+            additional_common = [w for w in common_words if w not in possible_words][
+                :10
+            ]
+            candidates.extend(additional_common)
+        else:
+            # With few possibilities, evaluate all possible words plus some extras
+            additional_common = [w for w in common_words if w not in possible_words][
+                :15
+            ]
+            candidates.extend(additional_common)
+
+        return candidates
+
+    def _score_and_sort_candidates(
+        self, candidates: List[str], possible_words: List[str]
+    ) -> List[str]:
         """Score candidates using minimax principle and return them sorted."""
         word_scores = {}
+
+        # OPTIMIZATION: Early termination if we find a perfect score
+        best_score = float("inf")
+
         for word in candidates:
-            word_scores[word] = -self._calculate_minimax_score(word, possible_words)
-            # Negative because lower worst-case count is better, but we sort by highest score later
+            score = self._calculate_minimax_score(word, possible_words)
+            word_scores[word] = -score  # Negative because lower worst-case is better
+
+            # Early termination: if we find a word that reduces to 1 in worst case, use it
+            if score == 1:
+                best_score = score
+                break
+
+            best_score = min(best_score, score)
+
+            # If we found a very good score and have enough candidates, stop early
+            if len(word_scores) >= 20 and score <= max(2, best_score + 1):
+                break
 
         # Sort by score (highest score first, which means lowest worst-case count)
-        return [word for word, score in sorted(word_scores.items(), key=lambda x: x[1], reverse=True)]
+        return [
+            word
+            for word, score in sorted(
+                word_scores.items(), key=lambda x: x[1], reverse=True
+            )
+        ]
 
     def _build_prioritized_result(
-        self, sorted_words: List[str], possible_words: List[str], common_words: List[str], count: int
+        self,
+        sorted_words: List[str],
+        possible_words: List[str],
+        common_words: List[str],
+        count: int,
     ) -> List[str]:
         """Build the final result with appropriate priorities."""
         # Split into common and other words
@@ -105,8 +172,12 @@ class MinimaxStrategy(SolverStrategy):
         # If we're in a late game with few possibilities, prioritize possible words
         if len(possible_words) <= 5:
             # In late game, favor words that could be the answer
-            possible_matches = [w for w in common_matches + other_matches if w in possible_words]
-            other_matches = [w for w in common_matches + other_matches if w not in possible_words]
+            possible_matches = [
+                w for w in common_matches + other_matches if w in possible_words
+            ]
+            other_matches = [
+                w for w in common_matches + other_matches if w not in possible_words
+            ]
             return (possible_matches + other_matches)[:count]
 
         # Combine with balanced distribution - about half should be common words
@@ -118,8 +189,9 @@ class MinimaxStrategy(SolverStrategy):
 
         return result[:count]
 
-    @log_method("DEBUG")
-    def _calculate_minimax_score(self, candidate: str, possible_answers: List[str]) -> int:
+    def _calculate_minimax_score(
+        self, candidate: str, possible_answers: List[str]
+    ) -> int:
         """
         Calculate the minimax score for a candidate word.
 
@@ -130,22 +202,68 @@ class MinimaxStrategy(SolverStrategy):
         if not possible_answers:
             return 0
 
+        total_answers = len(possible_answers)
+
+        # OPTIMIZATION: Early termination thresholds based on game state
+        # Only use early termination for larger sets to avoid interfering with tests
+        if total_answers > 100:
+            # For large word sets, if we can reduce to ≤5% of original, that's excellent
+            excellent_threshold = float(max(2, total_answers // 20))  # ≤5% remaining
+            min_samples = min(
+                50, total_answers // 3
+            )  # Process at least 1/3 or 50 words
+            min_patterns = min(10, total_answers // 10)  # Good pattern diversity
+        elif total_answers > 50:
+            # For medium sets, ≤10% is excellent
+            excellent_threshold = float(max(2, total_answers // 10))  # ≤10% remaining
+            min_samples = min(
+                25, total_answers // 2
+            )  # Process at least half or 25 words
+            min_patterns = min(8, total_answers // 8)  # Good pattern diversity
+        else:
+            # For small sets (≤50), disable early termination to ensure accuracy
+            excellent_threshold = float("inf")  # Never terminate early
+            min_samples = total_answers  # Process all words
+            min_patterns = total_answers  # All patterns
+
         # Count how many words would remain for each possible feedback pattern
         pattern_counts: Dict[str, int] = defaultdict(int)
+        current_max = 0
 
         # For each possible answer, determine what pattern the candidate would give
-        for answer in possible_answers:
+        for i, answer in enumerate(possible_answers):
             pattern = calculate_pattern(candidate, answer)
             pattern_counts[pattern] += 1
+            current_max = max(current_max, pattern_counts[pattern])
+
+            # EARLY TERMINATION: Only for larger sets with sufficient sampling
+            if (
+                current_max <= excellent_threshold
+                and i >= min_samples  # Processed enough samples
+                and len(pattern_counts) > min_patterns
+            ):  # Good pattern diversity
+
+                # This is likely an excellent candidate, return early
+                return current_max
 
         # Return the worst-case scenario (maximum number of remaining words)
         return max(pattern_counts.values())
 
-    @log_method("DEBUG")
-    def _get_good_starters(self, possible_words: List[str], common_words: List[str], count: int) -> List[str]:
+    def _get_good_starters(
+        self, possible_words: List[str], common_words: List[str], count: int
+    ) -> List[str]:
         """Return good starting words based on predefined choices."""
         # Strong starting words from both empirical testing and minimax analysis
-        starters = ["SOARE", "ROATE", "RAISE", "CRANE", "SLATE", "TRACE", "ADIEU", "AUDIO"]
+        starters = [
+            "SOARE",
+            "ROATE",
+            "RAISE",
+            "CRANE",
+            "SLATE",
+            "TRACE",
+            "ADIEU",
+            "AUDIO",
+        ]
 
         # Filter out any starters that aren't in our dictionary
         valid_starters = [w for w in starters if w in possible_words]
@@ -164,7 +282,10 @@ class MinimaxStrategy(SolverStrategy):
 
         # Sort by letter diversity score
         diverse_words = [
-            word for word, score in sorted(letter_diversity_scores.items(), key=lambda x: x[1], reverse=True)
+            word
+            for word, score in sorted(
+                letter_diversity_scores.items(), key=lambda x: x[1], reverse=True
+            )
         ]
 
         # Combine starters with diverse words

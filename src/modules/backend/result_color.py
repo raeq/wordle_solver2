@@ -58,6 +58,6 @@ class ResultColor(Enum):
         """Get the Rich style string for this color."""
         if self == self.GREEN:
             return "black on green"
-        elif self == self.YELLOW:
+        if self == self.YELLOW:
             return "black on yellow"
         return "white on grey23"  # BLACK case

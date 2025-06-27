@@ -18,7 +18,7 @@ class TestSolver(unittest.TestCase):
         # Create a mock WordManager
         self.word_manager = Mock(spec=WordManager)
 
-        # Configure the mock
+        # Configure the mock with proper return values
         self.word_manager.get_possible_words.return_value = [
             "CREAM",
             "BREAD",
@@ -27,6 +27,10 @@ class TestSolver(unittest.TestCase):
             "DREAM",
         ]
         self.word_manager.get_common_possible_words.return_value = ["CREAM", "BREAD"]
+
+        # Mock frequency method to return integers instead of Mock objects
+        self.word_manager.get_word_frequency.return_value = 1000
+        self.word_manager.get_word_entropy.return_value = 2.5
 
         # Create solver instance with mock word manager
         self.solver = GameStateManager(self.word_manager)

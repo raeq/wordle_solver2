@@ -1,93 +1,114 @@
 # src/modules/backend/solver/frequency_strategy.py
 """
-Frequency-based solver strategy for Wordle.
+Frequency-based solver strategy for Wordle using corpus frequency data.
 """
-from typing import Dict, List, Tuple
+import math
+from typing import TYPE_CHECKING, List, Optional, Tuple
 
-from ...logging_utils import log_method
-from .solver_strategy import SolverStrategy
-from .solver_utils import calculate_letter_frequencies
+from src.modules.backend.solver.solver_strategy import SolverStrategy
+
+from .common_utils import (
+    MemoryOptimizedWordProcessor,
+    WordSorter,
+)
+from .memory_profiler import profile_memory
+
+if TYPE_CHECKING:
+    from ..word_manager import WordManager
 
 
 class FrequencyStrategy(SolverStrategy):
-    """Strategy that uses letter frequency analysis to suggest words."""
+    """Strategy that uses actual word frequency data from corpus to suggest words."""
 
-    @log_method("DEBUG")
+    @profile_memory("FrequencyStrategy.get_top_suggestions")
     def get_top_suggestions(
         self,
         possible_words: List[str],
         common_words: List[str],
         guesses_so_far: List[Tuple[str, str]],
         count: int = 10,
+        word_manager: Optional["WordManager"] = None,
     ) -> List[str]:
-        """Get top N suggestions in order of likelihood, common words first."""
+        """Get top N suggestions based on actual word frequency from corpus."""
         if not possible_words:
             return []
 
         if len(possible_words) <= count:
-            # If we have few words left, prioritize common ones first
-            other_possible = [w for w in possible_words if w not in common_words]
-            return common_words + other_possible
+            # Use common utility for sorting by frequency with common priority
+            return WordSorter.sort_by_commonness_priority(
+                possible_words, common_words, word_manager
+            )
 
-        # Calculate letter frequency scores
-        letter_freq = calculate_letter_frequencies(possible_words)
-        # Convert from normalized frequencies to counts for scoring
-        total_words = len(possible_words)
-        letter_count = {letter: freq * total_words for letter, freq in letter_freq.items()}
+        # Use memory-optimized word processing with generators
+        def frequency_scoring_func(
+            word: str, gs: List[Tuple[str, str]], wm: "WordManager"
+        ) -> float:
+            return self._get_frequency_score(word, gs, wm)
 
-        # Separate common and uncommon words
-        other_possible = [w for w in possible_words if w not in common_words]
+        # Use generator-based processing to reduce memory usage
+        word_score_gen = MemoryOptimizedWordProcessor.word_score_generator(
+            possible_words, frequency_scoring_func, guesses_so_far, word_manager
+        )
 
-        # Score both groups separately
-        common_scored = self._score_words(common_words, letter_count, guesses_so_far)
-        other_scored = self._score_words(other_possible, letter_count, guesses_so_far)
+        sorted_words = MemoryOptimizedWordProcessor.get_top_n_words(
+            word_score_gen, min(count * 2, len(possible_words)), reverse=True
+        )
 
-        # Sort by score (highest first)
-        common_sorted = [
-            word for word, score in sorted(common_scored.items(), key=lambda x: x[1], reverse=True)
-        ]
-        other_sorted = [
-            word for word, score in sorted(other_scored.items(), key=lambda x: x[1], reverse=True)
-        ]
+        # Use common utility for balanced distribution
+        return WordSorter.balance_common_and_other(sorted_words, common_words, count)
 
-        # Combine with common words first, then fill with other words
-        suggestions = []
+    def _get_frequency_score(
+        self, word: str, guesses_so_far: List[Tuple[str, str]], word_manager=None
+    ) -> float:
+        """Get frequency score for a word with adjustments for previous guesses."""
+        if word_manager is not None:
+            # Use actual corpus frequency data
+            base_score = float(word_manager.get_word_frequency(word))
 
-        # Add common words first (up to count/2 or all common words)
-        common_count = min(len(common_sorted), max(count // 2, count - len(other_sorted)))
-        suggestions.extend(common_sorted[:common_count])
+            # Normalize score to a reasonable range (log scale for very high frequencies)
+            if base_score > 0:
+                # Use log scale to prevent extremely high frequencies from dominating
+                normalized_score = math.log10(base_score + 1)
+            else:
+                normalized_score = 0.0
 
-        # Add other words to fill up to count
-        suggestions.extend(other_sorted[: count - len(suggestions)])
+            # Apply small bonus for words not similar to previous guesses
+            uniqueness_bonus = self._calculate_uniqueness_bonus(word, guesses_so_far)
 
-        return suggestions[:count]
+            return normalized_score + uniqueness_bonus
+        # Fallback scoring based on word characteristics
+        return self._fallback_frequency_score(word)
 
-    @log_method("DEBUG")
-    def _score_words(
-        self, words: List[str], letter_freq: Dict[str, float], guesses_so_far: List[Tuple[str, str]]
-    ) -> Dict[str, float]:
-        """Score words based on letter frequency and uniqueness."""
-        word_scores: Dict[str, float] = {}
+    def _calculate_uniqueness_bonus(
+        self, word: str, guesses_so_far: List[Tuple[str, str]]
+    ) -> float:
+        """Calculate a small bonus for words that are different from previous guesses."""
+        if not guesses_so_far:
+            return 0.0
 
-        for word in words:
-            # Base score: sum of letter frequencies for unique letters
-            unique_letters = set(word)
-            score: float = sum(letter_freq.get(letter, 0) for letter in unique_letters)
+        # Small bonus for words that share fewer letters with previous guesses
+        previous_letters: set[str] = set()
+        for guess, _ in guesses_so_far:
+            previous_letters.update(guess.upper())
 
-            # Penalty for repeated letters (less information gain)
-            if len(unique_letters) < len(word):
-                repeated_count = len(word) - len(unique_letters)
-                score *= (5 - repeated_count) / 5  # Slight penalty for repeats
+        word_letters = set(word.upper())
+        shared_letters = len(word_letters.intersection(previous_letters))
+        total_letters = len(word_letters)
 
-            # Adjust score based on previous guesses (avoid similar patterns)
-            if guesses_so_far:
-                overlap_penalty: float = 0.0
-                for guess, _ in guesses_so_far:
-                    # Count shared letters
-                    shared_letters = len(set(word).intersection(set(guess)))
-                    overlap_penalty += shared_letters * 0.1  # Small penalty per shared letter
-                score -= overlap_penalty
+        # Small bonus (max 0.5) for words with fewer shared letters
+        uniqueness_ratio = (
+            1.0 - (shared_letters / total_letters) if total_letters > 0 else 0.0
+        )
+        return uniqueness_ratio * 0.5
 
-            word_scores[word] = score
+    def _fallback_frequency_score(self, word: str) -> float:
+        """Fallback scoring when no word_manager is available."""
+        # Score based on vowel content and common letter patterns
+        vowel_count = sum(1 for letter in word.upper() if letter in "AEIOU")
+        unique_letters = len(set(word.upper()))
 
-        return word_scores
+        # Common starting letters get slight bonus
+        common_starters = "TSRNA"
+        starter_bonus = 0.1 if word[0].upper() in common_starters else 0.0
+
+        return vowel_count + (unique_letters * 0.5) + starter_bonus

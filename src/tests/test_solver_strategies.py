@@ -28,7 +28,10 @@ def test_frequency_strategy_suggestions(word_manager):
     """Test that FrequencyStrategy returns valid suggestions."""
     strategy = FrequencyStrategy()
     suggestions = strategy.get_top_suggestions(
-        list(word_manager.possible_words), list(word_manager.common_words), [], 3  # No guesses yet
+        list(word_manager.possible_words),
+        list(word_manager.common_words),
+        [],
+        3,  # No guesses yet
     )
 
     # Should return suggestions
@@ -41,7 +44,10 @@ def test_entropy_strategy_suggestions(word_manager):
     """Test that EntropyStrategy returns valid suggestions."""
     strategy = EntropyStrategy()
     suggestions = strategy.get_top_suggestions(
-        list(word_manager.possible_words), list(word_manager.common_words), [], 3  # No guesses yet
+        list(word_manager.possible_words),
+        list(word_manager.common_words),
+        [],
+        3,  # No guesses yet
     )
 
     # Should return suggestions

@@ -3,7 +3,10 @@
 Strategy pattern implementation for Wordle solver algorithms.
 """
 from abc import ABC, abstractmethod
-from typing import List, Tuple
+from typing import TYPE_CHECKING, List, Optional, Tuple
+
+if TYPE_CHECKING:
+    from src.modules.backend.word_manager import WordManager
 
 
 class SolverStrategy(ABC):
@@ -16,6 +19,7 @@ class SolverStrategy(ABC):
         common_words: List[str],
         guesses_so_far: List[Tuple[str, str]],
         count: int = 10,
+        word_manager: Optional["WordManager"] = None,
     ) -> List[str]:
         """
         Get top N suggestions based on the strategy's algorithm.
@@ -25,8 +29,9 @@ class SolverStrategy(ABC):
             common_words: List of common words from the possible words
             guesses_so_far: List of (guess, result) tuples representing game history
             count: Number of suggestions to return
+            word_manager: WordManager instance for accessing word data
 
         Returns:
-            List of suggested words, ordered by score (best first)
+            List of suggested words, ordered by preference
         """
-        pass
+        raise NotImplementedError("Subclasses must implement get_top_suggestions")

@@ -58,8 +58,6 @@ class WordleError(Exception):
 class GameStateError(WordleError):
     """Raised when an operation is attempted in an invalid game state."""
 
-    pass
-
 
 class InvalidGuessError(WordleError):
     """Raised when a guess is invalid."""
@@ -101,4 +99,6 @@ class InputLengthError(WordleError):
         self.input_type = input_type
         self.actual_length = actual_length
         self.expected_length = expected_length
-        super().__init__(f"{input_type} must be exactly {expected_length} characters (got {actual_length})")
+        super().__init__(
+            f"{input_type} must be exactly {expected_length} characters (got {actual_length})"
+        )

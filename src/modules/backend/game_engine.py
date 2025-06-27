@@ -94,7 +94,9 @@ class GameEngine:
             raise InvalidGuessError(guess, "must contain only letters")
 
         # Check if word is valid, bypassing validation if word_manager is in test mode
-        if not self.word_manager._is_test_mode and not self.word_manager.is_valid_word(guess):
+        if not self.word_manager.is_test_mode() and not self.word_manager.is_valid_word(
+            guess
+        ):
             raise InvalidWordError(guess)
 
         result = self._calculate_result(guess, self.target_word)
@@ -129,7 +131,11 @@ class GameEngine:
 
         # Second pass: Mark misplaced letters (yellows)
         for i, g_char in enumerate(guess):
-            if result[i] != ResultColor.GREEN.value and g_char in target_chars and target_chars[g_char] > 0:
+            if (
+                result[i] != ResultColor.GREEN.value
+                and g_char in target_chars
+                and target_chars[g_char] > 0
+            ):
                 result[i] = ResultColor.YELLOW.value
                 target_chars[g_char] -= 1
 
@@ -148,7 +154,11 @@ class GameEngine:
     @log_method("DEBUG")
     def is_game_over(self) -> bool:
         """Check if the game is over (won or max guesses reached)."""
-        return self.is_game_won() or len(self.guesses) >= self.max_guesses or not self.game_active
+        return (
+            self.is_game_won()
+            or len(self.guesses) >= self.max_guesses
+            or not self.game_active
+        )
 
     @log_method("DEBUG")
     def get_game_state(self) -> Dict[str, object]:

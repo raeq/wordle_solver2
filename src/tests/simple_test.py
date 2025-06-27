@@ -6,7 +6,7 @@ This is not a formal unit test but rather a simple showcase of the modules worki
 
 # Use absolute imports instead of relative imports
 from src.modules.backend.game_engine import GameEngine
-from src.modules.backend.solver import Solver
+from src.modules.backend.solver.strategy_factory import StrategyFactory
 from src.modules.backend.word_manager import WordManager
 
 
@@ -19,7 +19,9 @@ def run_simple_test():
     word_manager = WordManager()
     all_words_count = len(word_manager.all_words)
     common_words_count = len(word_manager.common_words)
-    print(f"   Loaded {all_words_count} total words and {common_words_count} common words")
+    print(
+        f"   Loaded {all_words_count} total words and {common_words_count} common words"
+    )
 
     # Filter words with a sample guess
     print("\n   Testing word filtering...")
@@ -33,17 +35,24 @@ def run_simple_test():
     reset_count = len(word_manager.possible_words)
     print(f"   Reset filter - now have {reset_count} words")
 
-    # Test solver
-    print("\n2. Testing Solver...")
-    solver = Solver(word_manager)
-    suggestions = solver.get_top_suggestions(5)
+    # Test strategy factory
+    print("\n2. Testing StrategyFactory...")
+    strategy = StrategyFactory.create_strategy("frequency")
+    suggestions = strategy.get_top_suggestions(
+        list(word_manager.possible_words), list(word_manager.common_words), [], 5
+    )
     print(f"   Top 5 suggestions: {', '.join(suggestions)}")
 
-    # Test adding a guess
-    print("\n   Testing guess tracking...")
-    solver.add_guess("ADIEU", "BBYYB")
+    # Test adding a guess effect
+    print("\n   Testing guess filtering...")
+    word_manager.filter_words("ADIEU", "BBYYB")
     filtered_count = len(word_manager.possible_words)
-    new_suggestions = solver.get_top_suggestions(5)
+    new_suggestions = strategy.get_top_suggestions(
+        list(word_manager.possible_words),
+        list(word_manager.common_words),
+        [("ADIEU", "BBYYB")],
+        5,
+    )
     print(f"   After guess: {filtered_count} possible words")
     print(f"   New top 5 suggestions: {', '.join(new_suggestions)}")
 
@@ -55,7 +64,9 @@ def run_simple_test():
 
     # Make a sample guess
     try:
-        result, is_solved = game_engine.make_guess(target[:4] + "X")  # Almost correct guess
+        result, is_solved = game_engine.make_guess(
+            target[:4] + "X"
+        )  # Almost correct guess
         print(f"   Made guess: {target[:4] + 'X'}")
         print(f"   Result: {result}, Solved: {is_solved}")
     except ValueError:

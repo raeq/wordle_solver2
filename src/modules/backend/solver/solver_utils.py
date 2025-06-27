@@ -8,11 +8,9 @@ extracted to avoid code duplication and promote reusability.
 from collections import Counter
 from typing import Dict, List, Tuple
 
-from ...logging_utils import log_method
 from ..result_color import ResultColor
 
 
-@log_method("DEBUG")
 def calculate_pattern(guess: str, target: str) -> str:
     """
     Calculate the result pattern for a guess against a potential target word.
@@ -24,36 +22,39 @@ def calculate_pattern(guess: str, target: str) -> str:
     Returns:
         A string representing the pattern (using ResultColor values)
     """
+    # Ensure both strings are exactly 5 characters and uppercase
+    guess = guess.upper()[:5].ljust(5)
+    target = target.upper()[:5].ljust(5)
+
     # Initialize all positions as black (not matched)
     result = [ResultColor.BLACK.value] * 5
-    guess = guess.upper()
-    target = target.upper()
 
-    # Make a copy of the target for tracking available letters
-    remaining_target = list(target)
+    # Create a count of available letters in target for yellow matching
+    target_counts: Dict[str, int] = {}
+    for char in target:
+        target_counts[char] = target_counts.get(char, 0) + 1
 
-    # First pass: Mark green (correct position)
-    for i in range(min(len(guess), len(target))):
+    # First pass: Mark green (correct position) and reduce available counts
+    for i in range(5):
         if guess[i] == target[i]:
             result[i] = ResultColor.GREEN.value
-            # Mark this position as used in the target
-            remaining_target[i] = "_"
+            target_counts[guess[i]] -= 1
 
     # Second pass: Mark yellow (letter exists elsewhere)
-    for i in range(min(len(guess), len(target))):
+    for i in range(5):
         # Only check positions that weren't marked green
         if result[i] != ResultColor.GREEN.value:
-            for j, t_letter in enumerate(remaining_target):
-                if guess[i] == t_letter:
-                    result[i] = ResultColor.YELLOW.value
-                    remaining_target[j] = "_"  # Mark as used
-                    break
+            # If this letter is available in target (not used by greens)
+            if guess[i] in target_counts and target_counts[guess[i]] > 0:
+                result[i] = ResultColor.YELLOW.value
+                target_counts[guess[i]] -= 1
 
     return "".join(result)
 
 
-@log_method("DEBUG")
-def filter_by_guesses(words: List[str], guesses_so_far: List[Tuple[str, str]]) -> List[str]:
+def filter_by_guesses(
+    words: List[str], guesses_so_far: List[Tuple[str, str]]
+) -> List[str]:
     """
     Filter words based on previous guesses and their feedback patterns.
 
@@ -68,7 +69,9 @@ def filter_by_guesses(words: List[str], guesses_so_far: List[Tuple[str, str]]) -
 
     for guess, pattern in guesses_so_far:
         # Filter the list further with each guess
-        filtered_words = [word for word in filtered_words if is_word_consistent(word, guess, pattern)]
+        filtered_words = [
+            word for word in filtered_words if is_word_consistent(word, guess, pattern)
+        ]
 
     return filtered_words
 
@@ -92,7 +95,6 @@ def is_word_consistent(candidate: str, guess: str, pattern: str) -> bool:
     return expected_pattern == pattern
 
 
-@log_method("DEBUG")
 def calculate_position_frequencies(words: List[str]) -> List[Dict[str, float]]:
     """
     Calculate the frequency of each letter at each position in the word list.
@@ -121,7 +123,6 @@ def calculate_position_frequencies(words: List[str]) -> List[Dict[str, float]]:
     return position_freqs
 
 
-@log_method("DEBUG")
 def calculate_letter_frequencies(words: List[str]) -> Dict[str, float]:
     """
     Calculate the overall frequency of each letter in the word list.
@@ -141,7 +142,9 @@ def calculate_letter_frequencies(words: List[str]) -> Dict[str, float]:
     # Normalize to 0-1 range
     total_words = len(words)
     if total_words > 0:
-        normalized = {letter: count / total_words for letter, count in letter_counts.items()}
+        normalized = {
+            letter: count / total_words for letter, count in letter_counts.items()
+        }
     else:
         normalized = {}
 

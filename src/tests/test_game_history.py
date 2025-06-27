@@ -62,6 +62,7 @@ class TestGameHistory(unittest.TestCase):
         game_id = game_state["game_id"]
 
         # Verify we have a valid game ID
+        assert isinstance(game_id, str), "Game ID should be a string"
         self.assertTrue(game_id, "Game ID should not be empty")
         self.assertEqual(len(game_id), 6, "Game ID should be 6 characters long")
 
@@ -92,22 +93,28 @@ class TestGameHistory(unittest.TestCase):
             guesses_history,
             won,
             len(guesses_history),
-            game_id=game_id,
+            game_id=str(game_id),
             target_word=self.game_engine.target_word,
         )
 
         # Verify the game was stored in history
-        self.assertTrue(os.path.exists(self.test_history_file), "History file should be created")
+        self.assertTrue(
+            os.path.exists(self.test_history_file), "History file should be created"
+        )
 
         # Retrieve the game by ID
-        retrieved_game = self.stats_manager.get_game_by_id(game_id)
+        retrieved_game = self.stats_manager.get_game_by_id(str(game_id))
 
         # Verify we found a game
         self.assertIsNotNone(retrieved_game, f"Should find a game with ID {game_id}")
+        assert retrieved_game is not None  # Type assertion for mypy
 
         # Verify game details match what we expect
         self.assertEqual(retrieved_game["game_id"], game_id, "Game ID should match")
-        self.assertEqual(retrieved_game["target_word"], "THRUM", "Target word should match")
+        self.assertEqual(
+            retrieved_game["target_word"], "THRUM", "Target word should match"
+        )
+        assert isinstance(retrieved_game["guesses"], list), "Guesses should be a list"
         self.assertEqual(len(retrieved_game["guesses"]), 3, "Should have 3 guesses")
         self.assertTrue(retrieved_game["won"], "Game should be recorded as won")
 
@@ -129,7 +136,9 @@ class TestGameHistory(unittest.TestCase):
             result, _ = self.game_engine.make_guess(guess)
             guesses1.append([guess, result])
 
-        self.stats_manager.record_game(guesses1, True, 3, game_id=game1_id, target_word="THRUM")
+        self.stats_manager.record_game(
+            guesses1, True, 3, game_id=game1_id, target_word="THRUM"
+        )
 
         # Game 2: Lost game with target FEAST
         self.game_engine.start_new_game()
@@ -141,12 +150,16 @@ class TestGameHistory(unittest.TestCase):
             result, _ = self.game_engine.make_guess(guess)
             guesses2.append([guess, result])
 
-        self.stats_manager.record_game(guesses2, False, 6, game_id=game2_id, target_word="FEAST")
+        self.stats_manager.record_game(
+            guesses2, False, 6, game_id=game2_id, target_word="FEAST"
+        )
 
         # Test search by game ID
         games_by_id = self.stats_manager.search_games(game_id=game1_id)
         self.assertEqual(len(games_by_id), 1, "Should find exactly one game by ID")
-        self.assertEqual(games_by_id[0]["game_id"], game1_id, "Should find game with correct ID")
+        self.assertEqual(
+            games_by_id[0]["game_id"], game1_id, "Should find game with correct ID"
+        )
 
         # Test search by outcome
         won_games = self.stats_manager.search_games(won=True)
@@ -160,7 +173,9 @@ class TestGameHistory(unittest.TestCase):
 
         # Test search by max attempts
         quick_games = self.stats_manager.search_games(max_attempts=3)
-        self.assertEqual(len(quick_games), 1, "Should find one game with 3 or fewer attempts")
+        self.assertEqual(
+            len(quick_games), 1, "Should find one game with 3 or fewer attempts"
+        )
 
 
 if __name__ == "__main__":

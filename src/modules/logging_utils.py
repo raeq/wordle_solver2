@@ -38,10 +38,15 @@ _game_id_context: ContextVar[Optional[str]] = ContextVar("game_id", default=None
 
 
 def add_game_id_processor(
-    logger: Any, method_name: str, event_dict: MutableMapping[str, Any]
+    _logger: Any, _method_name: str, event_dict: MutableMapping[str, Any]
 ) -> Union[Mapping[str, Any], str, bytes, bytearray, tuple[Any, ...]]:
     """
     Processor that adds the game ID to the event dictionary if one is set in the context.
+
+    Args:
+        _logger: Logger instance (unused but required by structlog interface)
+        _method_name: Method name (unused but required by structlog interface)
+        event_dict: Event dictionary to modify
     """
     game_id = _game_id_context.get()
     if game_id:
@@ -102,7 +107,8 @@ def setup_logging(log_level: str = "INFO") -> None:
     Args:
         log_level: Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
     """
-    global logger
+    # Use module-level logger instead of global statement
+    import src.modules.logging_utils as logging_module
 
     # Create logs directory if it doesn't exist
     os_path = os.path.dirname(os.path.abspath(__file__))
@@ -117,7 +123,7 @@ def setup_logging(log_level: str = "INFO") -> None:
     config_file = os.path.join(os_path, "..", "logging_config.yaml")
 
     if os.path.exists(config_file):
-        with open(config_file) as f:
+        with open(config_file, encoding="utf-8") as f:
             config = yaml.safe_load(f)
 
         # Set the log file path for the rotating file handler
@@ -160,9 +166,10 @@ def setup_logging(log_level: str = "INFO") -> None:
         cache_logger_on_first_use=True,
     )
 
-    logger = structlog.get_logger("wordle_solver")
-    if logger is not None:
-        logger.info(
+    # Set the module-level logger
+    logging_module.logger = structlog.get_logger("wordle_solver")
+    if logging_module.logger is not None:
+        logging_module.logger.info(
             "Logging initialized",
             log_level=log_level,
             log_file=log_file,
@@ -211,17 +218,17 @@ def _extract_log_data(func: Callable, args: Any, kwargs: Any, level: str) -> dic
     return log_data
 
 
-def _log_exception(logger, exc, log_data):
+def _log_exception(_logger_instance, exc, log_data):
     """
     Logs the exception information using the provided logger.
 
     Args:
-        logger: The logger instance to use for logging
+        _logger_instance: The logger instance (renamed to avoid outer scope conflict)
         exc: The exception instance
         log_data: The log data dictionary containing contextual information
     """
-    if logger is not None:
-        logger.exception(
+    if _logger_instance is not None:
+        _logger_instance.exception(
             "Exception in method",
             **log_data,
             error=str(exc),
@@ -229,18 +236,18 @@ def _log_exception(logger, exc, log_data):
         )
 
 
-def _log_performance(logger, log_data, execution_time, level):
+def _log_performance(_logger_instance, log_data, execution_time, level):
     """
     Logs the performance metrics of the method execution.
 
     Args:
-        logger: The logger instance to use for logging
+        _logger_instance: The logger instance (renamed to avoid outer scope conflict)
         log_data: The log data dictionary containing contextual information
         execution_time: The execution time of the method in milliseconds
         level: The logging level as a string (e.g., "DEBUG", "INFO")
     """
-    if level.upper() == "DEBUG" and logger is not None:
-        logger.debug(
+    if level.upper() == "DEBUG" and _logger_instance is not None:
+        _logger_instance.debug(
             "Method execution completed",
             **log_data,
             execution_time_ms=round(execution_time, 2),
@@ -261,30 +268,54 @@ def log_method(level: str = "DEBUG") -> Callable[[F], F]:
     def decorator(func: F) -> F:
         @functools.wraps(func)
         def wrapper(*args: Any, **kwargs: Any) -> Any:
-            global logger
-            if logger is None:
+            # Get current logger or initialize if needed
+            current_logger = logger
+            if current_logger is None:
                 setup_logging()
+                current_logger = logger
 
-            # Extract method information and log data
-            log_data = _extract_log_data(func, args, kwargs, level)
+            # Skip performance logging for utility functions to avoid overhead
+            skip_performance_logging = func.__name__ in [
+                "calculate_pattern",
+                "is_valid_result_string",
+                "_matches_green_positions",
+                "_matches_yellow_positions",
+                "_matches_black_positions",
+                "_calculate_entropy_score",
+                "_calculate_frequency_score",
+                "_calculate_minimax_score",
+                "calculate_letter_frequencies",
+            ]
 
-            # Log method entry at the specified log level
-            if logger is not None and level.upper() == "DEBUG":
-                getattr(logger, level.lower())("Method call", **log_data)
+            # Extract method information and log data only if needed
+            log_data = None
+            if not skip_performance_logging:
+                log_data = _extract_log_data(func, args, kwargs, level)
 
-            start_time = time.time()
+                # Log method entry at the specified log level
+                if current_logger is not None and level.upper() == "DEBUG":
+                    getattr(current_logger, level.lower())("Method call", **log_data)
+
+            start_time = time.time() if not skip_performance_logging else None
             try:
                 # Call the actual method
                 result = func(*args, **kwargs)
                 return result
             except Exception as exc:
-                # Log exception details
-                _log_exception(logger, exc, log_data)
+                # Log exception details (always log exceptions)
+                if log_data is None:
+                    log_data = _extract_log_data(func, args, kwargs, level)
+                _log_exception(current_logger, exc, log_data)
                 raise
             finally:
-                # Calculate and log performance metrics
-                execution_time = (time.time() - start_time) * 1000  # ms
-                _log_performance(logger, log_data, execution_time, level)
+                # Calculate and log performance metrics only for non-utility functions
+                if (
+                    not skip_performance_logging
+                    and start_time is not None
+                    and log_data is not None
+                ):
+                    execution_time = (time.time() - start_time) * 1000  # ms
+                    _log_performance(current_logger, log_data, execution_time, level)
 
         return cast(F, wrapper)
 
@@ -304,9 +335,11 @@ def log_game_outcome(func: F) -> F:
 
     @functools.wraps(func)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
-        global logger
-        if logger is None:
+        # Get current logger or initialize if needed
+        current_logger = logger
+        if current_logger is None:
             setup_logging()
+            current_logger = logger
 
         result = func(*args, **kwargs)
 
@@ -315,18 +348,28 @@ def log_game_outcome(func: F) -> F:
         method_name = func.__name__
 
         # For specific outcome methods, log more detailed information
-        if method_name in ("_display_solver_result", "_display_game_result", "display_game_over"):
+        if method_name in (
+            "_display_solver_result",
+            "_display_game_result",
+            "display_game_over",
+        ):
             won = args[1] if len(args) > 1 else kwargs.get("won", None)
 
             # Different parameter order depending on the method
             if method_name == "_display_solver_result":
                 attempt = args[2] if len(args) > 2 else kwargs.get("attempt", None)
-                max_attempts = args[3] if len(args) > 3 else kwargs.get("max_attempts", None)
+                max_attempts = (
+                    args[3] if len(args) > 3 else kwargs.get("max_attempts", None)
+                )
                 target_word = None
             else:
-                target_word = args[2] if len(args) > 2 else kwargs.get("target_word", None)
+                target_word = (
+                    args[2] if len(args) > 2 else kwargs.get("target_word", None)
+                )
                 attempt = args[3] if len(args) > 3 else kwargs.get("attempt", None)
-                max_attempts = args[4] if len(args) > 4 else kwargs.get("max_attempts", None)
+                max_attempts = (
+                    args[4] if len(args) > 4 else kwargs.get("max_attempts", None)
+                )
 
             # Create the structured log data (don't include 'event' as a key)
             log_data = {
@@ -342,8 +385,8 @@ def log_game_outcome(func: F) -> F:
                 log_data["target_word"] = target_word
 
             # Use "Game outcome" as the event parameter, and pass the rest as kwargs
-            if logger is not None:
-                logger.info("Game outcome", **log_data)
+            if current_logger is not None:
+                current_logger.info("Game outcome", **log_data)
 
         return result
 

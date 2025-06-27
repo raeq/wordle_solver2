@@ -1,0 +1,37 @@
+# Include the README
+include README.md
+
+# Include license and legal files
+include LICENSE
+include CODE_OF_CONDUCT.md
+include CONTRIBUTING.md
+include SECURITY.md
+include SUPPORT.md
+
+# Include configuration files
+include config.yaml
+include mypy.ini
+include pytest.ini
+include requirements*.txt
+
+# Include documentation
+recursive-include docs *.md
+
+# Include source data files
+include src/words.txt
+include src/logging_config.yaml
+include src/modules/logging_config.yaml
+
+# Exclude unnecessary files
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude *.pyd
+global-exclude __pycache__
+global-exclude .git*
+global-exclude .pytest_cache
+global-exclude .mypy_cache
+global-exclude .coverage
+global-exclude *.log
+exclude game_history.json
+exclude game_stats.json
+exclude logs/*

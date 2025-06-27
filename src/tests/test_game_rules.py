@@ -173,7 +173,9 @@ class TestGameRules:
     def test_triple_letter_in_target(self, game_engine):
         """Test case with triple letter in target word"""
         game_engine.target_word = "BELLE"  # Double L, double E
-        result, _ = game_engine.make_guess("LABEL")  # Has L, E, B but not all in right positions
+        result, _ = game_engine.make_guess(
+            "LABEL"
+        )  # Has L, E, B but not all in right positions
         assert result == "YBYYY"
 
     def test_triple_letter_in_guess(self, game_engine):

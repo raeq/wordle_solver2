@@ -26,7 +26,7 @@ class StatsManager:
     def _load_stats(self) -> Dict[str, Any]:
         """Load statistics from file."""
         try:
-            with open(self.stats_file) as f:
+            with open(self.stats_file, encoding="utf-8") as f:
                 return cast(Dict[str, Any], json.load(f))
         except (FileNotFoundError, json.JSONDecodeError):
             return {
@@ -40,7 +40,7 @@ class StatsManager:
     def _load_history(self) -> List[Dict[str, Any]]:
         """Load game history from file."""
         try:
-            with open(self.history_file) as f:
+            with open(self.history_file, encoding="utf-8") as f:
                 return cast(List[Dict[str, Any]], json.load(f))
         except (FileNotFoundError, json.JSONDecodeError):
             return []
@@ -48,18 +48,24 @@ class StatsManager:
     @log_method("DEBUG")
     def save_stats(self) -> None:
         """Save statistics to file."""
-        with open(self.stats_file, "w") as f:
+        with open(self.stats_file, "w", encoding="utf-8") as f:
             json.dump(self.stats, f, indent=2)
 
     @log_method("DEBUG")
     def save_history(self) -> None:
         """Save game history to file."""
-        with open(self.history_file, "w") as f:
+        with open(self.history_file, "w", encoding="utf-8") as f:
             json.dump(self.history, f, indent=2)
 
     @log_method("INFO")
     def record_game(
-        self, guesses: List[List[str]], won: bool, attempts: int, game_id: str = "", target_word: str = ""
+        self,
+        guesses: List[List[str]],
+        won: bool,
+        attempts: int,
+        *,  # Force keyword-only arguments
+        game_id: str = "",
+        target_word: str = ""
     ) -> None:
         """
         Record a completed game in history and update statistics.
@@ -68,8 +74,8 @@ class StatsManager:
             guesses: List of [guess, result] pairs
             won: Whether the game was won
             attempts: Number of attempts made
-            game_id: Unique ID for the game session
-            target_word: The target word for the game (if available)
+            game_id: Unique ID for the game session (keyword-only)
+            target_word: The target word for the game (keyword-only)
         """
         # Update history
         game_record = {
@@ -93,7 +99,9 @@ class StatsManager:
             self.stats["games_won"] += 1
 
         # Recalculate win rate and average attempts
-        self.stats["win_rate"] = (self.stats["games_won"] / self.stats["games_played"]) * 100.0
+        self.stats["win_rate"] = (
+            self.stats["games_won"] / self.stats["games_played"]
+        ) * 100.0
 
         total_attempts = 0
         completed_games = 0
@@ -168,7 +176,10 @@ class StatsManager:
             if won is not None and game.get("won") != won:
                 match = False
 
-            if target_word is not None and game.get("target_word", "").upper() != target_word.upper():
+            if (
+                target_word is not None
+                and game.get("target_word", "").upper() != target_word.upper()
+            ):
                 match = False
 
             if max_attempts is not None and game.get("attempts", 0) > max_attempts:

@@ -1,2315 +1,2296 @@
-aback
-abase
-abate
-abbey
-abbot
-abhor
-abide
-abled
-abode
-abort
-about
-above
-abuse
-abyss
-acorn
-acrid
-actor
-acute
-adage
-adapt
-adept
-admin
-admit
-adobe
-adopt
-adore
-adorn
-adult
-affix
-afire
-afoot
-afoul
-after
-again
-agape
-agate
-agent
-agile
-aging
-aglow
-agony
-agora
-agree
-ahead
-aider
-aisle
-alarm
-album
-alert
-algae
-alibi
-alien
-align
-alike
-alive
-allay
-alley
-allot
-allow
-alloy
-aloft
-alone
-along
-aloof
-aloud
-alpha
-altar
-alter
-amass
-amaze
-amber
-amble
-amend
-amiss
-amity
-among
-ample
-amply
-amuse
-angel
-anger
-angle
-angry
-angst
-anime
-ankle
-annex
-annoy
-annul
-anode
-antic
-anvil
-aorta
-apart
-aphid
-aping
-apnea
-apple
-apply
-apron
-aptly
-arbor
-ardor
-arena
-argue
-arise
-armor
-aroma
-arose
-array
-arrow
-arson
-artsy
-ascot
-ashen
-aside
-askew
-assay
-asset
-atoll
-atone
-attic
-audio
-audit
-augur
-aunty
-avail
-avert
-avian
-avoid
-await
-awake
-award
-aware
-awash
-awful
-awoke
-axial
-axiom
-axion
-azure
-bacon
-badge
-badly
-bagel
-baggy
-baker
-baler
-balmy
-banal
-banjo
-barge
-baron
-basal
-basic
-basil
-basin
-basis
-baste
-batch
-bathe
-baton
-batty
-bawdy
-bayou
-beach
-beady
-beard
-beast
-beech
-beefy
-befit
-began
-begat
-beget
-begin
-begun
-being
-belch
-belie
-belle
-belly
-below
-bench
-beret
-berry
-berth
-beset
-betel
-bevel
-bezel
-bible
-bicep
-biddy
-bigot
-bilge
-billy
-binge
-bingo
-biome
-birch
-birth
-bison
-bitty
-black
-blade
-blame
-bland
-blank
-blare
-blast
-blaze
-bleak
-bleat
-bleed
-bleep
-blend
-bless
-blimp
-blind
-blink
-bliss
-blitz
-bloat
-block
-bloke
-blond
-blood
-bloom
-blown
-bluer
-bluff
-blunt
-blurb
-blurt
-blush
-board
-boast
-bobby
-boney
-bongo
-bonus
-booby
-boost
-booth
-booty
-booze
-boozy
-borax
-borne
-bosom
-bossy
-botch
-bough
-boule
-bound
-bowel
-boxer
-brace
-braid
-brain
-brake
-brand
-brash
-brass
-brave
-bravo
-brawl
-brawn
-bread
-break
-breed
-briar
-bribe
-brick
-bride
-brief
-brine
-bring
-brink
-briny
-brisk
-broad
-broil
-broke
-brood
-brook
-broom
-broth
-brown
-brunt
-brush
-brute
-buddy
-budge
-buggy
-bugle
-build
-built
-bulge
-bulky
-bully
-bunch
-bunny
-burly
-burnt
-burst
-bused
-bushy
-butch
-butte
-buxom
-buyer
-bylaw
-cabal
-cabby
-cabin
-cable
-cacao
-cache
-cacti
-caddy
-cadet
-cagey
-cairn
-camel
-cameo
-canal
-candy
-canny
-canoe
-canon
-caper
-caput
-carat
-cargo
-carol
-carry
-carve
-caste
-catch
-cater
-catty
-caulk
-cause
-cavil
-cease
-cedar
-cello
-chafe
-chaff
-chain
-chair
-chalk
-champ
-chant
-chaos
-chard
-charm
-chart
-chase
-chasm
-cheap
-cheat
-check
-cheek
-cheer
-chess
-chest
-chick
-chide
-chief
-child
-chili
-chill
-chime
-china
-chirp
-chock
-choir
-choke
-chord
-chore
-chose
-chuck
-chump
-chunk
-churn
-chute
-cider
-cigar
-cinch
-circa
-civic
-civil
-clack
-claim
-clamp
-clang
-clank
-clash
-clasp
-class
-clean
-clear
-cleat
-cleft
-clerk
-click
-cliff
-climb
-cling
-clink
-cloak
-clock
-clone
-close
-cloth
-cloud
-clout
-clove
-clown
-cluck
-clued
-clump
-clung
-coach
-coast
-cobra
-cocoa
-colon
-color
-comet
-comfy
-comic
-comma
-conch
-condo
-conic
-copse
-coral
-corer
-corny
-couch
-cough
-could
-count
-coupe
-court
-coven
-cover
-covet
-covey
-cower
-coyly
-crack
-craft
-cramp
-crane
-crank
-crash
-crass
-crate
-crave
-crawl
-craze
-crazy
-creak
-cream
-credo
-creed
-creek
-creep
-creme
-crepe
-crept
-cress
-crest
-crick
-cried
-crier
-crime
-crimp
-crisp
-croak
-crock
-crone
-crony
-crook
-cross
-croup
-crowd
-crown
-crude
-cruel
-crumb
-crump
-crush
-crust
-crypt
-cubic
-cumin
-curio
-curly
-curry
-curse
-curve
-curvy
-cutie
-cyber
-cycle
-cynic
-daddy
-daily
-dairy
-daisy
-dally
-dance
-dandy
-datum
-daunt
-dealt
-death
-debar
-debit
-debug
-debut
-decal
-decay
-decor
-decoy
-decry
-defer
-deign
-deity
-delay
-delta
-delve
-demon
-demur
-denim
-dense
-depot
-depth
-derby
-deter
-detox
-deuce
-devil
-diary
-dicey
-digit
-dilly
-dimly
-diner
-dingo
-dingy
-diode
-dirge
-dirty
-disco
-ditch
-ditto
-ditty
-diver
-dizzy
-dodge
-dodgy
-dogma
-doing
-dolly
-donor
-donut
-dopey
-doubt
-dough
-dowdy
-dowel
-downy
-dowry
-dozen
-draft
-drain
-drake
-drama
-drank
-drape
-drawl
-drawn
-dread
-dream
-dress
-dried
-drier
-drift
-drill
-drink
-drive
-droit
-droll
-drone
-drool
-droop
-dross
-drove
-drown
-druid
-drunk
-dryer
-dryly
-duchy
-dully
-dummy
-dumpy
-dunce
-dusky
-dusty
-dutch
-duvet
-dwarf
-dwell
-dwelt
-dying
-eager
-eagle
-early
-earth
-easel
-eaten
-eater
-ebony
-eclat
-edict
-edify
-eerie
-egret
-eight
-eject
-eking
-elate
-elbow
-elder
-elect
-elegy
-elfin
-elide
-elite
-elope
-elude
-email
-embed
-ember
-emcee
-empty
-enact
-endow
-enema
-enemy
-enjoy
-ennui
-ensue
-enter
-entry
-envoy
-epoch
-epoxy
-equal
-equip
-erase
-erect
-erode
-error
-erupt
-essay
-ester
-ether
-ethic
-ethos
-etude
-evade
-event
-every
-evict
-evoke
-exact
-exalt
-excel
-exert
-exile
-exist
-expel
-extol
-extra
-exult
-eying
-fable
-facet
-faint
-fairy
-faith
-false
-fancy
-fanny
-farce
-fatal
-fatty
-fault
-fauna
-favor
-feast
-fecal
-feign
-fella
-felon
-femme
-femur
-fence
-feral
-ferry
-fetal
-fetch
-fetid
-fetus
-fever
-fewer
-fiber
-fibre
-ficus
-field
-fiend
-fiery
-fifth
-fifty
-fight
-filer
-filet
-filly
-filmy
-filth
-final
-finch
-finer
-first
-fishy
-fixer
-fizzy
-fjord
-flack
-flail
-flair
-flake
-flaky
-flame
-flank
-flare
-flash
-flask
-fleck
-fleet
-flesh
-flick
-flier
-fling
-flint
-flirt
-float
-flock
-flood
-floor
-flora
-floss
-flour
-flout
-flown
-fluff
-fluid
-fluke
-flume
-flung
-flunk
-flush
-flute
-flyer
-foamy
-focal
-focus
-foggy
-foist
-folio
-folly
-foray
-force
-forge
-forgo
-forte
-forth
-forty
-forum
-found
-foyer
-frail
-frame
-frank
-fraud
-freak
-freed
-freer
-fresh
-friar
-fried
-frill
-frisk
-fritz
-frock
-frond
-front
-frost
-froth
-frown
-froze
-fruit
-fudge
-fugue
-fully
-fungi
-funky
-funny
-furor
-furry
-fussy
-fuzzy
-gaffe
-gaily
-gamer
-gamma
-gamut
-gassy
-gaudy
-gauge
-gaunt
-gauze
-gavel
-gawky
-gayer
-gayly
-gazer
-gecko
-geeky
-geese
-genie
-genre
-ghost
-ghoul
-giant
-giddy
-gipsy
-girly
-girth
-given
-giver
-glade
-gland
-glare
-glass
-glaze
-gleam
-glean
-glide
-glint
-gloat
-globe
-gloom
-glory
-gloss
-glove
-glyph
-gnash
-gnome
-godly
-going
-golem
-golly
-gonad
-goner
-goody
-gooey
-goofy
-goose
-gorge
-gouge
-gourd
-grace
-grade
-graft
-grail
-grain
-grand
-grant
-grape
-graph
-grasp
-grass
-grate
-grave
-gravy
-graze
-great
-greed
-green
-greet
-grief
-grill
-grime
-grimy
-grind
-gripe
-groan
-groin
-groom
-grope
-gross
-group
-grout
-grove
-growl
-grown
-gruel
-gruff
-grunt
-guard
-guava
-guess
-guest
-guide
-guild
-guile
-guilt
-guise
-gulch
-gully
-gumbo
-gummy
-guppy
-gusto
-gusty
-gypsy
-habit
-hairy
-halve
-handy
-happy
-hardy
-harem
-harpy
-harry
-harsh
-haste
-hasty
-hatch
-hater
-haunt
-haute
-haven
-havoc
-hazel
-heady
-heard
-heart
-heath
-heave
-heavy
-hedge
-hefty
-heist
-helix
-hello
-hence
-heron
-hilly
-hinge
-hippo
-hippy
-hitch
-hoard
-hobby
-hoist
-holly
-homer
-honey
-honor
-horde
-horny
-horse
-hotel
-hotly
-hound
-house
-hovel
-hover
-howdy
-human
-humid
-humor
-humph
-humus
-hunch
-hunky
-hurry
-husky
-hussy
-hutch
-hydro
-hyena
-hymen
-hyper
-icily
-icing
-ideal
-idiom
-idiot
-idler
-idyll
-igloo
-iliac
-image
-imbue
-impel
-imply
-inane
-inbox
-incur
-index
-inept
-inert
-infer
-ingot
-inlay
-inlet
-inner
-input
-inter
-intro
-ionic
-irate
-irony
-islet
-issue
-itchy
-ivory
-jaunt
-jazzy
-jelly
-jerky
-jetty
-jewel
-jiffy
-joint
-joist
-joker
-jolly
-joust
-judge
-juice
-juicy
-jumbo
-jumpy
-junta
-junto
-juror
-kappa
-karma
-kayak
-kebab
-khaki
-kinky
-kiosk
-kitty
-knack
-knave
-knead
-kneed
-kneel
-knelt
-knife
-knock
-knoll
-known
-koala
-krill
-label
-labor
-laden
-ladle
-lager
-lance
-lanky
-lapel
-lapse
-large
-larva
-lasso
-latch
-later
-lathe
-latte
-laugh
-layer
-leach
-leafy
-leaky
-leant
-leapt
-learn
-lease
-leash
-least
-leave
-ledge
-leech
-leery
-lefty
-legal
-leggy
-lemon
-lemur
-leper
-level
-lever
-libel
-liege
-light
-liken
-lilac
-limbo
-limit
-linen
-liner
-lingo
-lipid
-lithe
-liver
-livid
-llama
-loamy
-loath
-lobby
-local
-locus
-lodge
-lofty
-logic
-login
-loopy
-loose
-lorry
-loser
-louse
-lousy
-lover
-lower
-lowly
-loyal
-lucid
-lucky
-lumen
-lumpy
-lunar
-lunch
-lunge
-lupus
-lurch
-lurid
-lusty
-lying
-lymph
-lynch
-lyric
-macaw
-macho
-macro
-madam
-madly
-mafia
-magic
-magma
-maize
-major
-maker
-mambo
-mamma
-mammy
-manga
-mange
-mango
-mangy
-mania
-manic
-manly
-manor
-maple
-march
-marry
-marsh
-mason
-masse
-match
-matey
-mauve
-maxim
-maybe
-mayor
-mealy
-meant
-meaty
-mecca
-medal
-media
-medic
-melee
-melon
-mercy
-merge
-merit
-merry
-metal
-meter
-metro
-micro
-midge
-midst
-might
-milky
-mimic
-mince
-miner
-minim
-minor
-minty
-minus
-mirth
-miser
-missy
-mocha
-modal
-model
-modem
-mogul
-moist
-molar
-moldy
-money
-month
-moody
-moose
-moral
-moron
-morph
-mossy
-motel
-motif
-motor
-motto
-moult
-mound
-mount
-mourn
-mouse
-mouth
-mover
-movie
-mower
-mucky
-mucus
-muddy
-mulch
-mummy
-munch
-mural
-murky
-mushy
-music
-musky
-musty
-myrrh
-nadir
-naive
-nanny
-nasal
-nasty
-natal
-naval
-navel
-needy
-neigh
-nerdy
-nerve
-never
-newer
-newly
-nicer
-niche
-niece
-night
-ninja
-ninny
-ninth
-noble
-nobly
-noise
-noisy
-nomad
-noose
-north
-nosey
-notch
-novel
-nudge
-nurse
-nutty
-nylon
-nymph
-oaken
-obese
-occur
-ocean
-octal
-octet
-odder
-oddly
-offal
-offer
-often
-olden
-older
-olive
-ombre
-omega
-onion
-onset
-opera
-opine
-opium
-optic
-orbit
-order
-organ
-other
-otter
-ought
-ounce
-outdo
-outer
-outgo
-ovary
-ovate
-overt
-ovine
-ovoid
-owing
-owner
-oxide
-ozone
-paddy
-pagan
-paint
-paler
-palsy
-panel
-panic
-pansy
-papal
-paper
-parer
-parka
-parry
-parse
-party
-pasta
-paste
-pasty
-patch
-patio
-patsy
-patty
-pause
-payee
-payer
-peace
-peach
-pearl
-pecan
-pedal
-penal
-pence
-penne
-penny
-perch
-peril
-perky
-pesky
-pesto
-petal
-petty
-phase
-phone
-phony
-photo
-piano
-picky
-piece
-piety
-piggy
-pilot
-pinch
-piney
-pinky
-pinto
-piper
-pique
-pitch
-pithy
-pivot
-pixel
-pixie
-pizza
-place
-plaid
-plain
-plait
-plane
-plank
-plant
-plate
-plaza
-plead
-pleat
-plied
-plier
-pluck
-plumb
-plume
-plump
-plunk
-plush
-poesy
-point
-poise
-poker
-polar
-polka
-polyp
-pooch
-poppy
-porch
-poser
-posit
-posse
-pouch
-pound
-pouty
-power
-prank
-prawn
-preen
-press
-price
-prick
-pride
-pried
-prime
-primo
-print
-prior
-prism
-privy
-prize
-probe
-prone
-prong
-proof
-prose
-proud
-prove
-prowl
-proxy
-prude
-prune
-psalm
-pubic
-pudgy
-puffy
-pulpy
-pulse
-punch
-pupal
-pupil
-puppy
-puree
-purer
-purge
-purse
-pushy
-putty
-pygmy
-quack
-quail
-quake
-qualm
-quark
-quart
-quash
-quasi
-queen
-queer
-quell
-query
-quest
-queue
-quick
-quiet
-quill
-quilt
-quirk
-quite
-quota
-quote
-quoth
-rabbi
-rabid
-racer
-radar
-radii
-radio
-rainy
-raise
-rajah
-rally
-ralph
-ramen
-ranch
-randy
-range
-rapid
-rarer
-raspy
-ratio
-ratty
-raven
-rayon
-razor
-reach
-react
-ready
-realm
-rearm
-rebar
-rebel
-rebus
-rebut
-recap
-recur
-recut
-reedy
-refer
-refit
-regal
-rehab
-reign
-relax
-relay
-relic
-remit
-renal
-renew
-repay
-repel
-reply
-rerun
-reset
-resin
-retch
-retro
-retry
-reuse
-revel
-revue
-rhino
-rhyme
-rider
-ridge
-rifle
-right
-rigid
-rigor
-rinse
-ripen
-riper
-risen
-riser
-risky
-rival
-river
-rivet
-roach
-roast
-robin
-robot
-rocky
-rodeo
-roger
-rogue
-roomy
-roost
-rotor
-rouge
-rough
-round
-rouse
-route
-rover
-rowdy
-rower
-royal
-ruddy
-ruder
-rugby
-ruler
-rumba
-rumor
-rupee
-rural
-rusty
-sadly
-safer
-saint
-salad
-sally
-salon
-salsa
-salty
-salve
-salvo
-sandy
-saner
-sappy
-sassy
-satin
-satyr
-sauce
-saucy
-sauna
-saute
-savor
-savoy
-savvy
-scald
-scale
-scalp
-scaly
-scamp
-scant
-scare
-scarf
-scary
-scene
-scent
-scion
-scoff
-scold
-scone
-scoop
-scope
-score
-scorn
-scour
-scout
-scowl
-scram
-scrap
-scree
-screw
-scrub
-scrum
-scuba
-sedan
-seedy
-segue
-seize
-semen
-sense
-sepia
-serif
-serum
-serve
-setup
-seven
-sever
-sewer
-shack
-shade
-shady
-shaft
-shake
-shaky
-shale
-shall
-shalt
-shame
-shank
-shape
-shard
-share
-shark
-sharp
-shave
-shawl
-shear
-sheen
-sheep
-sheer
-sheet
-sheik
-shelf
-shell
-shied
-shift
-shine
-shiny
-shire
-shirk
-shirt
-shoal
-shock
-shone
-shook
-shoot
-shore
-shorn
-short
-shout
-shove
-shown
-showy
-shrew
-shrub
-shrug
-shuck
-shunt
-shush
-shyly
-siege
-sieve
-sight
-sigma
-silky
-silly
-since
-sinew
-singe
-siren
-sissy
-sixth
-sixty
-skate
-skier
-skiff
-skill
-skimp
-skirt
-skulk
-skull
-skunk
-slack
-slain
-slang
-slant
-slash
-slate
-slave
-sleek
-sleep
-sleet
-slept
-slice
-slick
-slide
-slime
-slimy
-sling
-slink
-sloop
-slope
-slosh
-sloth
-slump
-slung
-slunk
-slurp
-slush
-slyly
-smack
-small
-smart
-smash
-smear
-smell
-smelt
-smile
-smirk
-smite
-smith
-smock
-smoke
-smoky
-smote
-snack
-snail
-snake
-snaky
-snare
-snarl
-sneak
-sneer
-snide
-sniff
-snipe
-snoop
-snore
-snort
-snout
-snowy
-snuck
-snuff
-soapy
-sober
-soggy
-solar
-solid
-solve
-sonar
-sonic
-sooth
-sooty
-sorry
-sound
-south
-sower
-space
-spade
-spank
-spare
-spark
-spasm
-spawn
-speak
-spear
-speck
-speed
-spell
-spelt
-spend
-spent
-sperm
-spice
-spicy
-spied
-spiel
-spike
-spiky
-spill
-spilt
-spine
-spiny
-spire
-spite
-splat
-split
-spoil
-spoke
-spoof
-spook
-spool
-spoon
-spore
-sport
-spout
-spray
-spree
-sprig
-spunk
-spurn
-spurt
-squad
-squat
-squib
-stack
-staff
-stage
-staid
-stain
-stair
-stake
-stale
-stalk
-stall
-stamp
-stand
-stank
-stare
-stark
-start
-stash
-state
-stave
-stead
-steak
-steal
-steam
-steed
-steel
-steep
-steer
-stein
-stern
-stick
-stiff
-still
-stilt
-sting
-stink
-stint
-stock
-stoic
-stoke
-stole
-stomp
-stone
-stony
-stood
-stool
-stoop
-store
-stork
-storm
-story
-stout
-stove
-strap
-straw
-stray
-strip
-strut
-stuck
-study
-stuff
-stump
-stung
-stunk
-stunt
-style
-suave
-sugar
-suing
-suite
-sulky
-sully
-sumac
-sunny
-super
-surer
-surge
-surly
-sushi
-swami
-swamp
-swarm
-swash
-swath
-swear
-sweat
-sweep
-sweet
-swell
-swept
-swift
-swill
-swine
-swing
-swirl
-swish
-swoon
-swoop
-sword
-swore
-sworn
-swung
-synod
-syrup
-tabby
-table
-taboo
-tacit
-tacky
-taffy
-taint
-taken
-taker
-tally
-talon
-tamer
-tango
-tangy
-taper
-tapir
-tardy
-tarot
-taste
-tasty
-tatty
-taunt
-tawny
-teach
-teary
-tease
-teddy
-teeth
-tempo
-tenet
-tenor
-tense
-tenth
-tepee
-tepid
-terra
-terse
-testy
-thank
-theft
-their
-theme
-there
-these
-theta
-thick
-thief
-thigh
-thing
-think
-third
-thong
-thorn
-those
-three
-threw
-throb
-throw
-thrum
-thumb
-thump
-thyme
-tiara
-tibia
-tidal
-tiger
-tight
-tilde
-timer
-timid
-tipsy
-titan
-tithe
-title
-toast
-today
-toddy
-token
-tonal
-tonga
-tonic
-tooth
-topaz
-topic
-torch
-torso
-torus
-total
-totem
-touch
-tough
-towel
-tower
-toxic
-toxin
-trace
-track
-tract
-trade
-trail
-train
-trait
-tramp
-trash
-trawl
-tread
-treat
-trend
-triad
-trial
-tribe
-trice
-trick
-tried
-tripe
-trite
-troll
-troop
-trope
-trout
-trove
-truce
-truck
-truer
-truly
-trump
-trunk
-truss
-trust
-truth
-tryst
-tubal
-tuber
-tulip
-tulle
-tumor
-tunic
-turbo
-tutor
-twang
-tweak
-tweed
-tweet
-twice
-twine
-twirl
-twist
-twixt
-tying
-udder
-ulcer
-ultra
-umbra
-uncle
-uncut
-under
-undid
-undue
-unfed
-unfit
-unify
-union
-unite
-unity
-unlit
-unmet
-unset
-untie
-until
-unwed
-unzip
-upper
-upset
-urban
-urine
-usage
-usher
-using
-usual
-usurp
-utile
-utter
-vague
-valet
-valid
-valor
-value
-valve
-vapid
-vapor
-vault
-vaunt
-vegan
-venom
-venue
-verge
-verse
-verso
-verve
-vicar
-video
-vigil
-vigor
-villa
-vinyl
-viola
-viper
-viral
-virus
-visit
-visor
-vista
-vital
-vivid
-vixen
-vocal
-vodka
-vogue
-voice
-voila
-vomit
-voter
-vouch
-vowel
-vying
-wacky
-wafer
-wager
-wagon
-waist
-waive
-waltz
-warty
-waste
-watch
-water
-waver
-waxen
-weary
-weave
-wedge
-weedy
-weigh
-weird
-welch
-welsh
-wench
-whack
-whale
-wharf
-wheat
-wheel
-whelp
-where
-which
-whiff
-while
-whine
-whiny
-whirl
-whisk
-white
-whole
-whoop
-whose
-widen
-wider
-widow
-width
-wield
-wight
-willy
-wimpy
-wince
-winch
-windy
-wiser
-wispy
-witch
-witty
-woken
-woman
-women
-woody
-wooer
-wooly
-woozy
-wordy
-world
-worry
-worse
-worst
-worth
-would
-wound
-woven
-wrack
-wrath
-wreak
-wreck
-wrest
-wring
-wrist
-write
-wrong
-wrote
-wrung
-wryly
-yacht
-yearn
-yeast
-yield
-young
-youth
-zebra
-zesty
-zonal
+there 3148528 4.533753842401023
+right 2576821 7.745044372573241
+about 2487348 7.348487548779003
+think 1839473 7.745044372573241
+going 1520767 4.1566150903555075
+would 1340070 7.348487548779003
+where 1322226 4.533753842401023
+could 1111837 7.348487548779003
+never 930831 4.1566150903555075
+sorry 818019 5.168619345127808
+thank 773577 7.745044372573241
+doing 732145 7.348487548779003
+thing 697528 7.745044372573241
+these 683128 4.533753842401023
+first 656387 7.348487548779003
+still 639540 4.1566150903555075
+their 601171 7.745044372573241
+again 590019 4.1566150903555075
+maybe 581087 8.41005792109261
+other 577197 7.745044372573241
+after 572761 7.348487548779003
+night 556318 7.745044372573241
+great 545768 7.348487548779003
+those 528404 7.745044372573241
+leave 478282 4.1566150903555075
+money 471643 8.41005792109261
+place 444863 7.348487548779003
+which 422483 4.533753842401023
+hello 405534 4.533753842401023
+house 388585 7.745044372573241
+every 388520 5.168619345127808
+being 386528 7.348487548779003
+wrong 370949 7.348487548779003
+world 370620 7.348487548779003
+might 367145 7.745044372573241
+three 366626 4.533753842401023
+today 366395 8.41005792109261
+found 337382 7.348487548779003
+woman 324673 7.348487548779003
+heard 269851 7.745044372573241
+ready 267268 8.41005792109261
+happy 262141 5.553032729571804
+haven 258463 7.745044372573241
+whole 257109 7.745044372573241
+start 256417 4.1566150903555075
+while 255970 7.745044372573241
+since 254427 7.348487548779003
+guess 250320 4.1566150903555075
+bring 247343 7.348487548779003
+alone 240475 7.348487548779003
+phone 235246 7.745044372573241
+until 225171 7.348487548779003
+heart 213914 7.745044372573241
+worry 211329 5.168619345127808
+later 208878 7.348487548779003
+watch 207949 7.745044372573241
+music 207205 7.348487548779003
+young 194810 8.41005792109261
+water 193014 7.348487548779003
+stuff 190629 4.1566150903555075
+under 189347 7.348487548779003
+death 189000 7.745044372573241
+crazy 188767 9.4839805721334
+drink 182580 7.348487548779003
+check 176507 4.533753842401023
+point 174205 7.348487548779003
+sleep 168103 4.1566150903555075
+quite 166980 8.41005792109261
+close 166677 7.348487548779003
+party 166137 8.41005792109261
+shall 164162 4.533753842401023
+story 164040 8.41005792109261
+least 162905 7.348487548779003
+fight 159911 7.745044372573241
+stand 155391 7.348487548779003
+child 151864 7.745044372573241
+speak 150927 7.348487548779003
+women 150803 7.348487548779003
+truth 148389 4.533753842401023
+blood 147913 4.1566150903555075
+break 143107 7.348487548779003
+trust 141327 4.1566150903555075
+power 136611 7.348487548779003
+honey 135631 8.811399049482944
+tried 135401 7.348487548779003
+front 135341 7.348487548779003
+hurry 130182 5.553032729571804
+along 128220 7.348487548779003
+light 126657 7.745044372573241
+clear 125730 7.348487548779003
+order 125446 4.1566150903555075
+funny 123924 5.168619345127808
+black 123718 7.348487548779003
+alive 122833 7.348487548779003
+cause 121264 7.348487548779003
+ahead 120295 4.533753842401023
+taken 115236 7.348487548779003
+white 112881 7.745044372573241
+small 112316 4.1566150903555075
+uncle 107826 7.348487548779003
+earth 106394 7.745044372573241
+shoot 106067 4.533753842401023
+touch 105846 7.745044372573241
+sound 105298 7.348487548779003
+human 102595 7.745044372573241
+drive 102436 7.348487548779003
+daddy 100005 3.3404158233734464
+dance 97339 7.348487548779003
+catch 96609 4.533753842401023
+sense 96442 2.661739371382253
+known 95125 4.1566150903555075
+dream 95089 7.348487548779003
+write 94964 7.348487548779003
+voice 94104 7.348487548779003
+sweet 94057 4.1566150903555075
+lucky 92377 8.41005792109261
+quiet 90552 8.41005792109261
+given 87738 7.348487548779003
+fault 87420 7.348487548779003
+learn 84936 7.348487548779003
+early 84836 8.41005792109261
+clean 84238 7.348487548779003
+piece 84224 4.1566150903555075
+throw 83679 7.745044372573241
+worth 82559 7.745044372573241
+quick 81548 8.41005792109261
+state 80818 4.1566150903555075
+weird 78317 7.348487548779003
+chief 76951 7.745044372573241
+class 76489 4.1566150903555075
+worse 75595 7.348487548779003
+court 74580 7.348487548779003
+marry 73938 5.168619345127808
+meant 73929 7.348487548779003
+movie 73070 7.348487548779003
+mouth 72733 7.745044372573241
+month 71163 7.745044372573241
+lying 71098 8.41005792109261
+train 70974 7.348487548779003
+seven 70968 4.1566150903555075
+hotel 70659 7.745044372573241
+round 70043 7.348487548779003
+broke 68629 7.348487548779003
+frank 68472 7.348487548779003
+table 67702 7.348487548779003
+buddy 66718 5.168619345127808
+using 66503 7.348487548779003
+floor 66456 4.1566150903555075
+swear 66157 7.348487548779003
+spend 66119 7.348487548779003
+space 64991 7.348487548779003
+group 64761 7.348487548779003
+peace 64262 4.1566150903555075
+force 63737 7.348487548779003
+short 63714 7.745044372573241
+enjoy 63294 9.4839805721334
+crime 63084 7.348487548779003
+horse 62923 7.745044372573241
+count 62763 7.348487548779003
+honor 62722 4.533753842401023
+lunch 62582 7.745044372573241
+radio 62502 7.348487548779003
+idiot 62357 4.1566150903555075
+paper 62166 4.1566150903555075
+eight 61400 7.745044372573241
+cover 61052 7.348487548779003
+agree 60716 4.1566150903555075
+major 60560 8.41005792109261
+stick 60548 7.348487548779003
+offer 60444 4.1566150903555075
+smart 60397 7.348487548779003
+relax 59715 8.41005792109261
+brain 59464 7.348487548779003
+proud 59309 7.348487548779003
+angry 58748 8.41005792109261
+agent 58608 7.348487548779003
+dress 58429 4.1566150903555075
+scene 58017 4.1566150903555075
+tough 57486 7.745044372573241
+drunk 56919 7.348487548779003
+share 56854 7.745044372573241
+laugh 56460 7.745044372573241
+smell 56399 4.1566150903555075
+often 55998 7.348487548779003
+spent 55836 7.348487548779003
+third 55750 7.745044372573241
+visit 55638 4.1566150903555075
+judge 55336 8.41005792109261
+prove 55079 7.348487548779003
+queen 53006 5.168619345127808
+carry 52734 5.168619345127808
+teach 52731 7.745044372573241
+upset 52565 7.348487548779003
+green 52557 4.1566150903555075
+store 51492 7.348487548779003
+doubt 51287 7.348487548779003
+wrote 50800 7.348487548779003
+field 50617 7.348487548779003
+south 50364 7.745044372573241
+glass 50103 4.1566150903555075
+dying 49963 8.41005792109261
+whose 49808 7.745044372573241
+plane 49704 7.348487548779003
+north 49107 7.745044372573241
+madam 48931 2.661739371382253
+truck 48807 7.348487548779003
+board 48666 7.348487548779003
+stuck 48497 7.348487548779003
+magic 48484 7.348487548779003
+reach 48221 7.745044372573241
+dirty 47462 8.41005792109261
+knock 46228 4.1566150903555075
+harry 46028 5.553032729571804
+worst 45845 7.348487548779003
+river 45834 4.1566150903555075
+final 45614 7.348487548779003
+match 45223 7.745044372573241
+grand 45183 7.348487548779003
+press 44624 4.1566150903555075
+blame 44534 7.348487548779003
+price 43671 7.348487548779003
+smoke 43421 7.348487548779003
+favor 43370 7.348487548779003
+smile 43295 7.348487548779003
+guard 43270 7.348487548779003
+begin 43130 7.348487548779003
+enemy 42799 5.168619345127808
+allow 42649 4.1566150903555075
+apart 42417 4.1566150903555075
+stage 42074 7.348487548779003
+bunch 42064 7.745044372573241
+admit 41817 7.348487548779003
+steal 41720 7.348487548779003
+twice 41693 7.348487548779003
+cross 41692 4.1566150903555075
+waste 41240 7.348487548779003
+taste 41080 4.1566150903555075
+silly 40758 5.168619345127808
+build 40738 7.348487548779003
+track 40578 7.348487548779003
+above 40388 7.348487548779003
+video 40195 7.348487548779003
+fresh 40049 7.745044372573241
+stole 39897 7.348487548779003
+study 39882 8.41005792109261
+crowd 39856 7.348487548779003
+treat 39803 4.1566150903555075
+empty 39482 8.41005792109261
+level 39476 2.661739371382253
+built 39041 7.348487548779003
+raise 38449 7.348487548779003
+extra 38335 8.41005792109261
+heavy 38220 8.811399049482944
+billy 37951 5.168619345127808
+shame 37793 7.745044372573241
+awful 37405 7.348487548779003
+large 37373 7.348487548779003
+local 37344 4.1566150903555075
+stone 37203 7.348487548779003
+grace 37180 7.348487548779003
+beach 36841 7.745044372573241
+faith 36815 7.745044372573241
+knife 36197 7.348487548779003
+devil 36189 7.348487548779003
+blind 35066 7.348487548779003
+ghost 35051 7.745044372573241
+tight 34972 4.533753842401023
+speed 34794 4.1566150903555075
+trial 34375 7.348487548779003
+ought 34342 7.745044372573241
+spoke 34035 7.348487548779003
+angel 33922 7.348487548779003
+super 33639 7.348487548779003
+among 33190 7.348487548779003
+color 32837 4.1566150903555075
+photo 32757 4.533753842401023
+sight 32715 7.745044372573241
+coach 32471 4.533753842401023
+serve 32190 4.1566150903555075
+older 32130 7.348487548779003
+trick 31937 7.348487548779003
+teeth 31615 3.0245996814796734
+truly 31514 8.41005792109261
+bobby 31434 3.3404158233734464
+nurse 31406 7.348487548779003
+chair 30826 7.745044372573241
+roger 30768 4.1566150903555075
+brown 30395 7.348487548779003
+shirt 30183 7.745044372573241
+guest 30128 7.348487548779003
+began 30049 7.348487548779003
+usual 29636 4.1566150903555075
+aware 29598 4.1566150903555075
+proof 29430 4.1566150903555075
+cream 29378 7.348487548779003
+total 29264 4.1566150903555075
+threw 29223 7.745044372573241
+birth 29167 7.745044372573241
+noise 29049 7.348487548779003
+focus 28619 7.348487548779003
+exist 28526 8.41005792109261
+issue 28140 4.1566150903555075
+sword 27928 7.348487548779003
+mayor 27530 8.41005792109261
+staff 27397 4.1566150903555075
+split 27273 7.348487548779003
+alarm 27116 4.1566150903555075
+slept 27077 7.348487548779003
+enter 27074 4.1566150903555075
+brave 26990 7.348487548779003
+model 26977 7.348487548779003
+screw 26824 7.348487548779003
+style 26569 8.41005792109261
+spare 26393 7.348487548779003
+shake 26384 7.745044372573241
+loose 26356 4.1566150903555075
+paint 26174 7.348487548779003
+sugar 26110 7.348487548779003
+block 25785 7.348487548779003
+fancy 25771 8.41005792109261
+chest 25688 7.745044372573241
+trade 25560 7.348487548779003
+storm 25143 7.348487548779003
+lover 24842 7.348487548779003
+bread 24828 7.348487548779003
+legal 24785 4.1566150903555075
+owner 24722 7.348487548779003
+rough 24370 7.745044372573241
+clock 23907 4.1566150903555075
+ocean 23905 7.348487548779003
+thief 23870 7.745044372573241
+bleep 23861 4.1566150903555075
+smith 23799 7.745044372573241
+plant 23599 7.348487548779003
+bless 23587 4.1566150903555075
+crash 23547 7.745044372573241
+lower 23529 7.348487548779003
+event 23463 4.1566150903555075
+shape 23460 7.745044372573241
+royal 23448 8.41005792109261
+cheap 23430 7.745044372573241
+avoid 23374 7.348487548779003
+grown 23266 7.348487548779003
+giant 23227 7.348487548779003
+scare 23192 7.348487548779003
+china 22926 7.745044372573241
+grant 22210 7.348487548779003
+scary 22035 8.41005792109261
+grave 21831 7.348487548779003
+chase 21830 7.745044372573241
+badly 21750 8.41005792109261
+shock 21717 7.745044372573241
+pizza 21677 5.168619345127808
+image 21669 7.348487548779003
+plate 21466 7.348487548779003
+mercy 21410 8.41005792109261
+drove 21309 7.348487548779003
+wound 21144 7.348487548779003
+crack 20916 4.1566150903555075
+chose 20888 7.745044372573241
+stood 20827 4.1566150903555075
+below 20771 7.348487548779003
+march 20744 7.745044372573241
+aside 20677 7.348487548779003
+spell 20592 4.1566150903555075
+freak 20578 7.348487548779003
+awake 20552 4.1566150903555075
+prime 20480 7.348487548779003
+piano 20426 7.348487548779003
+value 20324 7.348487548779003
+union 20316 4.1566150903555075
+media 20306 7.348487548779003
+pride 20205 7.348487548779003
+metal 19938 7.348487548779003
+candy 19571 8.41005792109261
+bride 19249 7.348487548779003
+penny 19236 5.168619345127808
+claim 19233 7.348487548779003
+solve 19166 7.348487548779003
+theme 19163 4.533753842401023
+chuck 19107 4.533753842401023
+false 19075 7.348487548779003
+punch 18951 7.745044372573241
+witch 18890 7.745044372573241
+toast 18638 4.1566150903555075
+coast 18547 7.348487548779003
+beast 18414 7.348487548779003
+shift 18253 7.745044372573241
+exact 18213 8.41005792109261
+score 18120 7.348487548779003
+pilot 18070 7.348487548779003
+grade 17882 7.348487548779003
+juice 17879 8.41005792109261
+tower 17842 7.348487548779003
+wheel 17795 4.533753842401023
+fruit 17773 7.348487548779003
+range 17758 7.348487548779003
+youth 17703 8.811399049482944
+eaten 17689 4.1566150903555075
+alien 17513 7.348487548779003
+route 17472 7.348487548779003
+trace 17465 7.348487548779003
+nasty 17464 8.41005792109261
+merry 17407 5.168619345127808
+snake 17335 7.348487548779003
+actor 17318 7.348487548779003
+anger 17258 7.348487548779003
+sharp 17246 7.745044372573241
+squad 17220 8.41005792109261
+chain 16978 7.745044372573241
+fully 16943 5.168619345127808
+robin 16921 7.348487548779003
+curse 16867 7.348487548779003
+loser 16663 7.348487548779003
+climb 16614 7.348487548779003
+trash 16555 7.745044372573241
+prize 16489 8.41005792109261
+stock 16373 7.348487548779003
+bravo 16320 7.348487548779003
+glory 16221 8.41005792109261
+apple 16192 4.1566150903555075
+flesh 16064 7.745044372573241
+mummy 15781 3.3404158233734464
+alert 15747 7.348487548779003
+panic 15707 7.348487548779003
+tiger 15646 7.348487548779003
+saint 15618 7.348487548779003
+solid 15581 7.348487548779003
+chick 15412 4.533753842401023
+demon 15328 7.348487548779003
+crown 15281 7.348487548779003
+dozen 15139 8.41005792109261
+swing 15079 7.348487548779003
+slave 14888 7.348487548779003
+carol 14887 7.348487548779003
+cruel 14872 7.348487548779003
+sally 14857 5.168619345127808
+daily 14647 8.41005792109261
+bound 14619 7.348487548779003
+guide 14614 7.348487548779003
+fella 14583 4.1566150903555075
+couch 14529 4.533753842401023
+cheer 14507 4.533753842401023
+title 14488 4.1566150903555075
+fever 14430 4.1566150903555075
+flash 14418 7.745044372573241
+siren 14411 7.348487548779003
+drama 14284 4.1566150903555075
+adult 14267 7.348487548779003
+joint 14190 8.41005792109261
+civil 14131 4.1566150903555075
+shine 14055 7.745044372573241
+argue 14042 7.348487548779003
+trail 14033 7.348487548779003
+shout 13856 7.745044372573241
+blast 13764 7.348487548779003
+fifth 13690 4.533753842401023
+sweat 13581 7.348487548779003
+teddy 13549 5.168619345127808
+mason 13518 7.348487548779003
+kitty 13499 5.168619345127808
+crush 13497 7.745044372573241
+noble 13437 7.348487548779003
+gross 13387 4.1566150903555075
+skull 13299 4.1566150903555075
+shown 13295 7.745044372573241
+print 13293 7.348487548779003
+sauce 13249 7.348487548779003
+grass 13219 4.1566150903555075
+cheat 13204 7.745044372573241
+bible 13193 4.1566150903555075
+steel 13177 4.1566150903555075
+cabin 13159 7.348487548779003
+sheep 13127 4.533753842401023
+brand 13107 7.348487548779003
+virus 12984 7.348487548779003
+plain 12952 7.348487548779003
+robot 12886 4.1566150903555075
+purse 12740 7.348487548779003
+holly 12610 5.553032729571804
+tribe 12451 7.348487548779003
+equal 12433 8.41005792109261
+chill 12405 4.533753842401023
+nerve 12377 4.1566150903555075
+stake 12356 7.348487548779003
+thick 12143 7.745044372573241
+sport 12131 7.348487548779003
+basic 12130 7.348487548779003
+cliff 12109 4.1566150903555075
+forth 12049 7.745044372573241
+fetch 12029 7.745044372573241
+guilt 11973 7.348487548779003
+blown 11886 7.348487548779003
+booth 11880 4.533753842401023
+randy 11863 8.41005792109261
+trunk 11828 7.348487548779003
+drank 11765 7.348487548779003
+salad 11646 4.1566150903555075
+loyal 11641 5.168619345127808
+mouse 11619 7.348487548779003
+fairy 11562 8.41005792109261
+frame 11555 7.348487548779003
+habit 11536 7.745044372573241
+strip 11481 7.348487548779003
+lousy 11454 8.41005792109261
+belly 11442 5.168619345127808
+fence 11402 4.1566150903555075
+limit 11384 4.1566150903555075
+cried 11236 7.348487548779003
+pulse 11145 7.348487548779003
+cloud 11125 7.348487548779003
+pitch 11022 7.745044372573241
+charm 10980 7.745044372573241
+apply 10970 5.168619345127808
+fifty 10941 5.168619345127808
+clown 10883 7.348487548779003
+minor 10781 7.348487548779003
+chaos 10764 7.745044372573241
+angle 10724 7.348487548779003
+scale 10519 7.348487548779003
+ralph 10474 7.745044372573241
+shark 10456 7.745044372573241
+sneak 10416 7.348487548779003
+shell 10381 4.533753842401023
+drill 10349 4.1566150903555075
+begun 10285 7.348487548779003
+liver 10281 7.348487548779003
+moron 10229 4.1566150903555075
+sandy 10207 8.41005792109261
+album 10199 7.348487548779003
+alley 10145 5.168619345127808
+alibi 10141 4.1566150903555075
+blade 10100 7.348487548779003
+alpha 10093 4.533753842401023
+widow 10080 4.1566150903555075
+moral 10077 7.348487548779003
+award 10055 4.1566150903555075
+grief 10054 7.348487548779003
+novel 9997 7.348487548779003
+opera 9918 7.348487548779003
+brief 9876 7.348487548779003
+prick 9801 7.348487548779003
+abuse 9756 7.348487548779003
+elder 9722 4.1566150903555075
+beard 9718 7.348487548779003
+burnt 9678 7.348487548779003
+upper 9674 4.1566150903555075
+shore 9666 7.745044372573241
+lemon 9653 7.348487548779003
+crane 9625 7.348487548779003
+fraud 9599 7.348487548779003
+tense 9542 4.1566150903555075
+drawn 9493 7.348487548779003
+motor 9489 4.1566150903555075
+steak 9450 7.348487548779003
+tooth 9408 3.0245996814796734
+cable 9369 7.348487548779003
+slide 9324 7.348487548779003
+entry 9269 8.41005792109261
+mount 9239 7.348487548779003
+pound 9235 7.348487548779003
+motel 9233 7.348487548779003
+rifle 9221 7.348487548779003
+brick 9209 7.348487548779003
+brush 9186 7.745044372573241
+delay 9179 8.41005792109261
+baker 9155 7.348487548779003
+badge 9133 7.348487548779003
+labor 9117 7.348487548779003
+eagle 9058 4.1566150903555075
+basis 8975 4.1566150903555075
+twist 8971 4.1566150903555075
+inner 8942 4.1566150903555075
+patch 8938 7.745044372573241
+humor 8919 7.745044372573241
+rocky 8902 8.41005792109261
+radar 8868 2.661739371382253
+amber 8866 7.348487548779003
+booze 8781 5.168619345127808
+vodka 8757 7.348487548779003
+solar 8753 7.348487548779003
+phase 8690 7.745044372573241
+fleet 8685 4.1566150903555075
+smash 8631 4.533753842401023
+poker 8624 7.348487548779003
+sober 8569 7.348487548779003
+niece 8561 4.1566150903555075
+towel 8491 7.348487548779003
+daisy 8489 8.41005792109261
+bunny 8457 5.168619345127808
+skill 8447 4.1566150903555075
+baron 8441 7.348487548779003
+petty 8431 5.168619345127808
+diary 8423 8.41005792109261
+wagon 8420 7.348487548779003
+bacon 8411 7.348487548779003
+dutch 8403 7.745044372573241
+click 8401 4.1566150903555075
+burst 8398 7.348487548779003
+sunny 8377 5.168619345127808
+sheet 8346 4.533753842401023
+fried 8345 7.348487548779003
+ranch 8263 7.745044372573241
+safer 8257 7.348487548779003
+steam 8179 7.348487548779003
+pearl 8175 7.348487548779003
+ideal 8087 7.348487548779003
+spoil 8079 7.348487548779003
+lance 8068 7.348487548779003
+bloke 8066 7.348487548779003
+nanny 8037 3.3404158233734464
+vital 7997 7.348487548779003
+groom 7954 4.1566150903555075
+drown 7935 7.348487548779003
+alike 7933 7.348487548779003
+dough 7923 7.745044372573241
+wreck 7920 7.348487548779003
+stink 7891 7.348487548779003
+homer 7887 7.745044372573241
+bingo 7807 7.348487548779003
+broad 7798 7.348487548779003
+stare 7782 7.348487548779003
+puppy 7764 3.3404158233734464
+suite 7680 7.348487548779003
+arrow 7670 4.1566150903555075
+shave 7607 7.745044372573241
+sixth 7566 8.811399049482944
+error 7563 2.3727717637075796
+react 7521 7.348487548779003
+theft 7510 4.533753842401023
+harsh 7507 4.533753842401023
+flame 7500 7.348487548779003
+medal 7498 7.348487548779003
+swell 7434 4.1566150903555075
+feast 7431 7.348487548779003
+bench 7419 7.745044372573241
+scout 7409 7.348487548779003
+vault 7351 7.348487548779003
+quote 7348 8.41005792109261
+sonic 7293 7.348487548779003
+rusty 7276 8.41005792109261
+chess 7234 4.533753842401023
+cargo 7217 7.348487548779003
+shove 7215 7.745044372573241
+rumor 7163 4.1566150903555075
+skirt 7161 7.348487548779003
+spike 7140 7.348487548779003
+whale 7087 7.745044372573241
+villa 7056 4.1566150903555075
+comic 7053 4.1566150903555075
+faint 7053 7.348487548779003
+bleed 7050 4.1566150903555075
+cycle 7022 5.168619345127808
+goose 7019 4.1566150903555075
+sweep 7003 4.1566150903555075
+risky 6984 8.41005792109261
+blank 6956 7.348487548779003
+dummy 6768 5.168619345127808
+clerk 6743 7.348487548779003
+prior 6689 4.1566150903555075
+organ 6680 7.348487548779003
+outer 6677 7.348487548779003
+spray 6639 8.41005792109261
+ninja 6637 5.168619345127808
+handy 6634 8.811399049482944
+crawl 6626 7.348487548779003
+slice 6625 7.348487548779003
+stiff 6620 4.1566150903555075
+creep 6594 4.1566150903555075
+woody 6543 5.168619345127808
+drake 6527 7.348487548779003
+scent 6523 7.348487548779003
+naive 6522 7.348487548779003
+jolly 6519 6.1990704093781135
+swore 6516 7.348487548779003
+bonus 6470 7.348487548779003
+wrist 6461 7.348487548779003
+drain 6453 7.348487548779003
+thumb 6429 7.745044372573241
+lobby 6408 5.168619345127808
+dealt 6298 7.348487548779003
+fatal 6284 4.1566150903555075
+roast 6269 7.348487548779003
+flood 6263 4.1566150903555075
+champ 6229 7.745044372573241
+dizzy 6217 6.1990704093781135
+bully 6215 5.168619345127808
+patty 6204 5.168619345127808
+spill 6182 4.1566150903555075
+snack 6163 7.348487548779003
+cheek 6152 4.533753842401023
+ditch 6152 7.745044372573241
+spite 6131 7.348487548779003
+rebel 6130 4.1566150903555075
+reply 6125 8.41005792109261
+orbit 6124 7.348487548779003
+greet 6059 4.1566150903555075
+forty 6023 8.41005792109261
+brass 6019 4.1566150903555075
+sworn 6015 7.348487548779003
+email 6010 7.348487548779003
+tasty 6008 5.168619345127808
+label 5982 4.1566150903555075
+eager 5966 4.1566150903555075
+repay 5951 8.41005792109261
+logic 5950 7.348487548779003
+minus 5914 7.348487548779003
+cough 5883 7.745044372573241
+cloth 5852 7.745044372573241
+float 5801 7.348487548779003
+glove 5789 7.348487548779003
+stark 5756 7.348487548779003
+piper 5744 4.1566150903555075
+sperm 5741 7.348487548779003
+creek 5700 4.1566150903555075
+armor 5648 4.1566150903555075
+ankle 5622 7.348487548779003
+nicer 5618 7.348487548779003
+willy 5613 5.168619345127808
+draft 5608 7.348487548779003
+fanny 5554 5.168619345127808
+quest 5551 8.41005792109261
+spoon 5540 4.1566150903555075
+swamp 5516 7.348487548779003
+depth 5495 7.745044372573241
+occur 5488 4.1566150903555075
+stamp 5478 7.348487548779003
+torch 5474 7.745044372573241
+stall 5456 4.1566150903555075
+panel 5438 7.348487548779003
+smack 5434 7.348487548779003
+choir 5413 7.745044372573241
+stunt 5410 4.1566150903555075
+hobby 5399 5.553032729571804
+hatch 5398 4.533753842401023
+sadly 5380 8.41005792109261
+horny 5357 8.811399049482944
+fluid 5325 7.348487548779003
+shiny 5281 8.811399049482944
+howdy 5267 8.811399049482944
+flush 5260 7.745044372573241
+toxic 5246 8.41005792109261
+rally 5239 5.168619345127808
+bloom 5238 4.1566150903555075
+cease 5233 4.1566150903555075
+bribe 5227 4.1566150903555075
+lodge 5209 7.348487548779003
+olive 5193 7.348487548779003
+belle 5182 2.661739371382253
+straw 5179 7.348487548779003
+rehab 5172 7.745044372573241
+diner 5167 7.348487548779003
+weigh 5157 7.745044372573241
+topic 5140 7.348487548779003
+blond 5132 7.348487548779003
+plead 5132 7.348487548779003
+mafia 5067 4.1566150903555075
+cigar 5060 7.348487548779003
+seize 5050 5.168619345127808
+sting 5035 7.348487548779003
+attic 5014 4.1566150903555075
+dried 4998 4.1566150903555075
+aunty 4996 8.41005792109261
+maker 4996 7.348487548779003
+brake 4994 7.348487548779003
+scarf 4980 7.348487548779003
+marsh 4974 7.745044372573241
+tumor 4933 7.348487548779003
+grain 4895 7.348487548779003
+pinky 4886 8.41005792109261
+rogue 4876 7.348487548779003
+erase 4864 4.1566150903555075
+canal 4845 4.1566150903555075
+shade 4843 7.745044372573241
+hence 4836 4.533753842401023
+rival 4823 7.348487548779003
+elite 4812 4.1566150903555075
+craft 4812 7.348487548779003
+shelf 4806 7.745044372573241
+chart 4806 7.745044372573241
+spark 4765 7.348487548779003
+globe 4762 7.348487548779003
+breed 4752 4.1566150903555075
+adore 4752 7.348487548779003
+pasta 4750 4.1566150903555075
+delta 4746 7.348487548779003
+stove 4739 7.348487548779003
+disco 4702 7.348487548779003
+dolly 4700 5.168619345127808
+gypsy 4682 5.168619345127808
+ridge 4670 7.348487548779003
+razor 4664 5.168619345127808
+prank 4618 7.348487548779003
+realm 4610 7.348487548779003
+missy 4608 5.168619345127808
+altar 4600 4.1566150903555075
+jelly 4597 6.1990704093781135
+choke 4594 7.745044372573241
+donor 4586 4.1566150903555075
+refer 4580 2.661739371382253
+karma 4541 4.1566150903555075
+layer 4501 8.41005792109261
+adopt 4473 7.348487548779003
+frost 4455 7.348487548779003
+buyer 4438 8.41005792109261
+blunt 4425 7.348487548779003
+hunch 4408 4.533753842401023
+yacht 4408 8.811399049482944
+stain 4407 7.348487548779003
+hairy 4402 8.811399049482944
+meter 4395 4.1566150903555075
+lease 4394 4.1566150903555075
+tease 4361 4.1566150903555075
+rider 4352 4.1566150903555075
+stack 4345 7.348487548779003
+wheat 4345 7.745044372573241
+finch 4341 7.745044372573241
+chili 4316 4.533753842401023
+untie 4306 7.348487548779003
+phony 4298 8.811399049482944
+whack 4297 7.745044372573241
+noisy 4284 8.41005792109261
+waist 4279 7.348487548779003
+curry 4271 5.168619345127808
+grill 4265 4.1566150903555075
+freed 4264 4.1566150903555075
+urine 4261 7.348487548779003
+pinch 4247 7.745044372573241
+joker 4159 8.41005792109261
+porch 4148 7.745044372573241
+kneel 4146 4.1566150903555075
+rapid 4140 7.348487548779003
+sushi 4133 4.533753842401023
+shaft 4133 7.745044372573241
+setup 4127 7.348487548779003
+greed 4123 4.1566150903555075
+spine 4115 7.348487548779003
+salon 4108 7.348487548779003
+asset 4096 4.1566150903555075
+shook 4087 4.533753842401023
+naval 4086 4.1566150903555075
+swine 4083 7.348487548779003
+peach 4083 7.745044372573241
+crook 4072 4.1566150903555075
+grasp 4071 7.348487548779003
+reign 4062 7.348487548779003
+stash 4061 4.533753842401023
+jewel 4045 5.168619345127808
+swept 4043 7.348487548779003
+ferry 4034 5.168619345127808
+urban 4019 7.348487548779003
+comet 3980 7.348487548779003
+vomit 3972 7.348487548779003
+drift 3943 7.348487548779003
+aisle 3933 7.348487548779003
+raven 3913 7.348487548779003
+queer 3906 5.168619345127808
+trump 3904 7.348487548779003
+spicy 3897 8.41005792109261
+sheer 3893 4.533753842401023
+blink 3893 7.348487548779003
+steer 3892 4.1566150903555075
+dodge 3864 4.1566150903555075
+unite 3860 7.348487548779003
+camel 3822 7.348487548779003
+probe 3816 7.348487548779003
+stray 3796 8.41005792109261
+rabbi 3791 4.1566150903555075
+tramp 3769 7.348487548779003
+arena 3763 4.1566150903555075
+audio 3760 7.348487548779003
+steed 3754 4.1566150903555075
+piggy 3750 5.168619345127808
+pause 3750 7.348487548779003
+scrap 3730 7.348487548779003
+booty 3716 5.168619345127808
+fatty 3707 5.168619345127808
+onion 3699 2.661739371382253
+spice 3685 7.348487548779003
+grunt 3681 7.348487548779003
+elbow 3668 7.348487548779003
+flown 3665 7.348487548779003
+alter 3663 7.348487548779003
+filth 3656 7.745044372573241
+agony 3642 8.41005792109261
+shack 3634 7.745044372573241
+scrub 3633 7.348487548779003
+ruler 3631 4.1566150903555075
+flour 3620 7.348487548779003
+dusty 3617 8.41005792109261
+utter 3611 4.1566150903555075
+exile 3605 5.168619345127808
+drone 3600 7.348487548779003
+tango 3595 7.348487548779003
+swift 3583 7.348487548779003
+token 3580 7.348487548779003
+ninth 3578 4.533753842401023
+scoop 3569 4.1566150903555075
+spear 3554 7.348487548779003
+boxer 3537 8.41005792109261
+slack 3515 7.348487548779003
+blend 3498 7.348487548779003
+fritz 3492 8.41005792109261
+flirt 3488 7.348487548779003
+snuck 3481 7.348487548779003
+dwarf 3477 7.348487548779003
+boost 3472 4.1566150903555075
+timer 3456 7.348487548779003
+poppy 3445 3.3404158233734464
+metro 3445 7.348487548779003
+grove 3431 7.348487548779003
+irony 3398 8.41005792109261
+waltz 3396 8.41005792109261
+await 3391 4.1566150903555075
+verse 3386 4.1566150903555075
+bliss 3377 4.1566150903555075
+wrath 3364 7.745044372573241
+tutor 3363 4.1566150903555075
+stern 3353 7.348487548779003
+curly 3345 8.41005792109261
+batch 3338 7.745044372573241
+flock 3314 7.348487548779003
+medic 3308 7.348487548779003
+sewer 3307 4.1566150903555075
+moose 3298 4.1566150903555075
+brace 3293 7.348487548779003
+newly 3284 8.41005792109261
+bluff 3266 4.1566150903555075
+juicy 3264 9.4839805721334
+eerie 3264 2.3727717637075796
+troop 3259 4.1566150903555075
+flute 3245 7.348487548779003
+paddy 3245 5.168619345127808
+funky 3239 8.41005792109261
+butch 3231 7.745044372573241
+broom 3220 4.1566150903555075
+curve 3219 7.348487548779003
+sixty 3216 9.4839805721334
+valid 3198 7.348487548779003
+barge 3195 7.348487548779003
+strap 3171 7.348487548779003
+flora 3159 7.348487548779003
+polar 3159 7.348487548779003
+syrup 3144 8.41005792109261
+haunt 3128 7.745044372573241
+essay 3118 5.168619345127808
+fewer 3116 4.1566150903555075
+mamma 3112 1.2919762573449318
+grind 3111 7.348487548779003
+sniff 3100 4.1566150903555075
+slick 3098 7.348487548779003
+vague 3077 7.348487548779003
+tenth 3064 4.533753842401023
+yield 3059 8.41005792109261
+motto 3032 2.661739371382253
+midst 3021 7.348487548779003
+condo 3005 4.1566150903555075
+tying 2996 8.41005792109261
+unity 2963 8.41005792109261
+forge 2962 7.348487548779003
+valve 2945 4.1566150903555075
+scope 2927 7.348487548779003
+gravy 2924 8.41005792109261
+vocal 2924 7.348487548779003
+adapt 2905 4.1566150903555075
+fishy 2873 8.811399049482944
+flick 2873 7.348487548779003
+rhyme 2868 8.811399049482944
+abort 2855 7.348487548779003
+rover 2843 4.1566150903555075
+hardy 2839 8.811399049482944
+truce 2837 7.348487548779003
+plaza 2837 5.168619345127808
+berry 2824 5.168619345127808
+verge 2823 4.1566150903555075
+coral 2815 7.348487548779003
+arise 2806 7.348487548779003
+scram 2802 7.348487548779003
+brute 2796 7.348487548779003
+crust 2791 7.348487548779003
+sissy 2779 3.3404158233734464
+abbey 2776 5.168619345127808
+weary 2758 8.41005792109261
+stool 2756 4.1566150903555075
+skate 2753 7.348487548779003
+vicar 2751 7.348487548779003
+pupil 2750 4.1566150903555075
+crank 2734 7.348487548779003
+manor 2726 7.348487548779003
+merit 2725 7.348487548779003
+salty 2722 8.41005792109261
+rodeo 2720 4.1566150903555075
+bathe 2717 7.745044372573241
+crate 2705 7.348487548779003
+shady 2693 8.811399049482944
+hitch 2688 4.533753842401023
+rainy 2685 8.41005792109261
+leash 2684 7.745044372573241
+basil 2677 7.348487548779003
+cocoa 2673 2.661739371382253
+dense 2668 4.1566150903555075
+flint 2658 7.348487548779003
+chalk 2655 7.745044372573241
+clone 2647 7.348487548779003
+hazel 2638 8.811399049482944
+gamma 2626 2.661739371382253
+fuzzy 2617 6.1990704093781135
+cutie 2597 7.348487548779003
+siege 2593 4.1566150903555075
+cobra 2592 7.348487548779003
+manly 2587 8.41005792109261
+groan 2586 7.348487548779003
+crude 2568 7.348487548779003
+venom 2565 7.348487548779003
+relay 2564 8.41005792109261
+dowry 2556 8.41005792109261
+ounce 2552 7.348487548779003
+queue 2543 3.6380968685610027
+shush 2533 3.0245996814796734
+tread 2520 7.348487548779003
+opium 2516 7.348487548779003
+suing 2514 7.348487548779003
+wager 2498 7.348487548779003
+wider 2493 7.348487548779003
+thigh 2491 4.533753842401023
+serum 2490 7.348487548779003
+apron 2487 7.348487548779003
+tonic 2485 7.348487548779003
+steep 2484 4.1566150903555075
+hound 2470 7.745044372573241
+cloak 2469 7.348487548779003
+macho 2464 7.745044372573241
+fling 2460 7.348487548779003
+froze 2460 8.41005792109261
+mourn 2453 7.348487548779003
+quack 2451 8.41005792109261
+troll 2444 4.1566150903555075
+notch 2440 7.745044372573241
+annoy 2439 5.168619345127808
+arson 2435 7.348487548779003
+depot 2431 7.348487548779003
+dryer 2429 5.168619345127808
+moody 2426 5.168619345127808
+semen 2425 4.1566150903555075
+slate 2423 7.348487548779003
+scold 2420 7.348487548779003
+patsy 2415 8.41005792109261
+dwell 2413 4.1566150903555075
+squat 2412 8.41005792109261
+manic 2412 7.348487548779003
+lynch 2409 8.811399049482944
+omega 2391 7.348487548779003
+trout 2388 4.1566150903555075
+reset 2376 4.1566150903555075
+risen 2376 7.348487548779003
+flank 2361 7.348487548779003
+itchy 2356 8.811399049482944
+haste 2352 7.745044372573241
+heist 2350 7.745044372573241
+input 2349 7.348487548779003
+slash 2347 4.533753842401023
+thorn 2338 7.745044372573241
+hasty 2329 8.811399049482944
+debut 2323 7.348487548779003
+flare 2304 7.348487548779003
+milky 2304 8.41005792109261
+latte 2293 4.1566150903555075
+wiser 2292 7.348487548779003
+madly 2291 8.41005792109261
+valet 2288 7.348487548779003
+cadet 2278 7.348487548779003
+dairy 2274 8.41005792109261
+slope 2271 7.348487548779003
+paste 2267 7.348487548779003
+fiery 2267 8.41005792109261
+genie 2254 4.1566150903555075
+stein 2246 7.348487548779003
+viral 2236 7.348487548779003
+crisp 2234 7.348487548779003
+acute 2228 7.348487548779003
+flyer 2227 8.41005792109261
+grape 2224 7.348487548779003
+muddy 2212 5.168619345127808
+needy 2202 5.168619345127808
+titan 2196 4.1566150903555075
+carve 2178 7.348487548779003
+brink 2177 7.348487548779003
+chunk 2175 7.745044372573241
+vouch 2159 7.745044372573241
+venue 2147 4.1566150903555075
+lunar 2144 7.348487548779003
+sully 2141 5.168619345127808
+whoop 2105 4.533753842401023
+shalt 2103 7.745044372573241
+woken 2102 7.348487548779003
+pluck 2095 7.348487548779003
+surge 2093 7.348487548779003
+sauna 2089 4.1566150903555075
+pedal 2086 7.348487548779003
+turbo 2084 7.348487548779003
+melon 2070 7.348487548779003
+windy 2067 8.41005792109261
+derby 2062 8.41005792109261
+heave 2058 4.533753842401023
+golly 2051 5.168619345127808
+dandy 2050 5.168619345127808
+mammy 2043 3.3404158233734464
+tweet 2038 2.661739371382253
+skunk 2036 4.1566150903555075
+chant 2031 7.745044372573241
+laden 2028 7.348487548779003
+comfy 2010 8.41005792109261
+heath 2009 4.533753842401023
+clamp 1985 7.348487548779003
+rural 1976 4.1566150903555075
+usher 1972 7.745044372573241
+merge 1968 4.1566150903555075
+blaze 1963 8.41005792109261
+fiber 1958 7.348487548779003
+bosom 1955 4.1566150903555075
+salsa 1955 2.661739371382253
+dread 1954 4.1566150903555075
+abyss 1951 5.168619345127808
+rouge 1948 7.348487548779003
+corny 1946 8.41005792109261
+havoc 1944 7.745044372573241
+abide 1940 7.348487548779003
+clink 1936 7.348487548779003
+grail 1935 7.348487548779003
+lever 1930 4.1566150903555075
+decoy 1927 8.41005792109261
+vivid 1926 2.661739371382253
+shaky 1924 8.811399049482944
+goofy 1921 5.168619345127808
+goody 1919 5.168619345127808
+noose 1919 4.1566150903555075
+index 1918 8.41005792109261
+blush 1917 7.745044372573241
+snoop 1911 4.1566150903555075
+array 1908 3.6380968685610027
+maple 1903 7.348487548779003
+linen 1900 4.1566150903555075
+slime 1893 7.348487548779003
+oddly 1893 5.168619345127808
+clash 1885 7.745044372573241
+theta 1881 4.533753842401023
+fudge 1879 7.348487548779003
+ivory 1877 8.41005792109261
+trend 1876 7.348487548779003
+chump 1875 7.745044372573241
+cyber 1872 8.41005792109261
+aging 1869 4.1566150903555075
+mango 1867 7.348487548779003
+sonar 1867 7.348487548779003
+decay 1865 8.41005792109261
+posse 1864 4.1566150903555075
+jumbo 1862 8.41005792109261
+welsh 1861 7.745044372573241
+amuse 1853 7.348487548779003
+lorry 1852 5.168619345127808
+gavel 1839 7.348487548779003
+thump 1825 7.745044372573241
+weave 1823 4.1566150903555075
+budge 1822 7.348487548779003
+diver 1816 7.348487548779003
+cling 1809 7.348487548779003
+relic 1800 7.348487548779003
+spade 1796 7.348487548779003
+ratio 1795 7.348487548779003
+rhino 1784 7.745044372573241
+scalp 1781 7.348487548779003
+hedge 1777 4.533753842401023
+viper 1776 7.348487548779003
+witty 1776 5.168619345127808
+abbot 1774 4.1566150903555075
+vegan 1760 7.348487548779003
+guild 1757 7.348487548779003
+rugby 1753 8.41005792109261
+zebra 1752 8.41005792109261
+growl 1737 7.348487548779003
+picky 1734 8.41005792109261
+ledge 1732 4.1566150903555075
+spree 1722 4.1566150903555075
+stale 1714 7.348487548779003
+munch 1710 7.745044372573241
+spank 1695 7.348487548779003
+canoe 1691 7.348487548779003
+baton 1690 7.348487548779003
+kinky 1689 5.168619345127808
+geese 1688 2.3727717637075796
+forum 1673 7.348487548779003
+crest 1672 7.348487548779003
+chute 1663 7.745044372573241
+slimy 1657 8.41005792109261
+jumpy 1656 9.4839805721334
+lowly 1655 5.168619345127808
+cramp 1650 7.348487548779003
+moist 1648 7.348487548779003
+gauge 1640 4.1566150903555075
+intro 1630 7.348487548779003
+wench 1626 7.745044372573241
+tacky 1619 8.41005792109261
+voila 1614 7.348487548779003
+aloud 1613 7.348487548779003
+bagel 1608 7.348487548779003
+farce 1603 7.348487548779003
+donut 1601 7.348487548779003
+caste 1591 7.348487548779003
+wedge 1591 4.1566150903555075
+kappa 1588 2.661739371382253
+folly 1586 5.168619345127808
+basin 1584 7.348487548779003
+banjo 1581 8.41005792109261
+smear 1576 7.348487548779003
+pagan 1568 4.1566150903555075
+renew 1563 4.1566150903555075
+hutch 1561 4.533753842401023
+stump 1560 7.348487548779003
+purge 1553 7.348487548779003
+slain 1552 7.348487548779003
+triad 1539 7.348487548779003
+booby 1538 3.6380968685610027
+knack 1538 4.1566150903555075
+crave 1532 7.348487548779003
+stoop 1530 4.1566150903555075
+chord 1528 7.745044372573241
+torso 1525 4.1566150903555075
+buggy 1522 5.168619345127808
+tally 1522 5.168619345127808
+furry 1518 5.168619345127808
+sedan 1517 7.348487548779003
+colon 1516 4.1566150903555075
+snail 1515 7.348487548779003
+vista 1514 7.348487548779003
+fiend 1514 7.348487548779003
+ultra 1514 7.348487548779003
+peril 1510 7.348487548779003
+brook 1506 4.1566150903555075
+civic 1504 2.661739371382253
+cello 1503 4.1566150903555075
+whine 1490 7.745044372573241
+rinse 1484 7.348487548779003
+finer 1479 7.348487548779003
+latch 1475 7.745044372573241
+plank 1465 7.348487548779003
+miner 1463 7.348487548779003
+broth 1462 7.745044372573241
+elope 1459 4.1566150903555075
+sling 1448 7.348487548779003
+patio 1447 7.348487548779003
+creed 1442 4.1566150903555075
+tempo 1435 7.348487548779003
+stomp 1434 7.348487548779003
+chime 1434 7.745044372573241
+pouch 1432 7.745044372573241
+bowel 1424 7.348487548779003
+stung 1420 7.348487548779003
+bleak 1412 7.348487548779003
+expel 1411 5.168619345127808
+mound 1409 7.348487548779003
+whiff 1408 4.533753842401023
+felon 1399 7.348487548779003
+pushy 1398 8.811399049482944
+rigid 1397 4.1566150903555075
+maxim 1397 5.168619345127808
+giddy 1392 5.168619345127808
+ramen 1391 7.348487548779003
+imply 1389 8.41005792109261
+prone 1384 7.348487548779003
+dodgy 1373 5.168619345127808
+juror 1372 5.168619345127808
+wacky 1368 8.41005792109261
+adieu 1368 7.348487548779003
+swung 1367 7.348487548779003
+bugle 1363 7.348487548779003
+frown 1361 7.348487548779003
+quota 1354 8.41005792109261
+tidal 1350 7.348487548779003
+genre 1350 4.1566150903555075
+unfit 1350 7.348487548779003
+fetus 1350 7.348487548779003
+eater 1346 4.1566150903555075
+rowdy 1345 8.41005792109261
+snuff 1343 4.1566150903555075
+lefty 1341 8.41005792109261
+swarm 1338 7.348487548779003
+timid 1336 4.1566150903555075
+stalk 1335 7.348487548779003
+brawl 1329 7.348487548779003
+spook 1323 4.1566150903555075
+boast 1313 7.348487548779003
+snore 1311 7.348487548779003
+roach 1301 7.745044372573241
+snowy 1299 8.41005792109261
+audit 1299 7.348487548779003
+cider 1295 7.348487548779003
+jerky 1289 9.4839805721334
+penal 1284 7.348487548779003
+frail 1280 7.348487548779003
+flair 1279 7.348487548779003
+nutty 1278 5.168619345127808
+flask 1273 7.348487548779003
+ulcer 1270 7.348487548779003
+racer 1266 4.1566150903555075
+foggy 1264 5.168619345127808
+fussy 1262 5.168619345127808
+elect 1262 4.1566150903555075
+bossy 1255 5.168619345127808
+sheik 1249 7.745044372573241
+deuce 1246 4.1566150903555075
+mecca 1245 4.1566150903555075
+harem 1234 7.745044372573241
+proxy 1234 9.4839805721334
+thong 1227 7.745044372573241
+crypt 1224 8.41005792109261
+ample 1218 7.348487548779003
+clang 1218 7.348487548779003
+icing 1214 4.1566150903555075
+gorge 1214 4.1566150903555075
+terra 1209 4.1566150903555075
+amaze 1206 5.168619345127808
+limbo 1202 7.348487548779003
+cedar 1200 7.348487548779003
+girly 1200 8.41005792109261
+graft 1200 7.348487548779003
+drool 1188 4.1566150903555075
+leech 1186 4.533753842401023
+sassy 1184 3.3404158233734464
+aroma 1183 4.1566150903555075
+birch 1177 7.745044372573241
+swoop 1175 4.1566150903555075
+quill 1175 5.168619345127808
+mambo 1174 4.1566150903555075
+algae 1172 4.1566150903555075
+flack 1169 7.348487548779003
+floss 1165 4.1566150903555075
+vogue 1164 7.348487548779003
+privy 1163 8.41005792109261
+hoist 1163 7.745044372573241
+retro 1162 4.1566150903555075
+bland 1152 7.348487548779003
+toxin 1151 8.41005792109261
+viola 1148 7.348487548779003
+cinch 1147 4.533753842401023
+speck 1144 7.348487548779003
+lurch 1140 7.745044372573241
+rabid 1128 7.348487548779003
+scuba 1123 7.348487548779003
+sleet 1119 4.1566150903555075
+shawl 1111 7.745044372573241
+satin 1109 7.348487548779003
+pence 1108 4.1566150903555075
+canon 1108 4.1566150903555075
+jiffy 1107 6.1990704093781135
+caddy 1103 5.168619345127808
+borne 1103 7.348487548779003
+hippo 1099 4.533753842401023
+glide 1097 7.348487548779003
+friar 1089 4.1566150903555075
+atone 1083 7.348487548779003
+envoy 1082 8.41005792109261
+taboo 1080 4.1566150903555075
+quake 1078 8.41005792109261
+fluke 1074 7.348487548779003
+groin 1071 7.348487548779003
+slang 1067 7.348487548779003
+ether 1057 4.533753842401023
+nasal 1049 4.1566150903555075
+tulip 1043 7.348487548779003
+sever 1032 4.1566150903555075
+trait 1029 4.1566150903555075
+abode 1025 7.348487548779003
+filet 1024 7.348487548779003
+deity 1019 8.41005792109261
+snort 1018 7.348487548779003
+spawn 1010 7.348487548779003
+gnome 1007 7.348487548779003
+blitz 1006 8.41005792109261
+wharf 1004 7.745044372573241
+owing 1002 7.348487548779003
+quark 1001 8.41005792109261
+puffy 1000 5.168619345127808
+erect 1000 4.1566150903555075
+wield 993 7.348487548779003
+whirl 990 7.745044372573241
+lumpy 989 8.41005792109261
+awoke 988 7.348487548779003
+cubic 983 4.1566150903555075
+gloom 976 4.1566150903555075
+polka 974 7.348487548779003
+gloss 972 4.1566150903555075
+papal 971 2.661739371382253
+yearn 971 8.41005792109261
+tiara 970 4.1566150903555075
+clank 969 7.348487548779003
+flake 965 7.348487548779003
+pubic 962 7.348487548779003
+gauze 960 8.41005792109261
+ditto 959 4.1566150903555075
+rigor 958 4.1566150903555075
+lucid 957 7.348487548779003
+glare 957 7.348487548779003
+kebab 949 4.1566150903555075
+hover 947 7.745044372573241
+magma 946 2.661739371382253
+gloat 946 7.348487548779003
+evade 941 4.1566150903555075
+goner 941 7.348487548779003
+dingo 940 7.348487548779003
+creak 934 7.348487548779003
+quail 932 8.41005792109261
+bison 930 7.348487548779003
+lager 928 7.348487548779003
+smoky 925 8.41005792109261
+shone 922 7.745044372573241
+lapse 921 7.348487548779003
+plump 921 4.1566150903555075
+brood 918 4.1566150903555075
+fluff 916 2.3727717637075796
+aorta 915 4.1566150903555075
+scorn 911 7.348487548779003
+liner 911 7.348487548779003
+quilt 910 8.41005792109261
+nudge 910 7.348487548779003
+lyric 907 8.41005792109261
+crumb 906 7.348487548779003
+primo 904 7.348487548779003
+stout 904 4.1566150903555075
+otter 903 4.1566150903555075
+width 901 7.745044372573241
+smelt 900 7.348487548779003
+ruddy 898 5.168619345127808
+stork 894 7.348487548779003
+hefty 893 8.811399049482944
+swami 893 7.348487548779003
+liege 892 4.1566150903555075
+yeast 891 8.41005792109261
+mushy 891 8.811399049482944
+coven 888 7.348487548779003
+crock 886 4.1566150903555075
+louse 884 7.348487548779003
+jazzy 883 7.2453978678243836
+snout 880 7.348487548779003
+braid 879 7.348487548779003
+chirp 878 7.745044372573241
+vigil 877 4.1566150903555075
+arose 876 7.348487548779003
+wring 874 7.348487548779003
+comma 872 4.1566150903555075
+vinyl 866 8.41005792109261
+nylon 865 5.168619345127808
+avail 864 4.1566150903555075
+prune 864 7.348487548779003
+mimic 863 2.661739371382253
+strut 860 4.1566150903555075
+ozone 856 5.168619345127808
+perky 856 8.41005792109261
+hyena 854 8.811399049482944
+decor 843 7.348487548779003
+perch 843 7.745044372573241
+totem 843 4.1566150903555075
+mower 842 7.348487548779003
+tract 841 4.1566150903555075
+pooch 841 4.533753842401023
+gland 841 7.348487548779003
+savvy 839 5.168619345127808
+valor 839 7.348487548779003
+guise 831 7.348487548779003
+graze 831 8.41005792109261
+winch 828 7.745044372573241
+spied 828 7.348487548779003
+soggy 827 5.168619345127808
+regal 826 7.348487548779003
+horde 824 7.745044372573241
+croak 823 7.348487548779003
+spunk 822 7.348487548779003
+hyper 822 8.811399049482944
+silky 821 8.41005792109261
+eject 815 5.168619345127808
+pinto 815 7.348487548779003
+cache 810 4.533753842401023
+creme 810 4.1566150903555075
+welch 807 7.745044372573241
+chore 806 7.745044372573241
+vixen 805 8.41005792109261
+leper 803 4.1566150903555075
+femur 803 7.348487548779003
+mural 802 7.348487548779003
+woven 802 7.348487548779003
+savoy 800 8.41005792109261
+berth 799 7.745044372573241
+spout 797 7.348487548779003
+micro 796 7.348487548779003
+cater 795 7.348487548779003
+excel 794 5.168619345127808
+amiss 790 4.1566150903555075
+ethic 787 7.745044372573241
+cluck 786 4.1566150903555075
+agile 786 7.348487548779003
+bayou 785 8.41005792109261
+newer 783 4.1566150903555075
+detox 782 8.41005792109261
+dopey 781 8.41005792109261
+exert 777 5.168619345127808
+lofty 776 8.41005792109261
+tipsy 773 8.41005792109261
+binge 771 7.348487548779003
+filly 769 5.168619345127808
+putty 769 5.168619345127808
+matey 769 8.41005792109261
+align 768 7.348487548779003
+spilt 768 7.348487548779003
+fetal 767 7.348487548779003
+crept 766 7.348487548779003
+mania 766 4.1566150903555075
+recap 765 7.348487548779003
+rupee 762 4.1566150903555075
+flung 759 7.348487548779003
+savor 757 7.348487548779003
+graph 757 7.745044372573241
+annex 756 5.168619345127808
+vapor 755 7.348487548779003
+waive 754 7.348487548779003
+grate 754 7.348487548779003
+splat 751 7.348487548779003
+pansy 750 8.41005792109261
+tenor 750 7.348487548779003
+hussy 748 5.553032729571804
+alloy 747 5.168619345127808
+plaid 746 7.348487548779003
+niche 746 7.745044372573241
+parry 742 5.168619345127808
+talon 741 7.348487548779003
+navel 740 7.348487548779003
+prowl 738 7.348487548779003
+mocha 737 7.745044372573241
+humid 736 7.745044372573241
+bongo 734 4.1566150903555075
+twirl 732 7.348487548779003
+oxide 727 8.41005792109261
+prude 726 7.348487548779003
+repel 725 4.1566150903555075
+manga 722 4.1566150903555075
+nerdy 721 8.41005792109261
+widen 719 7.348487548779003
+shank 716 7.745044372573241
+sigma 715 7.348487548779003
+mince 715 7.348487548779003
+pixie 714 5.168619345127808
+evict 713 7.348487548779003
+pesky 713 8.41005792109261
+midge 710 7.348487548779003
+bulge 710 7.348487548779003
+sheen 710 4.533753842401023
+optic 710 7.348487548779003
+tarot 708 4.1566150903555075
+snare 707 7.348487548779003
+saucy 707 8.41005792109261
+taffy 706 5.168619345127808
+craze 706 8.41005792109261
+slump 705 7.348487548779003
+salvo 702 7.348487548779003
+giver 701 7.348487548779003
+femme 700 2.661739371382253
+lingo 700 7.348487548779003
+stint 699 4.1566150903555075
+hippy 697 5.553032729571804
+denim 696 7.348487548779003
+sloth 694 7.745044372573241
+lupus 694 4.1566150903555075
+murky 693 8.41005792109261
+obese 692 4.1566150903555075
+caper 689 7.348487548779003
+mangy 689 8.41005792109261
+forte 688 7.348487548779003
+ghoul 684 7.745044372573241
+erupt 680 7.348487548779003
+stank 680 7.348487548779003
+plumb 676 7.348487548779003
+voter 675 7.348487548779003
+taker 674 7.348487548779003
+bitty 672 5.168619345127808
+flier 670 7.348487548779003
+puree 668 4.1566150903555075
+leaky 667 8.41005792109261
+onset 666 7.348487548779003
+beret 665 4.1566150903555075
+frock 665 7.348487548779003
+olden 664 7.348487548779003
+gourd 663 7.348487548779003
+gummy 661 5.168619345127808
+fibre 661 7.348487548779003
+koala 659 4.1566150903555075
+kiosk 657 4.1566150903555075
+usage 656 7.348487548779003
+shard 655 7.745044372573241
+fixer 653 8.41005792109261
+druid 653 4.1566150903555075
+gusto 650 7.348487548779003
+libel 650 4.1566150903555075
+ebony 647 8.41005792109261
+wreak 644 7.348487548779003
+clout 644 7.348487548779003
+stead 643 7.348487548779003
+flunk 642 7.348487548779003
+roost 640 4.1566150903555075
+knave 639 7.348487548779003
+foyer 639 8.41005792109261
+miser 639 7.348487548779003
+batty 638 5.168619345127808
+prawn 635 7.348487548779003
+swirl 631 7.348487548779003
+frisk 631 7.348487548779003
+taint 630 4.1566150903555075
+admin 628 7.348487548779003
+renal 628 7.348487548779003
+clasp 628 7.348487548779003
+afoot 624 4.1566150903555075
+feral 624 7.348487548779003
+rouse 621 7.348487548779003
+shrew 619 7.745044372573241
+taunt 619 4.1566150903555075
+ninny 618 3.3404158233734464
+blimp 616 7.348487548779003
+plait 613 7.348487548779003
+cabal 612 4.1566150903555075
+crass 612 4.1566150903555075
+acorn 611 7.348487548779003
+nomad 610 7.348487548779003
+tweed 609 4.1566150903555075
+stoke 606 7.348487548779003
+toddy 601 5.168619345127808
+avert 599 7.348487548779003
+baggy 598 5.168619345127808
+prism 596 7.348487548779003
+swish 596 4.533753842401023
+prose 595 7.348487548779003
+rumba 594 7.348487548779003
+whiny 589 8.811399049482944
+leapt 587 7.348487548779003
+whisk 583 7.745044372573241
+lilac 583 4.1566150903555075
+resin 582 7.348487548779003
+slush 582 4.533753842401023
+quart 581 8.41005792109261
+brawn 581 7.348487548779003
+glaze 580 8.41005792109261
+tweak 579 7.348487548779003
+mucus 577 4.1566150903555075
+brisk 574 7.348487548779003
+gumbo 572 7.348487548779003
+ratty 572 5.168619345127808
+stony 567 8.41005792109261
+enema 567 4.1566150903555075
+woozy 567 6.1990704093781135
+aloof 566 4.1566150903555075
+llama 566 2.661739371382253
+coupe 566 7.348487548779003
+husky 561 8.811399049482944
+seedy 559 5.168619345127808
+banal 558 4.1566150903555075
+cynic 558 5.168619345127808
+petal 557 7.348487548779003
+nosey 557 8.41005792109261
+scamp 555 7.348487548779003
+brunt 555 7.348487548779003
+gooey 555 5.168619345127808
+clack 554 4.1566150903555075
+spasm 552 4.1566150903555075
+amend 552 7.348487548779003
+tripe 551 7.348487548779003
+flaky 550 8.41005792109261
+moldy 550 8.41005792109261
+gully 550 5.168619345127808
+piety 549 8.41005792109261
+defer 548 4.1566150903555075
+edict 547 7.348487548779003
+bulky 546 8.41005792109261
+crick 545 4.1566150903555075
+betel 544 4.1566150903555075
+gecko 543 7.348487548779003
+pecan 542 7.348487548779003
+plume 542 7.348487548779003
+helix 542 8.811399049482944
+suave 541 7.348487548779003
+stair 541 7.348487548779003
+adorn 540 7.348487548779003
+mogul 539 7.348487548779003
+deter 539 4.1566150903555075
+pasty 535 8.41005792109261
+mover 535 7.348487548779003
+hater 535 7.745044372573241
+golem 533 7.348487548779003
+gouge 532 4.1566150903555075
+visor 530 7.348487548779003
+covet 528 7.348487548779003
+smirk 528 7.348487548779003
+surly 524 8.41005792109261
+fable 520 7.348487548779003
+scour 518 7.348487548779003
+anvil 511 7.348487548779003
+salve 510 7.348487548779003
+arbor 510 4.1566150903555075
+hinge 508 7.745044372573241
+clung 506 7.348487548779003
+lemur 506 7.348487548779003
+motif 505 7.348487548779003
+debit 502 7.348487548779003
+sleek 500 4.1566150903555075
+ester 496 4.1566150903555075
+wordy 496 8.41005792109261
+bigot 496 7.348487548779003
+morph 495 7.745044372573241
+nymph 494 8.811399049482944
+pivot 493 7.348487548779003
+crepe 492 4.1566150903555075
+twine 488 7.348487548779003
+hoard 487 7.745044372573241
+lasso 485 4.1566150903555075
+tunic 485 7.348487548779003
+angst 483 7.348487548779003
+soapy 481 8.41005792109261
+sieve 480 4.1566150903555075
+tibia 479 4.1566150903555075
+drape 478 7.348487548779003
+belch 477 7.745044372573241
+inter 477 7.348487548779003
+adept 476 7.348487548779003
+undue 475 4.1566150903555075
+query 474 9.4839805721334
+focal 473 7.348487548779003
+tardy 472 8.41005792109261
+poise 470 7.348487548779003
+beech 469 4.533753842401023
+livid 469 4.1566150903555075
+pesto 468 7.348487548779003
+leach 468 7.745044372573241
+inept 467 7.348487548779003
+duvet 465 7.348487548779003
+grope 464 7.348487548779003
+vigor 463 7.348487548779003
+chasm 462 7.745044372573241
+aloft 460 7.348487548779003
+gleam 460 7.348487548779003
+scoff 459 4.1566150903555075
+briar 458 4.1566150903555075
+thyme 456 8.811399049482944
+churn 456 7.745044372573241
+swoon 455 4.1566150903555075
+uncut 455 4.1566150903555075
+digit 453 4.1566150903555075
+slant 453 7.348487548779003
+dicey 453 8.41005792109261
+gamer 452 7.348487548779003
+emcee 451 2.3727717637075796
+spelt 451 7.348487548779003
+revel 451 4.1566150903555075
+heron 447 7.745044372573241
+smite 447 7.348487548779003
+anime 447 7.348487548779003
+ember 445 4.1566150903555075
+hunky 444 8.811399049482944
+shale 444 7.745044372573241
+sappy 443 5.168619345127808
+scone 442 7.348487548779003
+humph 441 4.533753842401023
+knoll 436 4.1566150903555075
+raspy 435 8.41005792109261
+wimpy 434 8.41005792109261
+gruff 430 4.1566150903555075
+swill 428 4.1566150903555075
+shrug 428 7.745044372573241
+clump 427 7.348487548779003
+khaki 426 4.533753842401023
+snipe 425 7.348487548779003
+fizzy 425 6.1990704093781135
+waver 425 7.348487548779003
+hilly 424 5.553032729571804
+stunk 423 7.348487548779003
+spurt 423 7.348487548779003
+gruel 422 7.348487548779003
+kayak 422 3.6380968685610027
+rotor 422 2.661739371382253
+tabby 419 5.168619345127808
+dunce 418 7.348487548779003
+unzip 418 8.41005792109261
+drier 418 4.1566150903555075
+knelt 417 7.348487548779003
+revue 417 4.1566150903555075
+rerun 416 4.1566150903555075
+fauna 415 4.1566150903555075
+slink 414 7.348487548779003
+modem 413 4.1566150903555075
+ladle 411 4.1566150903555075
+larva 409 4.1566150903555075
+lymph 409 8.811399049482944
+trove 406 7.348487548779003
+circa 406 4.1566150903555075
+musty 403 8.41005792109261
+jetty 402 6.1990704093781135
+psalm 402 7.348487548779003
+godly 401 8.41005792109261
+cameo 401 7.348487548779003
+bilge 401 7.348487548779003
+loopy 400 5.168619345127808
+elude 400 4.1566150903555075
+blare 400 7.348487548779003
+dogma 400 7.348487548779003
+minty 398 8.41005792109261
+slurp 397 7.348487548779003
+evoke 397 4.1566150903555075
+heady 396 8.811399049482944
+plush 396 7.745044372573241
+testy 395 5.168619345127808
+meaty 394 8.41005792109261
+shunt 390 7.745044372573241
+tamer 386 7.348487548779003
+shire 386 7.745044372573241
+gaudy 385 8.41005792109261
+fungi 385 7.348487548779003
+blurt 384 7.348487548779003
+dilly 383 5.168619345127808
+pygmy 382 5.168619345127808
+hovel 382 7.745044372573241
+bushy 381 8.811399049482944
+poser 381 7.348487548779003
+catty 380 5.168619345127808
+truer 379 4.1566150903555075
+brash 378 7.745044372573241
+beady 377 8.41005792109261
+infer 376 7.348487548779003
+snide 373 7.348487548779003
+conch 373 4.533753842401023
+inert 370 7.348487548779003
+freer 369 2.661739371382253
+cleft 368 7.348487548779003
+incur 364 7.348487548779003
+crone 363 7.348487548779003
+harpy 363 8.811399049482944
+guppy 363 5.168619345127808
+biddy 362 5.168619345127808
+topaz 361 8.41005792109261
+leery 361 5.168619345127808
+enact 360 7.348487548779003
+lunge 359 7.348487548779003
+igloo 357 4.1566150903555075
+brine 357 7.348487548779003
+augur 356 4.1566150903555075
+bough 356 7.745044372573241
+quell 355 5.168619345127808
+joust 353 8.41005792109261
+delve 353 4.1566150903555075
+sneer 351 4.1566150903555075
+vowel 351 7.348487548779003
+fjord 349 8.41005792109261
+lapel 347 4.1566150903555075
+dingy 346 8.41005792109261
+mirth 346 7.745044372573241
+leafy 345 8.41005792109261
+glade 345 7.348487548779003
+gaunt 344 7.348487548779003
+fugue 344 4.1566150903555075
+trite 343 4.1566150903555075
+palsy 343 8.41005792109261
+aback 341 4.1566150903555075
+shear 341 7.745044372573241
+showy 338 8.811399049482944
+guile 335 7.348487548779003
+cagey 335 8.41005792109261
+geeky 333 5.168619345127808
+hydro 332 8.811399049482944
+nadir 332 7.348487548779003
+synod 332 8.41005792109261
+maize 331 8.41005792109261
+unify 331 8.41005792109261
+tryst 330 5.168619345127808
+stoic 329 7.348487548779003
+cower 329 7.348487548779003
+feign 327 7.348487548779003
+ditty 327 5.168619345127808
+quirk 326 8.41005792109261
+carat 325 4.1566150903555075
+guava 325 4.1566150903555075
+hymen 325 8.811399049482944
+neigh 320 7.745044372573241
+abhor 319 7.745044372573241
+shoal 318 7.745044372573241
+beefy 316 5.168619345127808
+skier 315 7.348487548779003
+roomy 315 5.168619345127808
+droll 314 4.1566150903555075
+tawny 313 8.41005792109261
+cumin 313 7.348487548779003
+balmy 310 8.41005792109261
+girth 310 7.745044372573241
+ascot 309 7.348487548779003
+forgo 308 4.1566150903555075
+smock 307 7.348487548779003
+molar 307 7.348487548779003
+scaly 306 8.41005792109261
+haute 304 7.745044372573241
+junta 304 8.41005792109261
+spiky 304 8.41005792109261
+vying 303 8.41005792109261
+azure 302 8.41005792109261
+grime 301 7.348487548779003
+mulch 300 7.745044372573241
+snarl 299 7.348487548779003
+overt 299 7.348487548779003
+inlet 299 7.348487548779003
+lusty 298 8.41005792109261
+tonga 296 7.348487548779003
+rebus 296 7.348487548779003
+pudgy 296 8.41005792109261
+glint 295 7.348487548779003
+afire 293 7.348487548779003
+fecal 293 7.348487548779003
+wafer 292 7.348487548779003
+gassy 292 5.168619345127808
+awash 291 4.533753842401023
+parka 289 4.1566150903555075
+grimy 288 8.41005792109261
+truss 284 4.1566150903555075
+lumen 284 7.348487548779003
+unwed 283 7.348487548779003
+outdo 283 4.1566150903555075
+burly 283 8.41005792109261
+begat 283 7.348487548779003
+usurp 282 4.1566150903555075
+wooly 280 5.168619345127808
+spiel 278 7.348487548779003
+curvy 277 8.41005792109261
+froth 277 7.745044372573241
+bicep 276 7.348487548779003
+inbox 276 8.41005792109261
+lurid 273 7.348487548779003
+crump 272 7.348487548779003
+lanky 272 8.41005792109261
+equip 271 8.41005792109261
+krill 271 4.1566150903555075
+easel 269 4.1566150903555075
+gripe 269 7.348487548779003
+chaff 268 4.533753842401023
+mauve 267 7.348487548779003
+chard 266 7.745044372573241
+riser 264 4.1566150903555075
+frond 263 7.348487548779003
+mucky 263 8.41005792109261
+artsy 261 8.41005792109261
+nobly 260 8.41005792109261
+bleat 260 7.348487548779003
+stave 259 7.348487548779003
+masse 258 4.1566150903555075
+clove 258 7.348487548779003
+dumpy 257 8.41005792109261
+wight 256 7.745044372573241
+aptly 256 8.41005792109261
+spool 252 4.1566150903555075
+boney 251 8.41005792109261
+adage 250 4.1566150903555075
+spire 249 7.348487548779003
+epoch 248 7.745044372573241
+pouty 247 8.41005792109261
+piney 247 8.41005792109261
+pried 247 7.348487548779003
+crier 247 4.1566150903555075
+cabby 247 5.168619345127808
+gipsy 247 8.41005792109261
+skiff 247 4.1566150903555075
+credo 246 7.348487548779003
+purer 246 4.1566150903555075
+grout 245 7.348487548779003
+segue 245 4.1566150903555075
+shirk 244 7.745044372573241
+irate 244 7.348487548779003
+ovary 243 8.41005792109261
+pixel 242 8.41005792109261
+beset 242 4.1566150903555075
+inane 242 4.1566150903555075
+flail 242 4.1566150903555075
+scowl 241 7.348487548779003
+rebar 240 4.1566150903555075
+fleck 238 7.348487548779003
+rarer 238 2.3727717637075796
+shrub 238 7.745044372573241
+jaunt 236 8.41005792109261
+crimp 236 7.348487548779003
+chock 234 4.533753842401023
+beget 233 4.1566150903555075
+rajah 232 5.553032729571804
+avian 232 4.1566150903555075
+myrrh 231 5.553032729571804
+remit 230 7.348487548779003
+ripen 229 7.348487548779003
+askew 229 7.348487548779003
+skimp 228 7.348487548779003
+sulky 228 8.41005792109261
+login 228 7.348487548779003
+duchy 227 8.811399049482944
+facet 227 7.348487548779003
+tangy 226 8.41005792109261
+baste 225 7.348487548779003
+leggy 222 5.168619345127808
+slung 222 7.348487548779003
+abate 222 4.1566150903555075
+dusky 222 8.41005792109261
+briny 221 8.41005792109261
+macro 220 7.348487548779003
+mange 219 7.348487548779003
+canny 218 5.168619345127808
+melee 215 2.3727717637075796
+apnea 213 4.1566150903555075
+satyr 210 8.41005792109261
+shuck 210 7.745044372573241
+throb 209 7.745044372573241
+ionic 209 4.1566150903555075
+botch 209 7.745044372573241
+gulch 209 7.745044372573241
+deign 208 7.348487548779003
+undid 208 4.1566150903555075
+teary 206 8.41005792109261
+bloat 206 7.348487548779003
+droop 206 4.1566150903555075
+wrung 205 7.348487548779003
+tepid 205 7.348487548779003
+spurn 203 7.348487548779003
+idiom 203 4.1566150903555075
+rivet 202 7.348487548779003
+annul 202 4.1566150903555075
+butte 202 4.1566150903555075
+offal 201 4.1566150903555075
+bluer 200 7.348487548779003
+chide 199 7.745044372573241
+knead 199 7.348487548779003
+gaily 198 8.41005792109261
+spoof 198 4.1566150903555075
+glean 196 7.348487548779003
+ethos 195 7.745044372573241
+taper 195 7.348487548779003
+scant 194 7.348487548779003
+bawdy 193 8.41005792109261
+foray 190 8.41005792109261
+lathe 190 7.745044372573241
+atoll 189 4.1566150903555075
+trawl 188 7.348487548779003
+udder 187 4.1566150903555075
+natal 186 4.1566150903555075
+cacti 185 4.1566150903555075
+gayer 184 8.41005792109261
+vapid 184 7.348487548779003
+agora 182 4.1566150903555075
+amass 180 2.661739371382253
+dowdy 180 5.168619345127808
+aglow 179 7.348487548779003
+spiny 179 8.41005792109261
+quash 179 8.811399049482944
+singe 178 7.348487548779003
+sloop 177 4.1566150903555075
+reuse 177 4.1566150903555075
+ensue 176 4.1566150903555075
+whelp 176 7.745044372573241
+allot 175 4.1566150903555075
+spore 175 7.348487548779003
+leant 173 7.348487548779003
+erode 172 4.1566150903555075
+paler 171 7.348487548779003
+amply 169 8.41005792109261
+loath 169 7.745044372573241
+pithy 168 8.811399049482944
+downy 167 8.41005792109261
+tulle 167 4.1566150903555075
+twang 167 7.348487548779003
+ficus 166 7.348487548779003
+ardor 165 4.1566150903555075
+locus 165 7.348487548779003
+cairn 164 7.348487548779003
+boozy 162 6.1990704093781135
+dally 161 5.168619345127808
+twixt 160 5.168619345127808
+epoxy 160 9.4839805721334
+scion 160 7.348487548779003
+croup 160 7.348487548779003
+basal 159 4.1566150903555075
+cacao 158 2.661739371382253
+endow 156 7.348487548779003
+embed 156 4.1566150903555075
+tepee 155 2.3727717637075796
+penne 153 2.661739371382253
+adobe 153 7.348487548779003
+tatty 153 3.3404158233734464
+buxom 153 8.41005792109261
+prong 152 7.348487548779003
+tilde 151 7.348487548779003
+folio 151 4.1566150903555075
+foamy 150 8.41005792109261
+scrum 149 7.348487548779003
+dwelt 149 7.348487548779003
+musky 149 8.41005792109261
+assay 149 3.6380968685610027
+dimly 149 8.41005792109261
+blurb 147 4.1566150903555075
+pique 147 8.41005792109261
+sooty 145 5.168619345127808
+tithe 145 4.533753842401023
+scald 144 7.348487548779003
+smote 141 7.348487548779003
+belie 141 4.1566150903555075
+gamut 141 7.348487548779003
+chafe 140 7.745044372573241
+mossy 139 5.168619345127808
+fetid 139 7.348487548779003
+amity 138 8.41005792109261
+sprig 138 7.348487548779003
+macaw 137 4.1566150903555075
+allay 137 3.6380968685610027
+iliac 136 4.1566150903555075
+broil 136 7.348487548779003
+tacit 135 4.1566150903555075
+ennui 133 4.1566150903555075
+tenet 132 2.661739371382253
+rayon 132 8.41005792109261
+trice 131 7.348487548779003
+curio 131 7.348487548779003
+skulk 130 4.1566150903555075
+plied 130 7.348487548779003
+filmy 129 8.41005792109261
+shied 127 7.745044372573241
+polyp 126 5.168619345127808
+wrest 126 7.348487548779003
+hotly 126 8.811399049482944
+wince 125 7.348487548779003
+verve 125 2.661739371382253
+surer 125 4.1566150903555075
+weedy 123 5.168619345127808
+quoth 123 8.811399049482944
+swath 123 7.745044372573241
+dirge 122 7.348487548779003
+plunk 122 7.348487548779003
+zesty 121 9.4839805721334
+shorn 121 7.745044372573241
+retry 121 5.168619345127808
+idyll 119 5.168619345127808
+sooth 119 4.533753842401023
+sinew 117 7.348487548779003
+copse 117 7.348487548779003
+payer 116 8.41005792109261
+flout 115 7.348487548779003
+lithe 115 7.745044372573241
+exalt 114 8.41005792109261
+retch 112 7.745044372573241
+recur 112 4.1566150903555075
+saute 111 7.348487548779003
+antic 111 7.348487548779003
+axiom 111 8.41005792109261
+quasi 111 8.41005792109261
+refit 111 7.348487548779003
+gaffe 110 4.1566150903555075
+foist 110 7.348487548779003
+clued 109 7.348487548779003
+inlay 109 8.41005792109261
+saner 109 7.348487548779003
+wispy 108 8.41005792109261
+posit 108 7.348487548779003
+shyly 107 5.553032729571804
+rower 107 4.1566150903555075
+ashen 107 7.745044372573241
+drawl 107 7.348487548779003
+gusty 106 8.41005792109261
+humus 104 4.533753842401023
+elfin 103 7.348487548779003
+afoul 102 7.348487548779003
+halve 102 7.745044372573241
+squib 102 8.41005792109261
+ruder 100 4.1566150903555075
+idler 100 7.348487548779003
+aider 100 7.348487548779003
+liken 100 7.348487548779003
+covey 98 8.41005792109261
+cress 98 4.1566150903555075
+borax 97 8.41005792109261
+torus 97 7.348487548779003
+rebut 96 7.348487548779003
+wrack 95 7.348487548779003
+imbue 95 7.348487548779003
+agate 95 4.1566150903555075
+tonal 94 7.348487548779003
+slyly 93 3.6380968685610027
+crony 93 8.41005792109261
+axial 91 5.168619345127808
+flume 90 7.348487548779003
+dryly 89 5.168619345127808
+preen 88 4.1566150903555075
+terse 87 4.1566150903555075
+decal 87 7.348487548779003
+reedy 87 5.168619345127808
+furor 85 4.1566150903555075
+mealy 85 8.41005792109261
+cleat 85 7.348487548779003
+gnash 84 7.745044372573241
+affix 84 5.168619345127808
+slosh 83 4.533753842401023
+agape 83 4.1566150903555075
+tuber 83 7.348487548779003
+bylaw 82 8.41005792109261
+egret 81 4.1566150903555075
+boule 80 7.348487548779003
+caulk 80 7.348487548779003
+gawky 79 8.41005792109261
+befit 79 7.348487548779003
+diode 79 4.1566150903555075
+sepia 79 7.348487548779003
+elegy 79 5.168619345127808
+trope 79 7.348487548779003
+recut 78 7.348487548779003
+snaky 76 8.41005792109261
+wryly 76 5.168619345127808
+islet 76 7.348487548779003
+tubal 76 7.348487548779003
+kneed 75 4.1566150903555075
+gazer 74 8.41005792109261
+staid 74 7.348487548779003
+glyph 74 8.811399049482944
+aphid 73 7.745044372573241
+tapir 72 7.348487548779003
+sumac 71 7.348487548779003
+odder 71 4.1566150903555075
+dross 70 4.1566150903555075
+dully 68 5.168619345127808
+ingot 67 7.348487548779003
+cavil 67 7.348487548779003
+acrid 66 7.348487548779003
+stilt 65 4.1566150903555075
+amble 63 7.348487548779003
+rearm 63 4.1566150903555075
+pleat 61 7.348487548779003
+unlit 61 7.348487548779003
+frill 59 4.1566150903555075
+parse 59 7.348487548779003
+serif 58 7.348487548779003
+sower 58 7.348487548779003
+bevel 57 4.1566150903555075
+ombre 55 7.348487548779003
+moult 55 7.348487548779003
+baler 54 7.348487548779003
+droit 54 7.348487548779003
+daunt 52 7.348487548779003
+umbra 51 7.348487548779003
+extol 51 8.41005792109261
+dowel 51 7.348487548779003
+slunk 50 7.348487548779003
+debug 49 7.348487548779003
+eying 49 8.41005792109261
+eking 48 7.348487548779003
+gonad 47 7.348487548779003
+qualm 45 8.41005792109261
+filer 44 7.348487548779003
+abase 44 4.1566150903555075
+abled 42 7.348487548779003
+pulpy 42 5.168619345127808
+wooer 42 4.1566150903555075
+etude 42 4.1566150903555075
+elide 41 4.1566150903555075
+joist 41 8.41005792109261
+riper 41 4.1566150903555075
+aping 40 7.348487548779003
+conic 40 4.1566150903555075
+scree 39 4.1566150903555075
+oaken 39 7.348487548779003
+exult 38 8.41005792109261
+impel 37 7.348487548779003
+swash 37 4.533753842401023
+lipid 37 4.1566150903555075
+bezel 36 5.168619345127808
+warty 36 8.41005792109261
+coyly 35 5.168619345127808
+pupal 35 4.1566150903555075
+corer 33 4.1566150903555075
+thrum 32 7.745044372573241
+ovoid 32 4.1566150903555075
+radii 31 4.1566150903555075
+opine 31 7.348487548779003
+decry 31 8.41005792109261
+datum 31 7.348487548779003
+caput 30 7.348487548779003
+waxen 29 8.41005792109261
+edify 28 8.41005792109261
+unfed 28 7.348487548779003
+junto 25 8.41005792109261
+debar 24 7.348487548779003
+plier 24 7.348487548779003
+bused 24 7.348487548779003
+modal 23 7.348487548779003
+zonal 22 8.41005792109261
+anode 22 7.348487548779003
+axion 22 8.41005792109261
+verso 21 7.348487548779003
