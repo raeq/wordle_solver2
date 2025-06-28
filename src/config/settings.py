@@ -133,3 +133,20 @@ def reset_settings() -> None:
     """Reset the global settings instance (useful for testing)."""
     global _app_settings
     _app_settings = None
+
+
+def initialize_config(config_path: Optional[Path] = None) -> AppSettings:
+    """
+    Initialize and return the application configuration.
+
+    Args:
+        config_path (Optional[Path]): Path to the configuration YAML file.
+
+    Returns:
+        AppSettings: The loaded application settings.
+    """
+    global _app_settings
+    if config_path is None:
+        config_path = Path(__file__).parent.parent.parent / "config.yaml"
+    _app_settings = AppSettings.load_from_file(config_path)
+    return _app_settings
