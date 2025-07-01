@@ -6,7 +6,6 @@ from pathlib import Path
 from typing import List, Set
 
 
-
 class TestMemoryProfilingRemoval:
     """Test suite to ensure complete removal of memory profiling infrastructure."""
 
@@ -104,6 +103,16 @@ class TestMemoryProfilingRemoval:
         """Check a single file for forbidden imports."""
         violations = []
 
+        # Skip test files that need to mention the forbidden terms
+        excluded_files = [
+            Path("src/tests/test_memory_profiling_removal.py").absolute(),
+            Path("tests/test_memory_profiling_removal.py").absolute(),
+            Path("clean_memory_profiling.py").absolute(),
+        ]
+
+        if file_path.absolute() in excluded_files:
+            return []
+
         try:
             with open(file_path, "r", encoding="utf-8") as f:
                 content = f.read()
@@ -158,6 +167,17 @@ class TestMemoryProfilingRemoval:
     def _check_file_for_decorators(self, file_path: Path) -> List[str]:
         """Check a file for memory profiling decorators."""
         violations = []
+
+        # Skip test files that need to mention the forbidden terms
+        excluded_files = [
+            Path("src/tests/test_memory_profiling_removal.py").absolute(),
+            Path("tests/test_memory_profiling_removal.py").absolute(),
+            Path("clean_memory_profiling.py").absolute(),
+        ]
+
+        if file_path.absolute() in excluded_files:
+            return []
+
         forbidden_decorators = [
             "@profile_memory",
             "@profile",
@@ -219,6 +239,17 @@ class TestMemoryProfilingRemoval:
     ) -> List[str]:
         """Check a file for forbidden terms."""
         violations = []
+
+        # Skip files that need to mention the forbidden terms
+        excluded_files = [
+            Path("src/tests/test_memory_profiling_removal.py").absolute(),
+            Path("tests/test_memory_profiling_removal.py").absolute(),
+            Path("clean_memory_profiling.py").absolute(),
+            Path("TODO.md").absolute(),
+        ]
+
+        if file_path.absolute() in excluded_files:
+            return []
 
         try:
             with open(file_path, "r", encoding="utf-8") as f:
