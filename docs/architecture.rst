@@ -131,11 +131,12 @@ Multiple solving strategies are implemented using the Strategy pattern, allowing
 Observer Pattern
 ~~~~~~~~~~~~~~~~
 
-Game events are handled using the Observer pattern for loose coupling between components:
+The architecture is designed to support the Observer pattern for loose coupling between components, though this is not yet fully implemented across all modules:
 
 .. code-block:: python
 
-   class GameEngine:
+   # Example of how Observer pattern could be implemented
+   class EventNotifier:
        def __init__(self):
            self._observers = []
 
@@ -145,6 +146,9 @@ Game events are handled using the Observer pattern for loose coupling between co
        def notify(self, event):
            for observer in self._observers:
                observer.update(event)
+
+   # Future enhancement: Game events could be handled this way
+   # Currently, the GameEngine uses direct method calls and logging
 
 Configuration Management
 ------------------------
