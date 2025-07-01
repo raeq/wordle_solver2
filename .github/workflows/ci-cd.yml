@@ -132,15 +132,15 @@ jobs:
         if [ -f bandit-report.json ]; then
           # Count high-severity issues (you can adjust this logic as needed)
           high_severity=$(python -c "
-          import json
-          try:
-              with open('bandit-report.json', 'r') as f:
-                  data = json.load(f)
-              high_issues = [r for r in data.get('results', []) if r.get('issue_severity') == 'HIGH']
-              print(len(high_issues))
-          except:
-              print(0)
-          ")
+import json
+try:
+    with open('bandit-report.json', 'r') as f:
+        data = json.load(f)
+    high_issues = [r for r in data.get('results', []) if r.get('issue_severity') == 'HIGH']
+    print(len(high_issues))
+except:
+    print(0)
+")
           
           echo "High-severity security issues found: $high_severity"
           
