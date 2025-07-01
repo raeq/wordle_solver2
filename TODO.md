@@ -141,22 +141,138 @@ This document tracks planned changes, improvements, and new features for the Wor
 
 ---
 
-## Priority Levels
+## Revised Roadmap and Implementation Strategy
 
-### High Priority (Next Release)
-- Remove memory profiling infrastructure
-- Implement observer pattern
-- Visual keyboard display
+### Phase 1: Critical Foundation (Next 4-6 Weeks)
+- ✅ Remove memory profiling infrastructure (appears to be already completed)
+- 🔥 Implement observer pattern for game state management
+  - This creates the foundation for all future features
+  - Enables loose coupling between components
+  - Start with core event system and subscriber interfaces
+- 📊 Enhance testing infrastructure incrementally
+  - Focus on unit tests for new observer pattern components
+  - Establish continuous integration workflow improvements
 
-### Medium Priority (Future Releases)
-- JSON-RPC web service preparation
-- Game rule parameterization
-- Additional language dictionaries
+### Phase 2: Architecture Preparation (Weeks 7-12)
+- 🔧 Begin backend decoupling
+  - Create service layer interfaces
+  - Separate business logic from presentation
+  - Implement dependency injection pattern
+- ⚙️ Enhance configuration management
+  - Centralize configuration handling
+  - Create abstractions for environment-specific settings
+  - Prepare for game rule parameterization
 
-### Low Priority (Long-term Goals)
+### Phase 3: User Experience (Weeks 13-16)
+- 🎨 Implement visual keyboard display
+  - Leverage observer pattern for state management
+  - Add UI components for keyboard visualization
+  - Focus on user experience improvements
+
+### Medium Priority (Next Quarter)
+- Complete JSON-RPC web service preparation
+- Implement game rule parameterization
+- Begin internationalization with one additional language
+
+### Long-term Goals (6+ Months)
 - MCP server implementation
 - Advanced game modes (chaos, cheat)
 - Real-world evidence solver mode
+
+### Risk-Benefit Analysis
+- **Observer Pattern First**: Creates architectural foundation that simplifies all future work
+- **Incremental Approach**: Each phase delivers tangible value while building toward larger goals
+- **Test-Driven Development**: Ensures quality while implementing new architectural patterns
+- **Backward Compatibility**: Maintain existing functionality during refactoring
+
+## Implementation Details
+
+### Observer Pattern Implementation Plan
+
+```python
+# Core event system
+class GameEvent:
+    """Base class for all game events"""
+    pass
+
+class LetterGuessedEvent(GameEvent):
+    """Event fired when a letter is guessed"""
+    def __init__(self, letter: str, result: str):
+        self.letter = letter  # The guessed letter
+        self.result = result  # 'correct', 'present', or 'absent'
+
+class GameStateObserver:
+    """Interface for all observers that want to be notified of game events"""
+    def notify(self, event: GameEvent) -> None:
+        """Called when a relevant event occurs"""
+        pass
+
+class GameEventBus:
+    """Central event dispatcher for the game"""
+    def __init__(self):
+        self._observers = []
+
+    def subscribe(self, observer: GameStateObserver) -> None:
+        """Add an observer to be notified of events"""
+        self._observers.append(observer)
+
+    def publish(self, event: GameEvent) -> None:
+        """Notify all observers of an event"""
+        for observer in self._observers:
+            observer.notify(event)
+```
+
+### Configuration Management Enhancement
+
+```python
+from typing import Dict, Any, Optional
+import yaml
+import os
+
+class ConfigManager:
+    """Centralized configuration management with environment support"""
+    _instance = None  # Singleton instance
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super(ConfigManager, cls).__new__(cls)
+            cls._instance._config = {}
+            cls._instance._load_config()
+        return cls._instance
+
+    def _load_config(self) -> None:
+        """Load configuration from files and environment variables"""
+        # Base configuration
+        with open('config.yaml', 'r') as f:
+            self._config = yaml.safe_load(f)
+
+        # Environment-specific configuration
+        env = os.getenv('WORDLE_ENV', 'development')
+        env_config_path = f'config.{env}.yaml'
+        if os.path.exists(env_config_path):
+            with open(env_config_path, 'r') as f:
+                env_config = yaml.safe_load(f)
+                # Deep merge configurations
+                self._deep_update(self._config, env_config)
+
+    def _deep_update(self, d: Dict[str, Any], u: Dict[str, Any]) -> None:
+        """Recursively update a dict with another dict"""
+        for k, v in u.items():
+            if isinstance(v, dict) and k in d and isinstance(d[k], dict):
+                self._deep_update(d[k], v)
+            else:
+                d[k] = v
+
+    def get(self, key: str, default: Any = None) -> Any:
+        """Get a configuration value by key path (dot notation)"""
+        parts = key.split('.')
+        config = self._config
+        for part in parts:
+            if part not in config:
+                return default
+            config = config[part]
+        return config
+```
 
 ---
 
@@ -171,6 +287,6 @@ If you're interested in working on any of these items:
 
 ---
 
-**Last Updated**: July 1, 2025  
+**Last Updated**: July 1, 2025 (Roadmap revised)  
 **Repository**: https://github.com/raeq/wordle_solver2  
 **Documentation**: https://raeq.github.io/wordle_solver2/
