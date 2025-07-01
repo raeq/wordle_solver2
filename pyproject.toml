@@ -6,20 +6,35 @@ build-backend = "setuptools.build_meta"
 name = "wordle-solver"
 version = "1.0.0"
 description = "A Wordle game and solver application"
+readme = "README.md"
+license = {file = "LICENSE"}
 authors = [
     {name = "Richard Quinn", email = "example@example.com"},
 ]
-keywords = ["wordle", "game", "solver", "puzzle"]
+keywords = ["wordle", "game", "solver", "puzzle", "terminal", "cli"]
 requires-python = ">=3.9"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Topic :: Games/Entertainment :: Puzzle Games",
+    "Topic :: Software Development :: Libraries :: Python Modules",
 ]
+
+[project.urls]
+"Homepage" = "https://raeq.github.io/wordle_solver2/"
+"Documentation" = "https://raeq.github.io/wordle_solver2/"
+"Repository" = "https://github.com/raeq/wordle_solver2"
+"Bug Tracker" = "https://github.com/raeq/wordle_solver2/issues"
+"Discussions" = "https://github.com/raeq/wordle_solver2/discussions"
+"Changelog" = "https://github.com/raeq/wordle_solver2/blob/main/CHANGELOG.md"
+
 dependencies = [
     "boto3",
     "click>=8.1.7",
