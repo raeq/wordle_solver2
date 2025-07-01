@@ -77,7 +77,20 @@ jobs:
     - name: Validate documentation structure
       run: |
         # Check that all referenced documentation files exist
-        test -f docs/ARCHITECTURE.md
-        test -f docs/Usage.md
-        test -f docs/Requirements.md
+        test -f docs/architecture.rst
+        test -f docs/usage.rst
+        test -f docs/installation.rst
+        test -f docs/game_rules.rst
+        test -f docs/contributing.rst
         test -f CHANGELOG.md
+
+    - name: Check Sphinx documentation builds
+      run: |
+        # Install documentation dependencies
+        pip install -r docs/requirements.txt
+        
+        # Test that Sphinx documentation builds without errors
+        cd docs
+        sphinx-build -W -b html . _build/html-test
+        
+        echo "✅ Sphinx documentation builds successfully"
