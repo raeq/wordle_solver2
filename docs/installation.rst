@@ -23,8 +23,8 @@ If you want to contribute to the project or run the latest development version:
 
    .. code-block:: bash
 
-      git clone https://github.com/yourusername/second_wordle_solver.git
-      cd second_wordle_solver
+      git clone https://github.com/raeq/wordle_solver2.git
+      cd wordle_solver2
 
 2. Create a virtual environment:
 

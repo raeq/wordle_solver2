@@ -3,16 +3,18 @@ Contributing
 
 We welcome contributions to the Wordle Solver project! This guide will help you get started with contributing code, documentation, or reporting issues.
 
+**📂 Repository**: https://github.com/raeq/wordle_solver2
+
 Getting Started
 ---------------
 
-1. **Fork the repository** on GitHub
+1. **Fork the repository** on GitHub: https://github.com/raeq/wordle_solver2/fork
 2. **Clone your fork** locally:
 
    .. code-block:: bash
 
-      git clone https://github.com/yourusername/second_wordle_solver.git
-      cd second_wordle_solver
+      git clone https://github.com/raeq/wordle_solver2.git
+      cd wordle_solver2
 
 3. **Set up the development environment**:
 
