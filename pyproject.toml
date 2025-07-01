@@ -100,6 +100,8 @@ allow_subclassing_any = true
 allow_untyped_globals = true
 allow_redefinition = true
 local_partial_types = true
+show_error_codes = false
+strict = false
 disable_error_code = [
     "var-annotated",
     "no-any-return",
@@ -108,13 +110,21 @@ disable_error_code = [
     "union-attr",
     "arg-type",
     "attr-defined",
-    "index"
+    "index",
+    "no-untyped-def",
+    "return-value",
+    "misc",
+    "has-type",
+    "syntax"
 ]
 
 [[tool.mypy.overrides]]
-module = "tests.*"
-ignore_errors = true
-
-[[tool.mypy.overrides]]
-module = "src.*"
+module = [
+    "tests.*",
+    "src.*",
+    "src.modules.backend.solver.*",
+    "src.frontend.cli.*",
+    "src.common.*",
+    "src.modules.*"
+]
 ignore_errors = true

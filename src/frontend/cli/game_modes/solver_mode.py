@@ -5,7 +5,6 @@ Solver mode specific UI components and interactions.
 
 from typing import List, Optional, Tuple
 
-
 from ..display import DisplayManager
 from ..input_handler import InputHandler
 
