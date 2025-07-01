@@ -118,13 +118,35 @@ jobs:
         fi
 
     - name: Upload bandit reports
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       if: always()
       with:
         name: bandit-security-reports
         path: |
           bandit-report.json
           bandit-report.txt
+
+    - name: Check for high-severity issues
+      run: |
+        # Optional: Parse the JSON report and fail only on high-severity issues
+        if [ -f bandit-report.json ]; then
+          # Count high-severity issues (you can adjust this logic as needed)
+          high_severity=$(python -c "
+import json
+try:
+    with open('bandit-report.json', 'r') as f:
+        data = json.load(f)
+    high_issues = [r for r in data.get('results', []) if r.get('issue_severity') == 'HIGH']
+    print(len(high_issues))
+except:
+    print(0)
+")
+          
+          echo "High-severity security issues found: $high_severity"
+          
+          # Uncomment the line below if you want to fail the workflow on high-severity issues
+          # if [ "$high_severity" -gt 0 ]; then exit 1; fi
+        fi
 
   build:
     name: Build Package
@@ -151,7 +173,7 @@ jobs:
       run: twine check dist/*
 
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v5
       with:
         name: dist
         path: dist/
@@ -166,7 +188,7 @@ jobs:
 
     steps:
     - name: Download build artifacts
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v5
       with:
         name: dist
         path: dist/
@@ -187,7 +209,7 @@ jobs:
 
     steps:
     - name: Download build artifacts
-      uses: actions/download-artifact@v4
+      uses: actions/download-artifact@v5
       with:
         name: dist
         path: dist/
