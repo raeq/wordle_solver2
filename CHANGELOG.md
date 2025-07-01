@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.1] - 2025-07-01
+### Added
+- Added support for pytest timeout in test dependencies
+- Added improved documentation for installation process
+
+### Changed
+- Moved memory profiling test to src/tests directory structure
+- Fixed pyproject.toml configuration to properly declare dependencies
+- Updated test exclusion logic to prevent self-referential test failures
+- Improved test coverage for memory profiling removal verification
+
+### Removed
+- Removed all memory profiling infrastructure and dependencies
+- Removed psutil from dependencies (type stubs still available for dev environment)
+
 ## [1.0.0] - 2025-06-27
 ### Added
 - Support for custom word lists via configuration

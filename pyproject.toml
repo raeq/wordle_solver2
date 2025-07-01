@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "wordle-solver"
-version = "1.0.0"
+version = "1.0.1"
 description = "A Wordle game and solver application"
 readme = "README.md"
 license = {file = "LICENSE"}
