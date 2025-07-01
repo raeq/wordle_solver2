@@ -355,11 +355,11 @@ Example: "AUDIO {black}{yellow}{black}{green}{black}"
 
         for _, (letter, code) in enumerate(zip(guess, result)):
             if code == ResultColor.GREEN.value:
-                styled_text.append(letter, style="black on green")
+                styled_text.append("", style="black on green")
             elif code == ResultColor.YELLOW.value:
-                styled_text.append(letter, style="black on yellow")
+                styled_text.append("", style="black on yellow")
             else:  # BLACK
-                styled_text.append(letter, style="white on grey23")
+                styled_text.append("", style="white on grey23")
 
         return styled_text
 

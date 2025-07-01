@@ -29,14 +29,10 @@ from structlog.stdlib import BoundLogger
 
 # Import constants for magic number replacement
 from .backend.solver.constants import (
-    FIFTH_ARRAY_INDEX,
     FIRST_ARRAY_INDEX,
-    FOURTH_ARRAY_INDEX,
     MILLISECONDS_CONVERSION_FACTOR,
     ROUND_PRECISION_DIGITS,
-    SECOND_ARRAY_INDEX,
     SKIP_SELF_PARAMETER_INDEX,
-    THIRD_ARRAY_INDEX,
 )
 
 # Type variables for better type hinting
@@ -232,7 +228,9 @@ def _extract_log_data(func: Callable, args: Any, kwargs: Any, level: str) -> dic
     return log_data
 
 
-def _log_exception(_logger_instance, exc, log_data):
+def _log_exception(
+    _logger_instance: Optional[BoundLogger], exc: Exception, log_data: dict
+) -> None:
     """
     Logs the exception information using the provided logger.
 
@@ -250,7 +248,12 @@ def _log_exception(_logger_instance, exc, log_data):
         )
 
 
-def _log_performance(_logger_instance, log_data, execution_time, level):
+def _log_performance(
+    _logger_instance: Optional[BoundLogger],
+    log_data: dict,
+    execution_time: float,
+    level: str,
+) -> None:
     """
     Logs the performance metrics of the method execution.
 
@@ -340,86 +343,73 @@ def log_method(level: str = "DEBUG") -> Callable[[F], F]:
 
 def log_game_outcome(func: F) -> F:
     """
-    Special decorator for logging game outcomes at INFO level.
+    Decorator for logging game outcomes at INFO level.
+
+    This decorator extracts relevant parameters from the function call and logs them
+    with structured information about the game outcome.
 
     Args:
         func: The function to decorate
 
     Returns:
-        Decorated function
+        Decorated function that logs game outcome information
     """
 
     @functools.wraps(func)
     def wrapper(*args: Any, **kwargs: Any) -> Any:
-        # Get current logger or initialize if needed
-        current_logger = logger
-        if current_logger is None:
-            setup_logging()
-            current_logger = logger
+        # Extract function signature to properly map arguments
+        import inspect
 
+        sig = inspect.signature(func)
+        # No need to store param_names since it's not used
+
+        # Create a mapping of parameter names to values
+        bound_args = sig.bind(*args, **kwargs)
+        bound_args.apply_defaults()
+
+        # Safely extract the attempt parameter
+        attempt = bound_args.arguments.get("attempt", None)
+
+        # Call the original function
         result = func(*args, **kwargs)
 
-        # Extract game result information
-        class_name = args[FIRST_ARRAY_INDEX].__class__.__name__ if args else None
-        method_name = func.__name__
+        # Log the game outcome with safely extracted values
+        if logger:
+            try:
+                log_data = {
+                    "outcome_type": "game_outcome",
+                    "function": func.__name__,
+                    "module": func.__module__,
+                }
 
-        # For specific outcome methods, log more detailed information
-        if method_name in (
-            "_display_solver_result",
-            "_display_game_result",
-            "display_game_over",
-        ):
-            won = (
-                args[SECOND_ARRAY_INDEX]
-                if len(args) > SECOND_ARRAY_INDEX
-                else kwargs.get("won", None)
-            )
+                # Add all available game outcome parameters
+                for param in [
+                    "won",
+                    "attempt",
+                    "target_word",
+                    "max_attempts",
+                    "game_id",
+                ]:
+                    if (
+                        param in bound_args.arguments
+                        and bound_args.arguments[param] is not None
+                    ):
+                        log_data[param] = bound_args.arguments[param]
 
-            # Different parameter order depending on the method
-            if method_name == "_display_solver_result":
-                attempt = (
-                    args[THIRD_ARRAY_INDEX]
-                    if len(args) > THIRD_ARRAY_INDEX
-                    else kwargs.get("attempt", None)
-                )
-                max_attempts = (
-                    args[FOURTH_ARRAY_INDEX]
-                    if len(args) > FOURTH_ARRAY_INDEX
-                    else kwargs.get("max_attempts", None)
-                )
-                target_word = (
-                    args[THIRD_ARRAY_INDEX]
-                    if len(args) > THIRD_ARRAY_INDEX
-                    else kwargs.get("target_word", None)
-                )
-                attempt = (
-                    args[FOURTH_ARRAY_INDEX]
-                    if len(args) > FOURTH_ARRAY_INDEX
-                    else kwargs.get("attempt", None)
-                )
-                max_attempts = (
-                    args[FIFTH_ARRAY_INDEX]
-                    if len(args) > FIFTH_ARRAY_INDEX
-                    else kwargs.get("max_attempts", None)
-                )
+                # Make sure we have attempt info in some form
+                if "attempt" not in log_data:
+                    log_data["attempts"] = attempt if attempt is not None else "Unknown"
 
-            # Create the structured log data (don't include 'event' as a key)
-            log_data = {
-                "class": class_name,
-                "outcome_type": "game_outcome",
-                "won": won,
-                "attempts": attempt,
-                "max_attempts": max_attempts,
-            }
-
-            # Add target word if available
-            if target_word:
-                log_data["target_word"] = target_word
-
-            # Use "Game outcome" as the event parameter, and pass the rest as kwargs
-            if current_logger is not None:
-                current_logger.info("Game outcome", **log_data)
+                logger.info("Game outcome", **log_data)
+            except Exception as e:
+                # Avoid crashing the application due to logging errors
+                if logger:
+                    logger.warning(
+                        "Failed to log game outcome",
+                        error=str(e),
+                        error_type=type(e).__name__,
+                    )
 
         return result
 
-    return cast(F, wrapper)
+    return wrapper  # type: ignore

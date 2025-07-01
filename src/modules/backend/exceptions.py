@@ -11,6 +11,41 @@ import structlog
 logger = structlog.get_logger("wordle_solver.exceptions")
 
 
+# Mixin for logging errors in debug mode
+class DebugLogMixin:
+    def _log_error(self, message: str) -> None:
+        frame = inspect.currentframe()
+        if frame is not None:
+            try:
+                if frame.f_back and frame.f_back.f_back:
+                    frame = frame.f_back.f_back
+                    calling_module = frame.f_globals.get("__name__", "unknown")
+                    calling_function = frame.f_code.co_name
+                    calling_lineno = frame.f_lineno
+                else:
+                    calling_module = "unknown"
+                    calling_function = "unknown"
+                    calling_lineno = 0
+            except AttributeError:
+                calling_module = "unknown"
+                calling_function = "unknown"
+                calling_lineno = 0
+        else:
+            calling_module = "unknown"
+            calling_function = "unknown"
+            calling_lineno = 0
+
+        if logger is not None:
+            logger.debug(
+                "Wordle error occurred",
+                error_type=self.__class__.__name__,
+                message=message,
+                module=calling_module,
+                function=calling_function,
+                line=calling_lineno,
+            )
+
+
 class WordleError(Exception):
     """Base class for all Wordle-related exceptions."""
 
@@ -59,7 +94,7 @@ class GameStateError(WordleError):
     """Raised when an operation is attempted in an invalid game state."""
 
 
-class InvalidGuessError(WordleError):
+class InvalidGuessError(DebugLogMixin, WordleError):
     """Raised when a guess is invalid."""
 
     def __init__(self, guess: str, reason: str):
@@ -75,7 +110,7 @@ class InvalidWordError(InvalidGuessError):
         super().__init__(word, "not in the word list")
 
 
-class InvalidResultError(WordleError):
+class InvalidResultError(DebugLogMixin, WordleError):
     """Raised when a result pattern is invalid."""
 
     def __init__(self, result: str, reason: str):
@@ -84,7 +119,7 @@ class InvalidResultError(WordleError):
         super().__init__(f"Invalid result '{result}': {reason}")
 
 
-class InvalidColorError(WordleError):
+class InvalidColorError(DebugLogMixin, WordleError):
     """Raised when an invalid color character is used."""
 
     def __init__(self, char: str):
@@ -92,7 +127,7 @@ class InvalidColorError(WordleError):
         super().__init__(f"Invalid color character: '{char}'. Use G, Y, or B.")
 
 
-class InputLengthError(WordleError):
+class InputLengthError(DebugLogMixin, WordleError):
     """Raised when input is not the correct length."""
 
     def __init__(self, input_type: str, actual_length: int, expected_length: int = 5):
