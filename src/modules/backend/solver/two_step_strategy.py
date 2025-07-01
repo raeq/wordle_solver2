@@ -26,7 +26,6 @@ from .constants import (
     TWO_STEP_SECOND_STEP_CANDIDATE_LIMIT,
 )
 from .entropy_strategy import EntropyStrategy
-from .memory_profiler import profile_memory
 from .solver_strategy import SolverStrategy
 from .solver_utils import calculate_pattern
 
@@ -54,7 +53,6 @@ class TwoStepStrategy(SolverStrategy):
         self.max_patterns_to_evaluate = max_patterns_to_evaluate
         self.entropy_fallback = EntropyStrategy()
 
-    @profile_memory("TwoStepStrategy.get_top_suggestions")
     def get_top_suggestions(
         self,
         possible_words: List[str],
@@ -105,7 +103,6 @@ class TwoStepStrategy(SolverStrategy):
         # Use common utility for balanced distribution
         return WordSorter.balance_common_and_other(sorted_words, common_words, count)
 
-    @profile_memory("TwoStepStrategy._calculate_two_step_score_optimized")
     def _calculate_two_step_score_optimized(
         self, candidate: str, possible_answers: List[str]
     ) -> float:

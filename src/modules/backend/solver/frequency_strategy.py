@@ -11,7 +11,6 @@ from .common_utils import (
     MemoryOptimizedWordProcessor,
     WordSorter,
 )
-from .memory_profiler import profile_memory
 
 if TYPE_CHECKING:
     from ..word_manager import WordManager
@@ -20,7 +19,6 @@ if TYPE_CHECKING:
 class FrequencyStrategy(SolverStrategy):
     """Strategy that uses actual word frequency data from corpus to suggest words."""
 
-    @profile_memory("FrequencyStrategy.get_top_suggestions")
     def get_top_suggestions(
         self,
         possible_words: List[str],

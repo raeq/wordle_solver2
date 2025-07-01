@@ -6,13 +6,11 @@ import math
 from typing import List
 
 from .common_utils import EntropyCalculator, get_pattern_counter, return_pattern_counter
-from .memory_profiler import profile_memory
 
 
 class EntropyCalculationMixin:
     """Mixin class providing shared entropy calculation methods for strategies."""
 
-    @profile_memory("EntropyCalculationMixin._calculate_entropy_optimized")
     def _calculate_entropy_optimized(
         self, candidate: str, possible_answers: List[str]
     ) -> float:

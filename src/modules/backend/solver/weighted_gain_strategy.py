@@ -23,7 +23,6 @@ from .constants import (
     WEIGHTED_GAIN_MAX_ADDITIONAL_COMMON,
     WEIGHTED_GAIN_MAX_POSSIBLE_CANDIDATES,
 )
-from .memory_profiler import profile_memory
 from .solver_strategy import SolverStrategy
 from .solver_utils import calculate_position_frequencies
 
@@ -64,7 +63,6 @@ class WeightedGainStrategy(SolverStrategy):
         # For debugging/testing: add small identifier to help differentiate strategies
         self.weight_signature = f"E{self.entropy_weight:.{WEIGHT_DISPLAY_PRECISION}f}_P{self.positional_weight:.{WEIGHT_DISPLAY_PRECISION}f}_F{self.frequency_weight:.{WEIGHT_DISPLAY_PRECISION}f}"
 
-    @profile_memory("WeightedGainStrategy.get_top_suggestions")
     def get_top_suggestions(
         self,
         possible_words: List[str],
@@ -127,7 +125,6 @@ class WeightedGainStrategy(SolverStrategy):
         # Larger list: use common utility for balanced distribution
         return WordSorter.balance_common_and_other(sorted_words, common_words, count)
 
-    @profile_memory("WeightedGainStrategy._calculate_weighted_score_optimized")
     def _calculate_weighted_score_optimized(
         self,
         candidate: str,

@@ -64,6 +64,5 @@ The main dependencies include:
 * **rich**: Rich text and beautiful formatting in the terminal
 * **PyYAML**: YAML configuration file support
 * **structlog**: Structured logging
-* **psutil**: System and process utilities
 
 For a complete list, see the ``requirements.txt`` file in the repository.

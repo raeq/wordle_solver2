@@ -10,7 +10,6 @@ from .common_utils import (
     WordSorter,
 )
 from .entropy_mixin import EntropyCalculationMixin
-from .memory_profiler import profile_memory
 from .solver_strategy import SolverStrategy
 
 if TYPE_CHECKING:
@@ -20,7 +19,6 @@ if TYPE_CHECKING:
 class EntropyStrategy(SolverStrategy, EntropyCalculationMixin):
     """Strategy that uses information theory to maximize information gain."""
 
-    @profile_memory("EntropyStrategy.get_top_suggestions")
     def get_top_suggestions(
         self,
         possible_words: List[str],

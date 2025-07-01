@@ -5,11 +5,11 @@ This document tracks planned changes, improvements, and new features for the Wor
 ## 🧹 Code Cleanup and Refactoring
 
 ### Remove Memory Profiling Infrastructure
-- [ ] Remove memory profiling from all code modules
-- [ ] Remove memory profile functions and decorators
-- [ ] Remove `psutil` dependency from requirements
-- [ ] Clean up any memory monitoring imports and calls
-- [ ] Update documentation to remove memory profiling references
+- [x] Remove memory profiling from all code modules
+- [x] Remove memory profile functions and decorators
+- [x] Remove `psutil` dependency from requirements
+- [x] Clean up any memory monitoring imports and calls
+- [x] Update documentation to remove memory profiling references
 
 ### Implement Observer Pattern
 - [ ] Implement observer pattern for game state management
