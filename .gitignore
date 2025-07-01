@@ -149,3 +149,6 @@ game_history.json
 game_stats.json
 logs/*.log
 *.iml
+
+# Security scanning reports
+bandit*
