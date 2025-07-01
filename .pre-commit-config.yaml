@@ -1,4 +1,5 @@
 repos:
+  # Basic file checks - keep these as they are lightweight and fast
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.5.0
     hooks:
@@ -13,27 +14,30 @@ repos:
       - id: check-merge-conflict
       - id: debug-statements
 
-  - repo: https://github.com/psf/black
-    rev: 23.12.1
+  # Use local scripts for consistency with CI/CD
+  - repo: local
     hooks:
-      - id: black
-        language_version: python3
+      - id: code-quality-checks
+        name: Code Quality Checks (Black, Ruff, isort, MyPy)
+        entry: ./.github/scripts/run-code-quality.sh
+        language: script
+        files: ^src/.*\.py$|^.*\.py$
+        pass_filenames: false
+        always_run: false
 
-  - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.1.9
-    hooks:
-      - id: ruff
-        args: [--fix, --unsafe-fixes]
+      - id: security-scan
+        name: Security Scan (Bandit)
+        entry: ./.github/scripts/run-security-scan.sh
+        language: script
+        files: ^src/.*\.py$
+        pass_filenames: false
+        always_run: false
 
-  - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
-    hooks:
-      - id: isort
-        name: isort (python)
-
-  # Temporarily disable MyPy in pre-commit to prevent CI/CD blocking
-  # - repo: https://github.com/pre-commit/mirrors-mypy
-  #   rev: v1.8.0
-  #   hooks:
-  #     - id: mypy
-  #       additional_dependencies: [types-PyYAML, types-six]
+      - id: run-tests
+        name: Run Tests with Coverage
+        entry: ./.github/scripts/run-tests.sh
+        language: script
+        files: ^src/.*\.py$|^.*tests.*\.py$
+        pass_filenames: false
+        always_run: false
+        stages: [manual]  # Only run when explicitly requested

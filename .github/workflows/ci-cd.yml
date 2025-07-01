@@ -37,13 +37,10 @@ jobs:
           ${{ runner.os }}-pip-
 
     - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -e ".[test]"
+      run: ./.github/scripts/install-dependencies.sh
 
     - name: Run tests with coverage
-      run: |
-        pytest src/tests/ -v --cov=src --cov-report=xml --cov-report=term-missing
+      run: ./.github/scripts/run-tests.sh
 
     - name: Upload coverage to Codecov
       if: matrix.python-version == '3.11'
@@ -71,22 +68,11 @@ jobs:
         path: ~/.cache/pip
         key: ${{ runner.os }}-pip-lint-${{ hashFiles('**/requirements*.txt', '**/pyproject.toml') }}
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -e ".[dev]"
+    - name: Install development dependencies
+      run: ./.github/scripts/install-dev-dependencies.sh
 
-    - name: Run Black (code formatting)
-      run: black --diff src src/tests
-
-    - name: Run Ruff (linting)
-      run: ruff check src src/tests --fix
-
-    - name: Run isort (import sorting)
-      run: isort --diff src src/tests
-
-    - name: Run MyPy (type checking)
-      run: mypy src
+    - name: Run code quality checks
+      run: ./.github/scripts/run-code-quality.sh
 
   security:
     name: Security Scan
@@ -103,19 +89,8 @@ jobs:
     - name: Install bandit
       run: pip install bandit[toml]
 
-    - name: Run bandit security scan
-      run: |
-        # Run bandit and capture the exit code, but don't fail the workflow immediately
-        bandit -r src/ -f json -o bandit-report.json || true
-        
-        # Also generate a human-readable report for easier review
-        bandit -r src/ -f txt -o bandit-report.txt || true
-        
-        # Show summary in the workflow log
-        echo "Bandit security scan completed. Check artifacts for detailed report."
-        if [ -f bandit-report.json ]; then
-          echo "Report generated successfully."
-        fi
+    - name: Run security scan
+      run: ./.github/scripts/run-security-scan.sh
 
     - name: Upload bandit reports
       uses: actions/upload-artifact@v5
@@ -125,28 +100,6 @@ jobs:
         path: |
           bandit-report.json
           bandit-report.txt
-
-    - name: Check for high-severity issues
-      run: |
-        # Optional: Parse the JSON report and fail only on high-severity issues
-        if [ -f bandit-report.json ]; then
-          # Count high-severity issues (you can adjust this logic as needed)
-          high_severity=$(python -c "
-import json
-try:
-    with open('bandit-report.json', 'r') as f:
-        data = json.load(f)
-    high_issues = [r for r in data.get('results', []) if r.get('issue_severity') == 'HIGH']
-    print(len(high_issues))
-except:
-    print(0)
-")
-          
-          echo "High-severity security issues found: $high_severity"
-          
-          # Uncomment the line below if you want to fail the workflow on high-severity issues
-          # if [ "$high_severity" -gt 0 ]; then exit 1; fi
-        fi
 
   build:
     name: Build Package
@@ -161,16 +114,8 @@ except:
       with:
         python-version: ${{ env.PYTHON_VERSION }}
 
-    - name: Install build dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install build twine
-
     - name: Build package
-      run: python -m build
-
-    - name: Check package
-      run: twine check dist/*
+      run: ./.github/scripts/build-package.sh
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v5
