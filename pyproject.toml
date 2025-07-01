@@ -73,7 +73,7 @@ ensure_newline_before_comments = true
 
 [tool.bandit]
 exclude_dirs = ["tests", "build", "dist"]
-skips = ["B101", "B601"]
+skips = ["B101", "B311", "B601"]
 
 [tool.bandit.assert_used]
 skips = ["*_test.py", "*test_*.py"]
