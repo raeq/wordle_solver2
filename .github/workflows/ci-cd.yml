@@ -101,6 +101,45 @@ jobs:
           bandit-report.json
           bandit-report.txt
 
+  docs:
+    name: Build and Validate Documentation
+    runs-on: ubuntu-latest
+    needs: [test, lint]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: Cache pip dependencies
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-docs-${{ hashFiles('docs/requirements.txt', '**/pyproject.toml') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-docs-
+
+    - name: Install package in editable mode
+      run: |
+        pip install -e .
+        pip install -r docs/requirements.txt
+
+    - name: Build documentation
+      run: ./.github/scripts/build-docs.sh
+
+    - name: Validate documentation
+      run: ./.github/scripts/validate-docs.sh
+
+    - name: Upload documentation artifacts
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: documentation-html
+        path: docs/_build/html/
+
   build:
     name: Build Package
     runs-on: ubuntu-latest

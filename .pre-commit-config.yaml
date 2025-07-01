@@ -38,3 +38,19 @@ repos:
         files: ^src/.*\.py$|^.*tests.*\.py$
         pass_filenames: false
         stages: [manual]  # Only run when explicitly requested
+
+      - id: build-docs
+        name: Build Documentation
+        entry: bash ./.github/scripts/build-docs.sh
+        language: system
+        files: ^docs/.*\.(rst|py|md)$|^src/.*\.py$
+        pass_filenames: false
+        stages: [manual]  # Only run when explicitly requested or docs files change
+
+      - id: validate-docs
+        name: Validate Documentation Links
+        entry: bash ./.github/scripts/validate-docs.sh
+        language: system
+        files: ^docs/.*\.rst$
+        pass_filenames: false
+        stages: [manual]
