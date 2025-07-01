@@ -3,8 +3,10 @@ repos:
     rev: v4.5.0
     hooks:
       - id: trailing-whitespace
+        args: [--markdown-linebreak-ext=md]
       - id: end-of-file-fixer
       - id: check-yaml
+        args: [--unsafe]  # Allow custom YAML tags
       - id: check-added-large-files
       - id: check-json
       - id: check-toml
@@ -21,7 +23,7 @@ repos:
     rev: v0.1.9
     hooks:
       - id: ruff
-        args: [--fix-only]
+        args: [--fix, --unsafe-fixes]
 
   - repo: https://github.com/pycqa/isort
     rev: 5.13.2

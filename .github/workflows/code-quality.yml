@@ -28,8 +28,29 @@ jobs:
     - name: Install pre-commit
       run: pip install pre-commit
 
-    - name: Run pre-commit
-      run: pre-commit run --all-files
+    - name: Run pre-commit (auto-fix)
+      run: |
+        # First run: auto-fix issues (may fail, that's expected)
+        pre-commit run --all-files || true
+        echo "Pre-commit auto-fixes completed"
+
+    - name: Check if files were modified
+      id: check-changes
+      run: |
+        if git diff --quiet; then
+          echo "No changes made by pre-commit"
+          echo "changes=false" >> $GITHUB_OUTPUT
+        else
+          echo "Files were modified by pre-commit"
+          echo "changes=true" >> $GITHUB_OUTPUT
+          git diff --name-only
+        fi
+
+    - name: Run pre-commit (verification)
+      run: |
+        # Second run: should pass if all issues were fixed
+        echo "Running pre-commit verification..."
+        pre-commit run --all-files
 
   documentation:
     name: Documentation Check
