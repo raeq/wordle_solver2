@@ -1,7 +1,7 @@
 repos:
   # Basic file checks - keep these as they are lightweight and fast
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.5.0
+    rev: v5.0.0
     hooks:
       - id: trailing-whitespace
         args: [--markdown-linebreak-ext=md]
@@ -19,25 +19,22 @@ repos:
     hooks:
       - id: code-quality-checks
         name: Code Quality Checks (Black, Ruff, isort, MyPy)
-        entry: ./.github/scripts/run-code-quality.sh
-        language: script
+        entry: bash ./.github/scripts/run-code-quality.sh
+        language: system
         files: ^src/.*\.py$|^.*\.py$
         pass_filenames: false
-        always_run: false
 
       - id: security-scan
         name: Security Scan (Bandit)
-        entry: ./.github/scripts/run-security-scan.sh
-        language: script
+        entry: bash ./.github/scripts/run-security-scan.sh
+        language: system
         files: ^src/.*\.py$
         pass_filenames: false
-        always_run: false
 
       - id: run-tests
         name: Run Tests with Coverage
-        entry: ./.github/scripts/run-tests.sh
-        language: script
+        entry: bash ./.github/scripts/run-tests.sh
+        language: system
         files: ^src/.*\.py$|^.*tests.*\.py$
         pass_filenames: false
-        always_run: false
         stages: [manual]  # Only run when explicitly requested

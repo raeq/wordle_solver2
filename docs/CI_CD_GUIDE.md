@@ -13,7 +13,7 @@ Runs on every push and pull request:
 - **Code Quality**: Black, Ruff, isort, and MyPy checks
 - **Security Scanning**: Bandit security analysis
 - **Package Building**: Creates both wheel and source distributions
-- **Automated Publishing**: 
+- **Automated Publishing**:
   - TestPyPI on main branch pushes
   - PyPI on tagged releases
 

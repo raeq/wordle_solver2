@@ -190,4 +190,3 @@ This architecture ensures the Wordle Solver application is robust, maintainable,
 
 ## Summary
 This architecture ensures the application is robust, maintainable, and ready for future enhancements, while providing a rich user experience through the CLI.
-

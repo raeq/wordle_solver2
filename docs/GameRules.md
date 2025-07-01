@@ -54,7 +54,7 @@ Example 2: Guess is "ANNAL", the hidden word is "BANAL". The feedback is [Y, B, 
 ### If a letter occurs in the guess occurs more often than in the hidden word, but none of the letters is in the correct position, the first letter will light up in yellow.
 
 Example 3: The hidden word is "BANAL" and the guess is "UNION".
-In UNION, neither N is in the correct position. 
+In UNION, neither N is in the correct position.
 The first 'N' in position 2 gets lit is yellow. The other N in position 5 is black because there is no second N in BANAL.
 
 
@@ -89,7 +89,7 @@ For each position (i) in guess not marked green or yellow:
 - **Guess**: "TRACE"
 - **Hidden Word**: "LACEY"
 - The feedback is [B, B, Y, Y, Y].
-- 
+-
 ### Test Case 5: Repeat letters in Hidden word but no repeats in guess
 - **Guess**: "RIPEN"
 - **Hidden Word**: "APPLE"
@@ -109,4 +109,3 @@ For each position (i) in guess not marked green or yellow:
 - **Guess**: "RATES"
 - **Hidden Word**: "STARE"
 - The feedback is [Y, Y, Y, Y, Y].
-

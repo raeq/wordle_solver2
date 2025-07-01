@@ -58,7 +58,7 @@ to review that game in detail.
 
 Navigate with:
 - 'n' for next page
-- 'p' for previous page  
+- 'p' for previous page
 - Enter a 6-letter Game ID to review
 - 'q' to return to main menu
 """

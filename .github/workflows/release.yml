@@ -64,7 +64,7 @@ jobs:
         else
           PRERELEASE_FLAG=""
         fi
-        
+
         # Create the release with assets
         gh release create "${{ github.ref_name }}" \
           --title "Release ${{ github.ref_name }}" \

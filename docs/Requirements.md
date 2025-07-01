@@ -14,7 +14,7 @@
 
 1.22 The application must process 5-character result patterns using the format:
    - G: correct letter in correct position (Green)
-   - Y: correct letter in wrong position (Yellow) 
+   - Y: correct letter in wrong position (Yellow)
    - B: letter not in word (Black)
 
 1.23 The application must read valid words from `src/words.txt`.
@@ -112,4 +112,3 @@
 2.63 The application must include detailed documentation for all major components.
 
 2.64 The application code must use type hints to improve maintainability.
-
