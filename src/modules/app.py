@@ -15,6 +15,7 @@ from .backend.exceptions import (
     WordleError,
 )
 from .backend.game_engine import GameEngine
+from .backend.game_history_manager import GameHistoryManager
 from .backend.game_state_manager import GameStateManager
 from .backend.result_color import ResultColor
 from .backend.solver.strategy_factory import StrategyFactory
@@ -87,6 +88,8 @@ class WordleSolverApp:
 
             if game_mode == "solver":
                 self._run_solver_mode()
+            elif game_mode == "review":
+                self._run_review_mode()
             else:
                 self._run_game_mode()
 
@@ -384,3 +387,69 @@ class WordleSolverApp:
             str(game_state["game_id"]),
             self.game_engine.guesses,
         )
+
+    @log_method("DEBUG")
+    def _run_review_mode(self) -> None:
+        """Run the review mode for browsing and reviewing previous games."""
+        try:
+            self.ui.display_review_mode_start()
+
+            # Initialize game history manager
+            history_manager = GameHistoryManager()
+
+            # Load game history
+            try:
+                games = history_manager.load_game_history()
+                if not games:
+                    self.ui.console.print("[yellow]No games found in history.[/yellow]")
+                    return
+
+                # Format games for display
+                formatted_games = [
+                    history_manager.format_game_summary(game) for game in games
+                ]
+
+                # Paginate games
+                pages = history_manager.paginate_games(formatted_games, page_size=10)
+                if not pages:
+                    self.ui.console.print("[yellow]No games to display.[/yellow]")
+                    return
+
+                current_page = 1
+                total_pages = len(pages)
+
+                # Main review loop
+                while True:
+                    # Display current page
+                    self.ui.display_game_list(
+                        pages[current_page - 1], current_page, total_pages
+                    )
+
+                    # Get user action
+                    action = self.ui.get_game_review_action(current_page, total_pages)
+
+                    if action == "q":
+                        break
+                    elif action == "n" and current_page < total_pages:
+                        current_page += 1
+                    elif action == "p" and current_page > 1:
+                        current_page -= 1
+                    elif len(action) == 6 and action.isalnum():
+                        # User entered a game ID
+                        game = history_manager.get_game_by_id(games, action)
+                        if game:
+                            self.ui.simulate_game_display(game)
+                        else:
+                            self.ui.console.print(
+                                f"[red]Game ID '{action}' not found.[/red]"
+                            )
+
+            except Exception as e:
+                self.ui.console.print(
+                    f"[bold red]Error loading game history: {str(e)}[/bold red]"
+                )
+
+        except Exception as e:
+            self.ui.console.print(
+                f"[bold red]Error in review mode: {str(e)}[/bold red]"
+            )

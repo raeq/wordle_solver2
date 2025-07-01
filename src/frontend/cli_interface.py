@@ -35,9 +35,11 @@ class CLIInterface:
 Choose your game mode:
 1. 🧠 Solver Mode: You play Wordle and get suggestions
 2. 🎮 Play Mode: Play against the computer
+3. 📚 Review Mode: Review previous games
 
 In Solver Mode, you tell the app your guess results and get top 10 suggestions.
 In Play Mode, the computer picks a word and you try to guess it!
+In Review Mode, you can review your past games and analyze your performance.
         """
 
         self.console.print(
@@ -53,12 +55,16 @@ In Play Mode, the computer picks a word and you try to guess it!
         """Get the game mode from user."""
         choice = Prompt.ask(
             "\n[bold cyan]Select game mode[/bold cyan]",
-            choices=["1", "2", "solver", "play"],
+            choices=["1", "2", "3", "solver", "play", "review"],
             default="1",
         )
 
         if choice in ["1", "solver"]:
             return "solver"
+        elif choice in ["2", "play"]:
+            return "play"
+        elif choice in ["3", "review"]:
+            return "review"
         return "play"
 
     def display_play_mode_start(self, game_id: str, difficulty_hint: str = "") -> None:
@@ -502,4 +508,134 @@ Better luck next time!
         """Ask if the user wants a hint."""
         return Confirm.ask(
             "[bold yellow]Would you like a hint? (costs you one guess)[/bold yellow]"
+        )
+
+    # Game Review Methods
+    def display_game_list(
+        self, games_page: List[Dict], page_num: int, total_pages: int
+    ) -> None:
+        """Display a page of games in table format."""
+        if not games_page:
+            self.console.print("[yellow]No games found in history.[/yellow]")
+            return
+
+        table = Table(title=f"📚 Game History - Page {page_num}/{total_pages}")
+        table.add_column("Game ID", style="bold cyan", width=8)
+        table.add_column("Date", style="blue", width=16)
+        table.add_column("Target Word", style="bold green", width=12)
+        table.add_column("Attempts", style="yellow", width=8)
+        table.add_column("Result", style="bold", width=8)
+
+        for game in games_page:
+            result_style = "green" if game["result"] == "Won" else "red"
+            table.add_row(
+                game["game_id"],
+                game["date"],
+                game["target"],
+                game["attempts"],
+                f"[{result_style}]{game['result']}[/{result_style}]",
+            )
+
+        self.console.print(table)
+
+    def get_game_review_action(self, page_num: int, total_pages: int) -> str:
+        """Get user action for game review navigation."""
+        options = []
+        choices = []
+
+        if page_num > 1:
+            options.append("p = Previous page")
+            choices.append("p")
+
+        if page_num < total_pages:
+            options.append("n = Next page")
+            choices.append("n")
+
+        options.extend(["Enter 6-letter Game ID to review", "q = Quit to main menu"])
+        choices.extend(["q"])
+
+        self.console.print(f"\n[bold]Options:[/bold] {' | '.join(options)}")
+
+        while True:
+            action = (
+                Prompt.ask("[bold cyan]Your choice[/bold cyan]", default="q")
+                .lower()
+                .strip()
+            )
+
+            if action in choices:
+                return action
+            elif len(action) == 6 and action.isalnum():
+                return action.upper()
+            else:
+                self.console.print("[red]Invalid input. Please try again.[/red]")
+
+    def simulate_game_display(self, game: Dict) -> None:
+        """Display a complete game simulation."""
+        game_id = game.get("game_id", "Unknown")
+        target_word = game.get("target_word", "Unknown")
+        won = game.get("won", False)
+        attempts = game.get("attempts", 0)
+        timestamp = game.get("timestamp", "Unknown")
+        guesses = game.get("guesses", [])
+
+        # Header
+        self.console.print(f"\n[bold blue]🎮 Game Simulation: {game_id}[/bold blue]")
+        self.console.print(f"[dim]Date: {timestamp}[/dim]")
+        self.console.print(f"[dim]Target Word: [bold]{target_word}[/bold][/dim]")
+        self.console.print("[dim]" + "=" * 50 + "[/dim]")
+
+        # Show each guess
+        for i, guess_data in enumerate(guesses, 1):
+            if len(guess_data) >= 3:
+                guess, result, method = guess_data[0], guess_data[1], guess_data[2]
+            else:
+                guess, result = guess_data[0], guess_data[1]
+                method = "unknown"
+
+            colored_result = self._colorize_result(guess, result)
+            emoji_result = ResultColor.result_to_emoji(result)
+
+            self.console.print(f"\n[bold]Turn {i}:[/bold]")
+            self.console.print(f"  Word: [bold white]{guess}[/bold white]")
+            self.console.print(f"  Result: {colored_result} {emoji_result}")
+            self.console.print(f"  Method: [cyan]{method}[/cyan]")
+
+        # Final result
+        self.console.print("\n[dim]" + "=" * 50 + "[/dim]")
+        if won:
+            self.console.print(
+                f"[bold green]🎉 Won in {attempts} attempts![/bold green]"
+            )
+        else:
+            self.console.print(
+                f"[bold red]😢 Lost after {attempts} attempts[/bold red]"
+            )
+
+        # Wait for user to continue
+        Prompt.ask("\n[dim]Press Enter to continue...[/dim]", default="")
+
+    def display_review_mode_start(self) -> None:
+        """Display start message for review mode."""
+        start_text = """
+📚 Review Mode Started! 📚
+
+Browse through your previous games and analyze your performance.
+You can navigate through pages of games or enter a specific Game ID
+to review that game in detail.
+
+Navigate with:
+- 'n' for next page
+- 'p' for previous page  
+- Enter a 6-letter Game ID to review
+- 'q' to return to main menu
+        """
+
+        self.console.print(
+            Panel(
+                start_text,
+                title="Review Previous Games",
+                title_align="center",
+                style="bold magenta",
+            )
         )
