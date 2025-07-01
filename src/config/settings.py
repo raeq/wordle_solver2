@@ -129,6 +129,23 @@ def get_settings() -> AppSettings:
     return _app_settings
 
 
+def initialize_config(config_path: Optional[str] = None) -> AppSettings:
+    """Initialize configuration from file or use defaults.
+
+    Args:
+        config_path: Optional path to configuration file
+
+    Returns:
+        AppSettings instance
+    """
+    if config_path:
+        return AppSettings.load_from_file(Path(config_path))
+    else:
+        # Use default config path or return default settings
+        default_config_path = Path(__file__).parent.parent.parent / "config.yaml"
+        return AppSettings.load_from_file(default_config_path)
+
+
 def reset_settings() -> None:
     """Reset the global settings instance (useful for testing)."""
     global _app_settings
