@@ -1,12 +1,13 @@
 # tests/test_review_cli_interface.py
 """
-Tests for the review functionality in the CLI interface.
+Tests for the review mode functionality of the CLI interface.
 """
+
 import unittest
 from unittest.mock import patch
 
 
-from src.frontend.cli_interface import CLIInterface
+from src.frontend.cli import CLIInterface
 
 
 class TestReviewCLIInterface(unittest.TestCase):
@@ -269,7 +270,3 @@ class TestReviewCLIInterface(unittest.TestCase):
         if options_call:
             # Should not include "n = Next page" on last page
             self.assertNotIn("n = Next", options_call)
-
-
-if __name__ == "__main__":
-    unittest.main()

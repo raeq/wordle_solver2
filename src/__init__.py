@@ -7,7 +7,7 @@ Now includes a play mode where you can play against the computer!
 """
 
 # Import new modular structure instead of old direct imports
-from .frontend.cli_interface import CLIInterface
+from .frontend.cli import CLIInterface
 from .modules.app import WordleSolverApp
 from .modules.backend.game_engine import GameEngine
 from .modules.backend.game_state_manager import GameStateManager

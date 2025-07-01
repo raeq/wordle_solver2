@@ -4,7 +4,7 @@ Dependency injection container for the Wordle Solver application.
 
 from typing import Any, Callable, Dict, Optional, Type, TypeVar
 
-from src.frontend.cli_interface import CLIInterface
+from src.frontend.cli import CLIInterface
 from src.modules.backend.game_engine import GameEngine
 from src.modules.backend.game_state_manager import GameStateManager
 from src.modules.backend.stats_manager import StatsManager

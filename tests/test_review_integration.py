@@ -1,13 +1,14 @@
 # tests/test_review_integration.py
 """
-Integration tests for the complete review feature functionality.
+Integration tests for the review mode functionality.
 """
+
 import json
 import tempfile
 import unittest
 from unittest.mock import Mock, patch
 
-from src.frontend.cli_interface import CLIInterface
+from src.frontend.cli import CLIInterface
 from src.modules.app import WordleSolverApp
 from src.modules.backend.game_history_manager import GameHistoryManager
 
@@ -279,7 +280,3 @@ class TestReviewIntegration(unittest.TestCase):
         game = manager.get_game_by_id(large_dataset, "GAME0500")
         self.assertIsNotNone(game)
         self.assertEqual(game["game_id"], "GAME0500")
-
-
-if __name__ == "__main__":
-    unittest.main()

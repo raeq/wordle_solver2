@@ -5,7 +5,7 @@ Main application module that coordinates the backend and frontend components.
 
 from src.common.di_container import get_container
 from src.config.settings import get_settings
-from src.frontend.cli_interface import CLIInterface
+from src.frontend.cli import CLIInterface
 
 from .backend.exceptions import (
     GameStateError,
