@@ -2,6 +2,10 @@
 
 A modular Python application for solving [Wordle](https://www.nytimes.com/games/wordle/index.html) puzzles and playing Wordle-style games directly in your terminal.
 
+[![Version](https://img.shields.io/badge/version-1.0.1-blue.svg)](https://github.com/raeq/wordle_solver2/releases/tag/v1.0.1)
+[![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)](https://www.python.org/downloads/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
 ## 📚 Documentation
 
 **Complete documentation is available at: [https://raeq.github.io/wordle_solver2/](https://raeq.github.io/wordle_solver2/)**
