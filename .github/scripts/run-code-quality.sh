@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+echo "Installing development dependencies..."
+python -m pip install --upgrade pip
+pip install -e ".[dev]"
+
 echo "Running code quality checks..."
 
 echo "1. Running Black (code formatting)..."
