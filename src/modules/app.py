@@ -90,6 +90,8 @@ class WordleSolverApp:
                 self._run_solver_mode()
             elif game_mode == "review":
                 self._run_review_mode()
+            elif game_mode == "clear":
+                self._run_clear_history_mode()
             else:
                 self._run_game_mode()
 
@@ -205,7 +207,7 @@ class WordleSolverApp:
         self, guesses_history: list, won: bool, attempt: int, max_attempts: int
     ) -> None:
         """Finalize solver mode by recording stats and displaying results."""
-        self.stats_manager.record_game(guesses_history, won, attempt)
+        self.stats_manager.record_game(guesses_history, won, attempt, mode="solver")
         self._display_solver_result(won, attempt, max_attempts, guesses_history)
         self.word_manager.reset()
 
@@ -335,6 +337,7 @@ class WordleSolverApp:
                 attempt,
                 game_id=str(game_state["game_id"]),
                 target_word=self.game_engine.target_word,
+                mode="manual",
             )
 
             # Display game result
@@ -394,6 +397,102 @@ class WordleSolverApp:
         try:
             self.ui.display_review_mode_start()
 
+            # Use StatsManager instead of GameHistoryManager for consistency
+            try:
+                games = self.stats_manager.get_history()
+                if not games:
+                    self.ui.console.print("[yellow]No games found in history.[/yellow]")
+                    return
+
+                # Paginate games directly (simple pagination)
+                page_size = 10
+                pages = []
+                for i in range(0, len(games), page_size):
+                    pages.append(games[i : i + page_size])
+
+                if not pages:
+                    self.ui.console.print("[yellow]No games to display.[/yellow]")
+                    return
+
+                current_page = 1
+                total_pages = len(pages)
+
+                # Main review loop
+                while True:
+                    # Display current page using the review mode handler
+                    self.ui.display_games_list(
+                        pages[current_page - 1], current_page, total_pages
+                    )
+
+                    # Get user action
+                    action = self.ui.get_game_review_action(current_page, total_pages)
+
+                    if action == "q":
+                        break
+                    elif action == "clear":
+                        # Handle clear history command
+                        if self._handle_clear_history():
+                            # History was cleared, exit review mode
+                            break
+                    elif action == "n" and current_page < total_pages:
+                        current_page += 1
+                    elif action == "p" and current_page > 1:
+                        current_page -= 1
+                    elif len(action) == 6 and action.isalnum():
+                        # User entered a game ID - use StatsManager to find it
+                        game = self.stats_manager.get_game_by_id(action)
+                        if game:
+                            self.ui.simulate_game_display(game)
+                        else:
+                            self.ui.console.print(
+                                f"[red]Game ID '{action}' not found.[/red]"
+                            )
+
+            except Exception as e:
+                self.ui.console.print(
+                    f"[bold red]Error loading game history: {str(e)}[/bold red]"
+                )
+
+        except Exception as e:
+            self.ui.console.print(
+                f"[bold red]Error in review mode: {str(e)}[/bold red]"
+            )
+
+    def _handle_clear_history(self) -> bool:
+        """
+        Handle the clear history command with confirmation.
+
+        Returns:
+            bool: True if history was cleared, False if cancelled
+        """
+        # Check if there's any history to clear
+        if not self.stats_manager.has_history():
+            self.ui.console.print("[yellow]No history to clear.[/yellow]")
+            return False
+
+        # Get current count before clearing
+        games_count = self.stats_manager.get_history_count()
+
+        # Get confirmation from user through the UI
+        if self.ui.review_mode.confirm_clear_history():
+            # User confirmed, clear the history
+            success = self.stats_manager.clear_all_history()
+
+            # Display result
+            self.ui.review_mode.display_clear_history_result(success, games_count)
+
+            return success
+        else:
+            # User cancelled
+            self.ui.console.print("[dim]Clear history cancelled.[/dim]")
+            return False
+
+    @log_method("DEBUG")
+    def _run_clear_history_mode(self) -> None:
+        """Run the clear history mode (user can clear game history)."""
+        try:
+            self.ui.display_clear_history_mode_start()
+
             # Initialize game history manager
             history_manager = GameHistoryManager()
 
@@ -418,31 +517,20 @@ class WordleSolverApp:
                 current_page = 1
                 total_pages = len(pages)
 
-                # Main review loop
-                while True:
-                    # Display current page
-                    self.ui.display_game_list(
-                        pages[current_page - 1], current_page, total_pages
+                # Display current page
+                self.ui.display_game_list(
+                    pages[current_page - 1], current_page, total_pages
+                )
+
+                # Get user confirmation to clear history
+                if self.ui.review_mode.confirm_clear_history():
+                    # User confirmed, clear the history
+                    success = self.stats_manager.clear_all_history()
+
+                    # Display result
+                    self.ui.review_mode.display_clear_history_result(
+                        success, len(games)
                     )
-
-                    # Get user action
-                    action = self.ui.get_game_review_action(current_page, total_pages)
-
-                    if action == "q":
-                        break
-                    elif action == "n" and current_page < total_pages:
-                        current_page += 1
-                    elif action == "p" and current_page > 1:
-                        current_page -= 1
-                    elif len(action) == 6 and action.isalnum():
-                        # User entered a game ID
-                        game = history_manager.get_game_by_id(games, action)
-                        if game:
-                            self.ui.simulate_game_display(game)
-                        else:
-                            self.ui.console.print(
-                                f"[red]Game ID '{action}' not found.[/red]"
-                            )
 
             except Exception as e:
                 self.ui.console.print(
@@ -451,5 +539,5 @@ class WordleSolverApp:
 
         except Exception as e:
             self.ui.console.print(
-                f"[bold red]Error in review mode: {str(e)}[/bold red]"
+                f"[bold red]Error in clear history mode: {str(e)}[/bold red]"
             )

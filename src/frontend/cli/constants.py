@@ -5,7 +5,7 @@ Constants and message templates for the CLI interface.
 
 
 # Game mode constants
-GAME_MODES = {"SOLVER": "solver", "PLAY": "play", "REVIEW": "review"}
+GAME_MODES = {"SOLVER": "solver", "PLAY": "play", "REVIEW": "review", "CLEAR": "clear"}
 
 # Special commands
 SPECIAL_COMMANDS = {"HINT": "HINT", "STRATEGY": "STRATEGY", "QUIT": "QUIT"}
@@ -18,6 +18,7 @@ Choose your game mode:
 1. 🧠 Solver Mode: You play Wordle and get suggestions
 2. 🎮 Play Mode: Play against the computer
 3. 📚 Review Mode: Review previous games
+4. 🗑️  Clear History: Delete all game history
 
 In Solver Mode, you tell the app your guess results and get top 10 suggestions.
 In Play Mode, the computer picks a word and you try to guess it!

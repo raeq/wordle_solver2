@@ -25,8 +25,35 @@ class ReviewModeHandler:
     def get_navigation_input(self) -> str:
         """Get navigation input from user in review mode."""
         return self.input_handler.get_simple_input(
-            "Enter command (n/p for navigation, Game ID to review, q to quit):"
+            "Enter command (n/p for navigation, Game ID to review, 'clear' to clear all history, q to quit):"
         )
+
+    def confirm_clear_history(self) -> bool:
+        """Get confirmation from user before clearing all history."""
+        self.display.console.print(
+            "\n[bold red]⚠️  WARNING: This will permanently delete ALL game history![/bold red]"
+        )
+        self.display.console.print(
+            "[yellow]This action cannot be undone. All your game records and statistics will be lost.[/yellow]"
+        )
+
+        confirmation = self.input_handler.get_simple_input(
+            "\nType 'DELETE ALL' (in caps) to confirm, or anything else to cancel:"
+        )
+
+        return confirmation == "DELETE ALL"
+
+    def display_clear_history_result(self, success: bool, games_count: int) -> None:
+        """Display the result of clearing history operation."""
+        if success:
+            self.display.console.print(
+                f"\n[bold green]✅ Successfully cleared all history! "
+                f"Deleted {games_count} game records.[/bold green]"
+            )
+        else:
+            self.display.console.print(
+                "\n[bold red]❌ Failed to clear history. Please try again.[/bold red]"
+            )
 
     def display_games_list(
         self, games: List[Dict[str, Any]], page: int, total_pages: int
@@ -54,6 +81,9 @@ class ReviewModeHandler:
         target_word = game.get("target_word", "Unknown")
         timestamp = game.get("timestamp", "Unknown")
 
+        # Format timestamp for display
+        formatted_date = self._format_timestamp(timestamp)
+
         # Format status
         status = "🎉 Won" if won else "😢 Lost"
         status_style = "green" if won else "red"
@@ -64,11 +94,24 @@ class ReviewModeHandler:
 [bold]Mode:[/bold] {mode.title()}
 [bold]Target:[/bold] {target_word}
 [bold]Result:[/bold] [{status_style}]{status}[/{status_style}] in {attempts} attempts
-[bold]Date:[/bold] {timestamp}
+[bold]Date:[/bold] {formatted_date}
 [dim]{'=' * 50}[/dim]
         """
 
         self.display.console.print(summary.strip())
+
+    def _format_timestamp(self, timestamp: str) -> str:
+        """Format ISO timestamp to readable date format."""
+        if timestamp == "Unknown" or not timestamp:
+            return "Unknown"
+
+        try:
+            from datetime import datetime
+
+            dt = datetime.fromisoformat(timestamp.replace("Z", "+00:00"))
+            return dt.strftime("%B %d, %Y at %I:%M %p")
+        except (ValueError, AttributeError):
+            return timestamp  # Return original if parsing fails
 
     def display_detailed_game_review(self, game: Dict[str, Any]) -> None:
         """Display detailed review of a specific game."""
@@ -80,12 +123,15 @@ class ReviewModeHandler:
         mode = game.get("mode", "Unknown")
         timestamp = game.get("timestamp", "Unknown")
 
+        # Format timestamp for display
+        formatted_date = self._format_timestamp(timestamp)
+
         # Display game header
         header = f"""
 🎯 Detailed Game Review: {game_id}
 
 [bold]Mode:[/bold] {mode.title()}
-[bold]Date:[/bold] {timestamp}
+[bold]Date:[/bold] {formatted_date}
 [bold]Target Word:[/bold] {target_word}
 [bold]Result:[/bold] {"🎉 Won" if won else "😢 Lost"} in {attempts} attempts
 

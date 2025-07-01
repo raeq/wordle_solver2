@@ -121,6 +121,14 @@ class CLIInterface:
         """Display review mode start screen."""
         self.review_mode.start_mode()
 
+    def display_clear_history_mode_start(self) -> None:
+        """Display clear history mode start screen."""
+        self.console.print("\n[bold red]🗑️  Clear History Mode[/bold red]\n")
+        self.console.print(
+            "[yellow]You are about to view and potentially delete all game history.[/yellow]"
+        )
+        self.console.print("[dim]Current games in your history:[/dim]\n")
+
     def display_games_list(
         self, games: List[dict], page: int, total_pages: int
     ) -> None:

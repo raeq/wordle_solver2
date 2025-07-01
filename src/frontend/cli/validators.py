@@ -92,6 +92,7 @@ class InputValidator:
             "1": GAME_MODES["SOLVER"],
             "2": GAME_MODES["PLAY"],
             "3": GAME_MODES["REVIEW"],
+            "4": GAME_MODES["CLEAR"],
         }
 
         if normalized_mode in mode_mapping:
@@ -101,7 +102,7 @@ class InputValidator:
 
         return ValidationResult(
             is_valid=False,
-            error_message=f"Invalid game mode: {mode}. Choose 1/solver, 2/play, or 3/review",
+            error_message=f"Invalid game mode: {mode}. Choose 1-4, solver, play, review, or clear.",
         )
 
     @staticmethod

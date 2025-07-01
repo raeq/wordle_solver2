@@ -14,27 +14,10 @@ class StatsManager:
 
     def __init__(
         self,
-        stats_file: str = "game_stats.json",
         history_file: str = "game_history.json",
     ):
-        self.stats_file = stats_file
         self.history_file = history_file
-        self.stats = self._load_stats()
         self.history = self._load_history()
-
-    @log_method("DEBUG")
-    def _load_stats(self) -> Dict[str, Any]:
-        """Load statistics from file."""
-        try:
-            with open(self.stats_file, encoding="utf-8") as f:
-                return cast(Dict[str, Any], json.load(f))
-        except (FileNotFoundError, json.JSONDecodeError):
-            return {
-                "games_played": 0,
-                "games_won": 0,
-                "win_rate": 0.0,
-                "avg_attempts": 0.0,
-            }
 
     @log_method("DEBUG")
     def _load_history(self) -> List[Dict[str, Any]]:
@@ -44,12 +27,6 @@ class StatsManager:
                 return cast(List[Dict[str, Any]], json.load(f))
         except (FileNotFoundError, json.JSONDecodeError):
             return []
-
-    @log_method("DEBUG")
-    def save_stats(self) -> None:
-        """Save statistics to file."""
-        with open(self.stats_file, "w", encoding="utf-8") as f:
-            json.dump(self.stats, f, indent=2)
 
     @log_method("DEBUG")
     def save_history(self) -> None:
@@ -65,10 +42,11 @@ class StatsManager:
         attempts: int,
         *,  # Force keyword-only arguments
         game_id: str = "",
-        target_word: str = ""
+        target_word: str = "",
+        mode: str = "manual"
     ) -> None:
         """
-        Record a completed game in history and update statistics.
+        Record a completed game in history.
 
         Args:
             guesses: List of [guess, result] pairs
@@ -76,6 +54,7 @@ class StatsManager:
             attempts: Number of attempts made
             game_id: Unique ID for the game session (keyword-only)
             target_word: The target word for the game (keyword-only)
+            mode: The game mode (solver/manual) (keyword-only)
         """
         # Update history
         game_record = {
@@ -84,6 +63,7 @@ class StatsManager:
             "won": won,
             "attempts": attempts,
             "game_id": game_id,
+            "mode": mode,
         }
 
         # Add target word if available
@@ -93,33 +73,35 @@ class StatsManager:
         self.history.append(game_record)
         self.save_history()
 
-        # Update stats
-        self.stats["games_played"] += 1
-        if won:
-            self.stats["games_won"] += 1
-
-        # Recalculate win rate and average attempts
-        self.stats["win_rate"] = (
-            self.stats["games_won"] / self.stats["games_played"]
-        ) * 100.0
-
-        total_attempts = 0
-        completed_games = 0
-
-        for game in self.history:
-            if game["won"]:  # Only count winning games for average attempts
-                total_attempts += game["attempts"]
-                completed_games += 1
-
-        if completed_games > 0:
-            self.stats["avg_attempts"] = total_attempts / completed_games
-
-        self.save_stats()
-
     @log_method("DEBUG")
     def get_stats(self) -> Dict[str, Any]:
-        """Get current statistics."""
-        return self.stats
+        """Calculate and return current statistics dynamically from game history."""
+        if not self.history:
+            return {
+                "games_played": 0,
+                "games_won": 0,
+                "win_rate": 0.0,
+                "avg_attempts": 0.0,
+            }
+
+        games_played = len(self.history)
+        games_won = sum(1 for game in self.history if game.get("won", False))
+        win_rate = (games_won / games_played) * 100.0 if games_played > 0 else 0.0
+
+        # Calculate average attempts for winning games only
+        winning_games = [game for game in self.history if game.get("won", False)]
+        if winning_games:
+            total_attempts = sum(game.get("attempts", 0) for game in winning_games)
+            avg_attempts = total_attempts / len(winning_games)
+        else:
+            avg_attempts = 0.0
+
+        return {
+            "games_played": games_played,
+            "games_won": games_won,
+            "win_rate": win_rate,
+            "avg_attempts": avg_attempts,
+        }
 
     @log_method("DEBUG")
     def get_history(self, limit: Optional[int] = None) -> List[Dict[str, Any]]:
@@ -189,3 +171,34 @@ class StatsManager:
                 results.append(game)
 
         return results
+
+    @log_method("INFO")
+    def clear_all_history(self) -> bool:
+        """
+        Clear all game history and reset to blank.
+
+        Returns:
+            bool: True if successful, False if there was an error
+        """
+        try:
+            # Clear the in-memory history
+            self.history = []
+
+            # Save empty history to file
+            self.save_history()
+
+            return True
+        except Exception:
+            # If there's an error saving, restore the history and return False
+            self.history = self._load_history()
+            return False
+
+    @log_method("DEBUG")
+    def get_history_count(self) -> int:
+        """Get the total number of games in history."""
+        return len(self.history)
+
+    @log_method("DEBUG")
+    def has_history(self) -> bool:
+        """Check if there is any game history."""
+        return len(self.history) > 0

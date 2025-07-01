@@ -34,7 +34,7 @@ class InputHandler:
         while True:
             choice = self.prompt.ask(
                 DEFAULT_PROMPTS["game_mode"],
-                choices=["1", "2", "3", "solver", "play", "review"],
+                choices=["1", "2", "3", "4", "solver", "play", "review", "clear"],
                 default="1",
             )
 
