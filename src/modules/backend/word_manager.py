@@ -16,7 +16,7 @@ class WordManager:
     def __init__(self, words_file: Optional[str] = None):
         # Set default path to words.txt relative to the project root
         if words_file is None:
-            words_file = str(Path(__file__).parents[3] / "src/words.txt")
+            words_file = str(Path(__file__).parents[3] / "src/data/words.txt")
 
         # Load words with frequency and entropy data
         self.word_data = self._load_word_data(words_file)
