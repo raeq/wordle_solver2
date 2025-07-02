@@ -147,7 +147,9 @@ Thumbs.db
 # Project specific
 game_history.json
 game_stats.json
-logs/*.log
+# Log files and directories
+logs/
+*.log
 *.iml
 
 # Security scanning reports
