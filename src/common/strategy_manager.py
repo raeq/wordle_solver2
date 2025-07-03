@@ -12,24 +12,41 @@ from src.modules.backend.solver.constants import (
     FIRST_ARRAY_INDEX,
 )
 
-# Import all strategy classes at module level to fix import-outside-toplevel warnings
-from src.modules.backend.solver.entropy_strategy import EntropyStrategy
-from src.modules.backend.solver.frequency_strategy import FrequencyStrategy
-from src.modules.backend.solver.hybrid_frequency_entropy_strategy import (
-    HybridFrequencyEntropyStrategy,
+# Import stateless strategy classes directly
+from src.modules.backend.solver.stateless_entropy_strategy import (
+    StatelessEntropyStrategy,
 )
-from src.modules.backend.solver.minimax_strategy import MinimaxStrategy
-from src.modules.backend.solver.solver_strategy import SolverStrategy
-from src.modules.backend.solver.two_step_strategy import TwoStepStrategy
-from src.modules.backend.solver.weighted_gain_strategy import WeightedGainStrategy
+from src.modules.backend.solver.stateless_frequency_strategy import (
+    StatelessFrequencyStrategy,
+)
+from src.modules.backend.solver.stateless_hybrid_strategy import StatelessHybridStrategy
+from src.modules.backend.solver.stateless_minimax_strategy import (
+    StatelessMinimaxStrategy,
+)
+from src.modules.backend.solver.stateless_solver_strategy import StatelessSolverStrategy
+from src.modules.backend.solver.stateless_two_step_strategy import (
+    StatelessTwoStepStrategy,
+)
+from src.modules.backend.solver.stateless_weighted_gain_strategy import (
+    StatelessWeightedGainStrategy,
+)
+
+# Type aliases for backward compatibility
+EntropyStrategy = StatelessEntropyStrategy
+FrequencyStrategy = StatelessFrequencyStrategy
+HybridFrequencyEntropyStrategy = StatelessHybridStrategy
+MinimaxStrategy = StatelessMinimaxStrategy
+SolverStrategy = StatelessSolverStrategy
+TwoStepStrategy = StatelessTwoStepStrategy
+WeightedGainStrategy = StatelessWeightedGainStrategy
 
 
 class StrategyManager:
     """Enhanced strategy manager with caching and performance monitoring."""
 
     def __init__(self):
-        self._strategies: Dict[str, Type[SolverStrategy]] = {}
-        self._strategy_instances: Dict[str, SolverStrategy] = {}
+        self._strategies: Dict[str, Type[StatelessSolverStrategy]] = {}
+        self._strategy_instances: Dict[str, StatelessSolverStrategy] = {}
         self._performance_stats: Dict[str, Dict[str, Any]] = {}
 
     def register_strategy(

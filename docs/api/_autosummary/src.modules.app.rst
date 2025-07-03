@@ -3,10 +3,9 @@
 
 .. automodule:: src.modules.app
 
-   
+
    .. rubric:: Classes
 
    .. autosummary::
-   
+
       WordleSolverApp
-   

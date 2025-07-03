@@ -3,10 +3,9 @@
 
 .. automodule:: src.modules.backend.word_manager
 
-   
+
    .. rubric:: Classes
 
    .. autosummary::
-   
+
       WordManager
-   

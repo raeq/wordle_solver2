@@ -8,7 +8,8 @@ from typing import Optional, Tuple
 
 from rich.prompt import Confirm, Prompt
 
-from src.modules.backend.solver.strategy_factory import StrategyFactory
+# Import StrategyFactory from the centralized __init__.py
+from src.modules.backend.solver import StrategyFactory
 from src.modules.backend.word_manager import WordManager
 
 from .constants import DEFAULT_PROMPTS, SPECIAL_COMMANDS

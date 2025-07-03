@@ -13,8 +13,9 @@ class TestAppClearHistoryIntegration(unittest.TestCase):
 
     def setUp(self):
         """Set up test fixtures."""
-        with patch("src.modules.app.get_container"), patch(
-            "src.modules.app.get_settings"
+        with (
+            patch("src.modules.app.get_container"),
+            patch("src.modules.app.get_settings"),
         ):
             self.app = WordleSolverApp()
 
@@ -196,8 +197,9 @@ class TestModeRecordingIntegration(unittest.TestCase):
 
     def setUp(self):
         """Set up test fixtures."""
-        with patch("src.modules.app.get_container"), patch(
-            "src.modules.app.get_settings"
+        with (
+            patch("src.modules.app.get_container"),
+            patch("src.modules.app.get_settings"),
         ):
             self.app = WordleSolverApp()
 
@@ -224,7 +226,7 @@ class TestModeRecordingIntegration(unittest.TestCase):
             guesses_history, True, 2, mode="solver"
         )
 
-    @patch("src.modules.app.GameStateManager")
+    @patch("src.modules.app.EnhancedGameStateManager")
     @patch("src.modules.app.GameEngine")
     def test_run_game_mode_records_manual_mode(
         self, mock_game_engine_class, mock_solver_class

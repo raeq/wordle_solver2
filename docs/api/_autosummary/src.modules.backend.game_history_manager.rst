@@ -3,16 +3,15 @@
 
 .. automodule:: src.modules.backend.game_history_manager
 
-   
+
    .. rubric:: Classes
 
    .. autosummary::
-   
+
       GameHistoryManager
-   
+
    .. rubric:: Exceptions
 
    .. autosummary::
-   
+
       GameHistoryError
-   

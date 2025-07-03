@@ -2,5 +2,3 @@
 ========
 
 .. automodule:: src.main
-
-   

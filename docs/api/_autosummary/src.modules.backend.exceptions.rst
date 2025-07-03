@@ -3,17 +3,17 @@
 
 .. automodule:: src.modules.backend.exceptions
 
-   
+
    .. rubric:: Classes
 
    .. autosummary::
-   
+
       DebugLogMixin
-   
+
    .. rubric:: Exceptions
 
    .. autosummary::
-   
+
       GameStateError
       InputLengthError
       InvalidColorError
@@ -21,4 +21,3 @@
       InvalidResultError
       InvalidWordError
       WordleError
-   

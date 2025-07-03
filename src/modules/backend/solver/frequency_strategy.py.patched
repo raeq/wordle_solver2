@@ -1,4 +1,0 @@
-# Helper file to be renamed after creating patches for all strategy files
-# This is a placeholder until we can read all strategy files
-
-# This file should remove the @profile_memory decorator from FrequencyStrategy.get_top_suggestions

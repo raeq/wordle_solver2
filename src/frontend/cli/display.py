@@ -8,7 +8,8 @@ from typing import List, Optional
 
 from rich.console import Console
 
-from src.modules.backend.solver.strategy_factory import StrategyFactory
+# Import StrategyFactory from the centralized __init__.py
+from src.modules.backend.solver import StrategyFactory
 
 from .constants import (
     PLAY_MODE_START,

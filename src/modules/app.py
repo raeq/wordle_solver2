@@ -7,6 +7,7 @@ from src.common.di_container import get_container
 from src.config.settings import get_settings
 from src.frontend.cli import CLIInterface
 
+from .backend.enhanced_game_state_manager import EnhancedGameStateManager
 from .backend.exceptions import (
     GameStateError,
     InvalidColorError,
@@ -16,12 +17,17 @@ from .backend.exceptions import (
 )
 from .backend.game_engine import GameEngine
 from .backend.game_history_manager import GameHistoryManager
-from .backend.game_state_manager import GameStateManager
 from .backend.result_color import ResultColor
-from .backend.solver.strategy_factory import StrategyFactory
+from .backend.stateless_word_manager import StatelessWordManager
 from .backend.stats_manager import StatsManager
 from .backend.word_manager import WordManager
 from .logging_utils import log_game_outcome, log_method
+
+# Constants
+GAME_ABORT_MESSAGE = (
+    "[bold yellow]The application will continue, "
+    "but the current game has been aborted.[/bold yellow]"
+)
 
 
 class WordleSolverApp:
@@ -32,15 +38,30 @@ class WordleSolverApp:
         self.config = get_settings()
         self.container = get_container()
 
-        # Group related components to reduce instance attribute count
-        self._components = self._initialize_components()
+        # Set the current strategy name directly
         self.current_strategy_name = self.config.solver.default_strategy
 
+        # Group related components to reduce instance attribute count
+        self._components = self._initialize_components()
+
     def _initialize_components(self) -> dict:
-        """Initialize and return all application components."""
+        """Initialize and return all enhanced application components with stateless capabilities."""
+        # Initialize word managers
+        word_manager = self.container.get(WordManager)
+        stateless_word_manager = StatelessWordManager()
+
+        # Initialize enhanced game state manager with stateless support
+        enhanced_solver = EnhancedGameStateManager(
+            word_manager=word_manager,
+            strategy_name=self.current_strategy_name,
+            use_stateless=True,  # Always use stateless by default
+            stateless_word_manager=stateless_word_manager,
+        )
+
         return {
-            "word_manager": self.container.get(WordManager),
-            "solver": self.container.get(GameStateManager),
+            "word_manager": word_manager,
+            "stateless_word_manager": stateless_word_manager,
+            "solver": enhanced_solver,  # Use enhanced solver instead of legacy
             "game_engine": self.container.get(GameEngine),
             "stats_manager": self.container.get(StatsManager),
             "ui": self.container.get(CLIInterface),
@@ -52,7 +73,7 @@ class WordleSolverApp:
         return self._components["word_manager"]  # type: ignore
 
     @property
-    def solver(self) -> GameStateManager:
+    def solver(self) -> EnhancedGameStateManager:
         """Get solver component."""
         return self._components["solver"]  # type: ignore
 
@@ -114,15 +135,21 @@ class WordleSolverApp:
         self.ui.display_current_strategy(self.current_strategy_name)
 
     def _change_strategy(self, strategy_name: str) -> None:
-        """Change the current solver strategy."""
+        """Change the current solver strategy using the modernized factory."""
         try:
-            new_strategy = StrategyFactory.create_strategy(strategy_name)
-            self.solver.set_strategy(new_strategy)
-            self.current_strategy_name = strategy_name
-            self.ui.console.print(
-                f"[bold green]✓ Strategy changed to: {strategy_name.upper()}[/bold green]"
-            )
-        except ValueError as e:
+            # Use the enhanced solver's strategy switching capability
+            success = self.solver.switch_strategy(strategy_name, use_stateless=True)
+
+            if success:
+                self.current_strategy_name = strategy_name
+                self.ui.console.print(
+                    f"[bold green]✓ Strategy changed to: {strategy_name.upper()}[/bold green]"
+                )
+            else:
+                self.ui.console.print(
+                    f"[bold red]Failed to change strategy to: {strategy_name}[/bold red]"
+                )
+        except Exception as e:
             self.ui.console.print(
                 f"[bold red]Error changing strategy: {str(e)}[/bold red]"
             )
@@ -198,7 +225,6 @@ class WordleSolverApp:
             InvalidGuessError,
             InvalidResultError,
             InvalidColorError,
-            WordleError,
         ) as e:
             self.ui.console.print(f"[bold red]{type(e).__name__}: {str(e)}[/bold red]")
             return False
@@ -214,10 +240,7 @@ class WordleSolverApp:
     def _handle_solver_mode_error(self, error: Exception) -> None:
         """Handle unexpected errors in solver mode."""
         self.ui.console.print(f"[bold red]Unexpected error: {str(error)}[/bold red]")
-        self.ui.console.print(
-            "[bold yellow]The application will continue, "
-            "but the current game has been aborted.[/bold yellow]"
-        )
+        self.ui.console.print(GAME_ABORT_MESSAGE)
 
     @log_method("DEBUG")
     def _show_suggestions(self) -> None:
@@ -354,14 +377,10 @@ class WordleSolverApp:
             GameStateError,
             InvalidGuessError,
             InvalidResultError,
-            WordleError,
         ) as e:
             # Handle known game-related errors
             self.ui.console.print(f"[bold red]Game Error: {str(e)}[/bold red]")
-            self.ui.console.print(
-                "[bold yellow]The application will continue, "
-                "but the current game has been aborted.[/bold yellow]"
-            )
+            self.ui.console.print(GAME_ABORT_MESSAGE)
         except KeyboardInterrupt:
             # Handle user interruption gracefully
             self.ui.console.print(
@@ -370,10 +389,7 @@ class WordleSolverApp:
         except Exception as e:
             # Handle any other unexpected errors to prevent app crash
             self.ui.console.print(f"[bold red]Unexpected error: {str(e)}[/bold red]")
-            self.ui.console.print(
-                "[bold yellow]The application will continue, "
-                "but the current game has been aborted.[/bold yellow]"
-            )
+            self.ui.console.print(GAME_ABORT_MESSAGE)
 
     @log_method("INFO")
     @log_game_outcome

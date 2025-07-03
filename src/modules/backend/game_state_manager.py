@@ -6,8 +6,9 @@ from typing import Dict, List, Optional, Tuple
 
 from ..logging_utils import set_game_id
 from .result_color import ResultColor
-from .solver.hybrid_frequency_entropy_strategy import HybridFrequencyEntropyStrategy
-from .solver.solver_strategy import SolverStrategy
+
+# Import from the centralized __init__.py
+from .solver import HybridFrequencyEntropyStrategy, SolverStrategy
 from .word_manager import WordManager
 
 

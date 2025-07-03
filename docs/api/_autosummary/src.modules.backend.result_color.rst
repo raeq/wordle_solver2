@@ -3,10 +3,9 @@
 
 .. automodule:: src.modules.backend.result_color
 
-   
+
    .. rubric:: Classes
 
    .. autosummary::
-   
+
       ResultColor
-   

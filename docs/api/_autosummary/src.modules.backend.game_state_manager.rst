@@ -3,10 +3,9 @@
 
 .. automodule:: src.modules.backend.game_state_manager
 
-   
+
    .. rubric:: Classes
 
    .. autosummary::
-   
+
       GameStateManager
-   

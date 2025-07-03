@@ -1,6 +1,7 @@
-# src/modules/backend/word_manager.py
+# src/modules/backend/stateless_word_manager.py
 """
-Module for managing word lists and word filtering logic.
+Stateless word manager that uses functional programming principles.
+This is the future interface for word filtering without state mutation.
 """
 from pathlib import Path
 from typing import Dict, List, Optional, Set, Tuple
@@ -10,28 +11,27 @@ from .exceptions import InputLengthError, InvalidResultError, InvalidWordError
 from .result_color import ResultColor
 
 
-class WordManager:
-    """Manages the list of valid words and filtering based on game constraints."""
+class StatelessWordManager:
+    """Stateless word manager using functional programming principles."""
 
     def __init__(self, words_file: Optional[str] = None):
         # Set default path to words.txt relative to the project root
         if words_file is None:
             words_file = str(Path(__file__).parents[3] / "src/data/words.txt")
 
-        # Load words with frequency and entropy data
+        # Load words with frequency and entropy data (immutable after loading)
         self.word_data = self._load_word_data(words_file)
-        self.all_words = set(self.word_data.keys())
+        self.all_words = frozenset(self.word_data.keys())  # Immutable set
 
-        # Create common_words as high-frequency words for backward compatibility
+        # Create common_words as high-frequency words
         # Use top 30% of words by frequency as "common" words
         sorted_by_freq = sorted(
             self.word_data.items(), key=lambda x: x[1][0], reverse=True
         )
         common_count = max(1, len(sorted_by_freq) * 30 // 100)
-        self.common_words = {word for word, _ in sorted_by_freq[:common_count]}
+        self.common_words = frozenset(word for word, _ in sorted_by_freq[:common_count])
 
-        self.possible_words = self.all_words.copy()
-        self._is_test_mode = False  # Added attribute for test mode
+        self._is_test_mode = False
 
     @log_method("DEBUG")
     def _load_word_data(self, filename: str) -> Dict[str, Tuple[int, float]]:
@@ -69,15 +69,6 @@ class WordManager:
             print(f"Warning: Word file not found: {filename}")
 
         return word_data
-
-    @log_method("DEBUG")
-    def _load_words(self, _filename: str) -> Set[str]:
-        """Legacy method for backward compatibility.
-
-        Args:
-            _filename: Filename parameter (unused but kept for backward compatibility)
-        """
-        return set(self.word_data.keys()) if hasattr(self, "word_data") else set()
 
     @log_method("DEBUG")
     def _word_matches_result(self, word: str, guess: str, result: str) -> bool:
@@ -142,177 +133,19 @@ class WordManager:
         return True
 
     @log_method("DEBUG")
-    def get_possible_words(self) -> List[str]:
-        """Get current list of possible words."""
-        return sorted(self.possible_words)
-
-    @log_method("DEBUG")
-    def get_common_possible_words(self) -> List[str]:
-        """Get list of common words that are still possible."""
-        return sorted(
-            [word for word in self.possible_words if word in self.common_words]
-        )
-
-    @log_method("DEBUG")
-    def get_possible_words_stateless(
-        self, constraints: List[Tuple[str, str]] = None
-    ) -> List[str]:
-        """Get possible words using stateless filtering from constraints.
-
-        Args:
-            constraints: List of (guess, result) tuples to apply. If None, returns all words.
-
-        Returns:
-            List of words that satisfy all constraints
-        """
-        if constraints is None or len(constraints) == 0:
-            return sorted(self.all_words)
-
-        return self.apply_multiple_constraints(constraints)
-
-    @log_method("DEBUG")
-    def get_common_possible_words_stateless(
-        self, constraints: List[Tuple[str, str]] = None
-    ) -> List[str]:
-        """Get common words using stateless filtering from constraints.
-
-        Args:
-            constraints: List of (guess, result) tuples to apply. If None, returns all common words.
-
-        Returns:
-            List of common words that satisfy all constraints
-        """
-        if constraints is None or len(constraints) == 0:
-            return sorted(self.common_words)
-
-        possible_words = set(self.apply_multiple_constraints(constraints))
-        return sorted([word for word in possible_words if word in self.common_words])
-
-    @log_method("DEBUG")
     def is_valid_word(self, word: str) -> bool:
         """Check if a word is in the word list."""
         return word.upper() in self.all_words
 
     @log_method("DEBUG")
-    def reset(self) -> None:
-        """Reset the list of possible words."""
-        self.possible_words = self.all_words.copy()
+    def get_all_words(self) -> List[str]:
+        """Get all words in the word list."""
+        return sorted(self.all_words)
 
     @log_method("DEBUG")
-    def get_word_count(self) -> int:
-        """Return the number of possible words."""
-        return len(self.possible_words)
-
-    @log_method("DEBUG")
-    def filter_words(self, guess: str, result: str) -> None:
-        """Filter possible words based on the guess and result.
-
-        Note: This method maintains state for backward compatibility.
-        For stateless filtering, use apply_single_constraint or apply_multiple_constraints.
-        """
-        guess = guess.upper()
-        result = result.upper()
-
-        # Validate input lengths unless in test mode
-        if not self._is_test_mode:
-            if len(guess) != 5:
-                raise InputLengthError("Guess must be 5 letters", len(guess), 5)
-            if len(result) != 5:
-                raise InputLengthError("Result must be 5 characters", len(result), 5)
-            if not self.is_valid_word(guess):
-                raise InvalidWordError(f"{guess} is not a valid word")
-            for char in result:
-                if char not in [c.value for c in ResultColor]:
-                    raise InvalidResultError(
-                        f"Invalid result character: {char}",
-                        "Must use valid result colors",
-                    )
-
-        # Use stateless filtering internally, then update state
-        filtered_words = self.apply_single_constraint(
-            guess, result, self.possible_words
-        )
-        self.possible_words = set(filtered_words)
-
-    @log_method("DEBUG")
-    def get_word_frequency(self, word: str) -> int:
-        """Get the frequency count for a word."""
-        word = word.upper()
-        if word in self.word_data:
-            return self.word_data[word][0]
-        return 0
-
-    @log_method("DEBUG")
-    def get_word_entropy(self, word: str) -> float:
-        """Get the entropy value for a word."""
-        word = word.upper()
-        if word in self.word_data:
-            return self.word_data[word][1]
-        return 0.0
-
-    @log_method("DEBUG")
-    def get_words_by_frequency_range(
-        self,
-        min_freq: int = 0,
-        max_freq: float = float("inf"),
-        word_set: Optional[Set[str]] = None,
-    ) -> List[str]:
-        """Get words within a frequency range, sorted by frequency descending.
-
-        Args:
-            min_freq: Minimum frequency threshold
-            max_freq: Maximum frequency threshold
-            word_set: Optional set of words to filter. If None, uses possible_words for compatibility.
-
-        Returns:
-            List of words within frequency range, sorted by frequency descending
-        """
-        if word_set is None:
-            word_set = self.possible_words
-
-        filtered_words = [
-            word
-            for word, (freq, _) in self.word_data.items()
-            if min_freq <= freq <= max_freq and word in word_set
-        ]
-        return sorted(filtered_words, key=lambda w: self.word_data[w][0], reverse=True)
-
-    @log_method("DEBUG")
-    def get_words_by_entropy_range(
-        self,
-        min_entropy: float = 0.0,
-        max_entropy: float = float("inf"),
-        word_set: Optional[Set[str]] = None,
-    ) -> List[str]:
-        """Get words within an entropy range, sorted by entropy descending.
-
-        Args:
-            min_entropy: Minimum entropy threshold
-            max_entropy: Maximum entropy threshold
-            word_set: Optional set of words to filter. If None, uses possible_words for compatibility.
-
-        Returns:
-            List of words within entropy range, sorted by entropy descending
-        """
-        if word_set is None:
-            word_set = self.possible_words
-
-        filtered_words = [
-            word
-            for word, (_, entropy) in self.word_data.items()
-            if min_entropy <= entropy <= max_entropy and word in word_set
-        ]
-        return sorted(filtered_words, key=lambda w: self.word_data[w][1], reverse=True)
-
-    @log_method("DEBUG")
-    def is_test_mode(self) -> bool:
-        """Check if the word manager is in test mode (public method)."""
-        return self._is_test_mode
-
-    @log_method("DEBUG")
-    def set_test_mode(self, test_mode: bool) -> None:
-        """Set test mode for the word manager (public method)."""
-        self._is_test_mode = test_mode
+    def get_common_words(self) -> List[str]:
+        """Get all common words."""
+        return sorted(self.common_words)
 
     @log_method("DEBUG")
     def apply_single_constraint(
@@ -329,7 +162,7 @@ class WordManager:
             List of words that match the constraint
         """
         if word_set is None:
-            word_set = self.all_words.copy()
+            word_set = set(self.all_words)
 
         guess = guess.upper()
         result = result.upper()
@@ -370,7 +203,7 @@ class WordManager:
             List of words that match all constraints
         """
         if word_set is None:
-            current_words = self.all_words.copy()
+            current_words = set(self.all_words)
         else:
             current_words = word_set.copy()
 
@@ -395,7 +228,7 @@ class WordManager:
             List of words matching the pattern
         """
         if word_set is None:
-            word_set = self.all_words.copy()
+            word_set = set(self.all_words)
 
         filtered_words = set()
 
@@ -426,7 +259,7 @@ class WordManager:
             List of words containing all specified letters
         """
         if word_set is None:
-            word_set = self.all_words.copy()
+            word_set = set(self.all_words)
 
         letters_upper = [letter.upper() for letter in letters]
 
@@ -450,7 +283,7 @@ class WordManager:
             List of words not containing any of the specified letters
         """
         if word_set is None:
-            word_set = self.all_words.copy()
+            word_set = set(self.all_words)
 
         letters_upper = [letter.upper() for letter in letters]
 
@@ -479,7 +312,7 @@ class WordManager:
             List of words satisfying yellow constraints
         """
         if word_set is None:
-            word_set = self.all_words.copy()
+            word_set = set(self.all_words)
 
         filtered_words = set()
 
@@ -503,3 +336,163 @@ class WordManager:
                 filtered_words.add(word)
 
         return sorted(filtered_words)
+
+    @log_method("DEBUG")
+    def get_word_frequency(self, word: str) -> int:
+        """Get the frequency count for a word."""
+        word = word.upper()
+        if word in self.word_data:
+            return self.word_data[word][0]
+        return 0
+
+    @log_method("DEBUG")
+    def get_word_entropy(self, word: str) -> float:
+        """Get the entropy value for a word."""
+        word = word.upper()
+        if word in self.word_data:
+            return self.word_data[word][1]
+        return 0.0
+
+    @log_method("DEBUG")
+    def get_words_by_frequency_range(
+        self,
+        min_freq: int = 0,
+        max_freq: float = float("inf"),
+        word_set: Optional[Set[str]] = None,
+    ) -> List[str]:
+        """Get words within a frequency range, sorted by frequency descending.
+
+        Args:
+            min_freq: Minimum frequency threshold
+            max_freq: Maximum frequency threshold
+            word_set: Optional set of words to filter. If None, uses all words.
+
+        Returns:
+            List of words within frequency range, sorted by frequency descending
+        """
+        if word_set is None:
+            word_set = set(self.all_words)
+
+        filtered_words = [
+            word
+            for word, (freq, _) in self.word_data.items()
+            if min_freq <= freq <= max_freq and word in word_set
+        ]
+        return sorted(filtered_words, key=lambda w: self.word_data[w][0], reverse=True)
+
+    @log_method("DEBUG")
+    def get_words_by_entropy_range(
+        self,
+        min_entropy: float = 0.0,
+        max_entropy: float = float("inf"),
+        word_set: Optional[Set[str]] = None,
+    ) -> List[str]:
+        """Get words within an entropy range, sorted by entropy descending.
+
+        Args:
+            min_entropy: Minimum entropy threshold
+            max_entropy: Maximum entropy threshold
+            word_set: Optional set of words to filter. If None, uses all words.
+
+        Returns:
+            List of words within entropy range, sorted by entropy descending
+        """
+        if word_set is None:
+            word_set = set(self.all_words)
+
+        filtered_words = [
+            word
+            for word, (_, entropy) in self.word_data.items()
+            if min_entropy <= entropy <= max_entropy and word in word_set
+        ]
+        return sorted(filtered_words, key=lambda w: self.word_data[w][1], reverse=True)
+
+    @log_method("DEBUG")
+    def get_common_words_from_set(self, word_set: Set[str]) -> List[str]:
+        """Get common words from a given word set.
+
+        Args:
+            word_set: Set of words to filter for common words.
+
+        Returns:
+            List of common words from the given set.
+        """
+        return sorted([word for word in word_set if word in self.common_words])
+
+    @log_method("DEBUG")
+    def set_test_mode(self, test_mode: bool) -> None:
+        """Set test mode for the word manager."""
+        self._is_test_mode = test_mode
+
+    @log_method("DEBUG")
+    def is_test_mode(self) -> bool:
+        """Check if the word manager is in test mode."""
+        return self._is_test_mode
+
+    # Functional composition methods for complex filtering
+    @log_method("DEBUG")
+    def compose_filters(self, *filter_funcs) -> callable:
+        """Compose multiple filter functions into a single function.
+
+        Args:
+            *filter_funcs: Variable number of filter functions that take and return word sets.
+
+        Returns:
+            A composed function that applies all filters in sequence.
+        """
+
+        def composed_filter(word_set: Set[str]) -> Set[str]:
+            result = word_set
+            for filter_func in filter_funcs:
+                result = set(filter_func(result))
+            return result
+
+        return composed_filter
+
+    @log_method("DEBUG")
+    def create_pattern_filter(self, pattern: Dict[int, str]) -> callable:
+        """Create a filter function for a specific pattern.
+
+        Args:
+            pattern: Dictionary mapping positions to required letters.
+
+        Returns:
+            Filter function that can be used with compose_filters.
+        """
+
+        def pattern_filter(word_set: Set[str]) -> List[str]:
+            return self.get_words_matching_pattern(pattern, word_set)
+
+        return pattern_filter
+
+    @log_method("DEBUG")
+    def create_letter_inclusion_filter(self, letters: List[str]) -> callable:
+        """Create a filter function for letter inclusion.
+
+        Args:
+            letters: List of letters that must be included.
+
+        Returns:
+            Filter function that can be used with compose_filters.
+        """
+
+        def inclusion_filter(word_set: Set[str]) -> List[str]:
+            return self.get_words_containing_letters(letters, word_set)
+
+        return inclusion_filter
+
+    @log_method("DEBUG")
+    def create_letter_exclusion_filter(self, letters: List[str]) -> callable:
+        """Create a filter function for letter exclusion.
+
+        Args:
+            letters: List of letters that must be excluded.
+
+        Returns:
+            Filter function that can be used with compose_filters.
+        """
+
+        def exclusion_filter(word_set: Set[str]) -> List[str]:
+            return self.get_words_excluding_letters(letters, word_set)
+
+        return exclusion_filter
