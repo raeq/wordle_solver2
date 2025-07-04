@@ -5,7 +5,7 @@ Play mode specific UI components and interactions.
 
 from typing import List, Optional
 
-from src.modules.backend.word_manager import WordManager
+from src.modules.backend.stateless_word_manager import StatelessWordManager
 
 from ..display import DisplayManager
 from ..input_handler import InputHandler
@@ -27,7 +27,7 @@ class PlayModeHandler:
 
     def get_guess_input(
         self,
-        word_manager: Optional[WordManager] = None,
+        word_manager: Optional[StatelessWordManager] = None,
         custom_prompt: Optional[str] = None,
     ) -> str:
         """Get guess input from user for play mode."""

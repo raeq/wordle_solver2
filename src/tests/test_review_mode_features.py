@@ -174,8 +174,9 @@ class TestReviewModeFeatures(unittest.TestCase):
         }
 
         # Mock the _display_guess_detail and _display_game_analysis methods
-        with patch.object(self.review_handler, "_display_guess_detail"), patch.object(
-            self.review_handler, "_display_game_analysis"
+        with (
+            patch.object(self.review_handler, "_display_guess_detail"),
+            patch.object(self.review_handler, "_display_game_analysis"),
         ):
 
             self.review_handler.display_detailed_game_review(test_game)
@@ -193,15 +194,15 @@ class TestReviewModeFeatures(unittest.TestCase):
         )  # Raw ISO should not appear
 
 
-class TestAppClearHistoryIntegration(unittest.TestCase):
-    """Test the app-level clear history integration."""
+class TestClearHistoryAppIntegration(unittest.TestCase):
+    """Test clear history functionality at the app level."""
 
     def setUp(self):
         """Set up test fixtures."""
         # Mock the app and its dependencies
-        from src.modules.app import WordleSolverApp
+        from src.modules.enhanced_app import EnhancedWordleSolverApp
 
-        self.app = WordleSolverApp()
+        self.app = EnhancedWordleSolverApp()
 
         # Mock the stats manager
         self.mock_stats_manager = Mock()

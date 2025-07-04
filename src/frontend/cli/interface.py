@@ -8,7 +8,7 @@ from typing import List, Optional, Tuple
 
 from rich.console import Console
 
-from src.modules.backend.word_manager import WordManager
+from src.modules.backend.stateless_word_manager import StatelessWordManager
 
 from .display import DisplayManager
 from .game_modes import PlayModeHandler, ReviewModeHandler, SolverModeHandler
@@ -33,8 +33,13 @@ class CLIInterface:
         self.display = DisplayManager(self.console)
         self.input_handler = InputHandler()
 
+        # Create a shared stateless word manager instance
+        self.word_manager = StatelessWordManager()
+
         # Game mode handlers
-        self.solver_mode = SolverModeHandler(self.display, self.input_handler)
+        self.solver_mode = SolverModeHandler(
+            self.display, self.input_handler, self.word_manager
+        )
         self.play_mode = PlayModeHandler(self.display, self.input_handler)
         self.review_mode = ReviewModeHandler(self.display, self.input_handler)
 
@@ -93,7 +98,7 @@ class CLIInterface:
     def get_guess_input(
         self,
         prompt_text: str = "Enter your guess (5-letter word) or type 'hint' for suggestions:",
-        word_manager: Optional[WordManager] = None,
+        word_manager: Optional[StatelessWordManager] = None,
     ) -> str:
         """Get a guess from the user."""
         return self.play_mode.get_guess_input(word_manager, prompt_text)
@@ -148,7 +153,9 @@ class CLIInterface:
         """Display a list of games (backward compatibility alias)."""
         self.display_games_list(games, page, total_pages)
 
-    def get_game_review_action(self, current_page: int, total_pages: int) -> str:
+    def get_game_review_action(
+        self, current_page: int = 1, total_pages: int = 1
+    ) -> str:
         """Get user action for game review navigation."""
         # Display navigation options based on current page
         options = ["q = Quit"]
@@ -201,14 +208,18 @@ class CLIInterface:
 
     def display_guess_history(self, guesses: List[tuple]) -> None:
         """Display the history of guesses made in a game."""
+        from src.modules.backend.result_color import ResultColor
+
         self.display_info("Guess History:")
         for i, guess_data in enumerate(guesses, 1):
             if len(guess_data) >= 3:
                 guess, result, method = guess_data[0], guess_data[1], guess_data[2]
-                self.display_info(f"  {i}. {guess} -> {result} (using {method})")
+                emoji_result = ResultColor.result_to_emoji(result)
+                self.display_info(f"  {i}. {guess} -> {emoji_result} (using {method})")
             elif len(guess_data) >= 2:
                 guess, result = guess_data[0], guess_data[1]
-                self.display_info(f"  {i}. {guess} -> {result}")
+                emoji_result = ResultColor.result_to_emoji(result)
+                self.display_info(f"  {i}. {guess} -> {emoji_result}")
 
     # Shared utility methods
     def display_error(self, message: str) -> None:
@@ -251,7 +262,7 @@ class CLIInterface:
 
     # Backward compatibility methods for gradual migration
     def _validate_input_guess(
-        self, guess: str, word_manager: Optional[WordManager] = None
+        self, guess: str, word_manager: Optional[StatelessWordManager] = None
     ) -> None:
         """Backward compatibility method - validation is now handled in InputHandler."""
         # This method exists for compatibility but validation is now centralized

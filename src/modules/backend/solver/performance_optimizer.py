@@ -5,8 +5,8 @@ Performance optimization utilities for stateless solver strategies.
 import time
 from typing import Dict, List, Optional, Tuple
 
+from ..legacy_word_manager import WordManager
 from ..stateless_word_manager import StatelessWordManager
-from ..word_manager import WordManager
 from .strategy_migration_factory import strategy_factory
 
 

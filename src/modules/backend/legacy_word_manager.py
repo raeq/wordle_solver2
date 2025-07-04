@@ -1,4 +1,4 @@
-# src/modules/backend/word_manager.py
+# src/modules/backend/legacy_word_manager.py
 """
 Module for managing word lists and word filtering logic.
 """

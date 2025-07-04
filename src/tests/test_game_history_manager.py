@@ -63,8 +63,9 @@ class TestGameHistoryManager(unittest.TestCase):
     def test_init_default_path(self):
         """Test initialization with default path."""
         manager = GameHistoryManager()
-        # Should now use absolute path to game_history.json
-        self.assertTrue(manager.history_file_path.endswith("src/game_history.json"))
+        # Should now use absolute path to game_history.json in the project root
+        self.assertTrue(manager.history_file_path.endswith("game_history.json"))
+        self.assertFalse(manager.history_file_path.endswith("src/game_history.json"))
         self.assertTrue(os.path.isabs(manager.history_file_path))
 
     def test_init_custom_path(self):
@@ -161,7 +162,9 @@ class TestGameHistoryManager(unittest.TestCase):
     def test_get_game_by_id_found(self):
         """Test getting game by ID when it exists."""
         manager = GameHistoryManager()
-        game = manager.get_game_by_id(self.sample_games, "CGVWFZ")
+        # Mock the load_game_history method to return our sample games
+        manager.load_game_history = lambda: self.sample_games
+        game = manager.get_game_by_id("CGVWFZ")
         self.assertIsNotNone(game)
         self.assertEqual(game["game_id"], "CGVWFZ")
         self.assertEqual(game["target_word"], "BEGUN")
@@ -169,20 +172,26 @@ class TestGameHistoryManager(unittest.TestCase):
     def test_get_game_by_id_not_found(self):
         """Test getting game by ID when it doesn't exist."""
         manager = GameHistoryManager()
-        game = manager.get_game_by_id(self.sample_games, "NOTFND")
+        # Mock the load_game_history method to return our sample games
+        manager.load_game_history = lambda: self.sample_games
+        game = manager.get_game_by_id("NOTFND")
         self.assertIsNone(game)
 
     def test_get_game_by_id_case_insensitive(self):
         """Test getting game by ID is case insensitive."""
         manager = GameHistoryManager()
-        game = manager.get_game_by_id(self.sample_games, "cgvwfz")
+        # Mock the load_game_history method to return our sample games
+        manager.load_game_history = lambda: self.sample_games
+        game = manager.get_game_by_id("cgvwfz")
         self.assertIsNotNone(game)
         self.assertEqual(game["game_id"], "CGVWFZ")
 
     def test_get_game_by_id_strips_whitespace(self):
         """Test getting game by ID strips whitespace."""
         manager = GameHistoryManager()
-        game = manager.get_game_by_id(self.sample_games, " CGVWFZ ")
+        # Mock the load_game_history method to return our sample games
+        manager.load_game_history = lambda: self.sample_games
+        game = manager.get_game_by_id(" CGVWFZ ")
         self.assertIsNotNone(game)
         self.assertEqual(game["game_id"], "CGVWFZ")
 

@@ -2,6 +2,7 @@
 Configuration settings for the Wordle solver application.
 """
 
+import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Optional
@@ -15,6 +16,9 @@ from ..modules.backend.solver.constants import (
     DEFAULT_SUGGESTIONS_COUNT,
     DEFAULT_WORD_LENGTH,
 )
+
+# Environment variable name
+WORDLE_ENV_VAR = "WORDLE_ENVIRONMENT"
 
 
 @dataclass
@@ -115,6 +119,21 @@ class AppSettings:
         }
 
 
+def get_environment() -> str:
+    """
+    Get the current environment setting from the WORDLE_ENVIRONMENT variable.
+
+    If not set or empty, defaults to 'PROD'. Valid values are 'DEV' and 'PROD'.
+
+    Returns:
+        str: The current environment ('DEV' or 'PROD')
+    """
+    env = os.environ.get(WORDLE_ENV_VAR, "")
+    if not env or env not in ["DEV", "PROD"]:
+        return "PROD"
+    return env
+
+
 # Global settings instance
 _app_settings: Optional[AppSettings] = None
 
@@ -138,12 +157,24 @@ def initialize_config(config_path: Optional[str] = None) -> AppSettings:
     Returns:
         AppSettings instance
     """
-    if config_path:
-        return AppSettings.load_from_file(Path(config_path))
-    else:
-        # Use default config path or return default settings
+    # Check environment variable for configuration
+    environment = get_environment()
+
+    # Allow different config paths based on environment
+    if not config_path:
+        # Use default config path
         default_config_path = Path(__file__).parent.parent.parent / "config.yaml"
+
+        # Check for environment-specific config file
+        env_config_path = (
+            Path(__file__).parent.parent.parent / f"config.{environment.lower()}.yaml"
+        )
+        if env_config_path.exists():
+            default_config_path = env_config_path
+
         return AppSettings.load_from_file(default_config_path)
+    else:
+        return AppSettings.load_from_file(Path(config_path))
 
 
 def reset_settings() -> None:

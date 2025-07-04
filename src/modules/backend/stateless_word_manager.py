@@ -148,6 +148,24 @@ class StatelessWordManager:
         return sorted(self.common_words)
 
     @log_method("DEBUG")
+    def get_possible_words(self) -> List[str]:
+        """Get current list of possible words.
+
+        In the stateless implementation, this returns all words since
+        constraints are applied via specific methods rather than internal state.
+        """
+        return sorted(self.all_words)
+
+    @log_method("DEBUG")
+    def get_common_possible_words(self) -> List[str]:
+        """Get list of common words that are still possible.
+
+        In the stateless implementation, this returns all common words since
+        constraints are applied via specific methods rather than internal state.
+        """
+        return sorted(word for word in self.common_words)
+
+    @log_method("DEBUG")
     def apply_single_constraint(
         self, guess: str, result: str, word_set: Optional[Set[str]] = None
     ) -> List[str]:
@@ -428,6 +446,18 @@ class StatelessWordManager:
     def is_test_mode(self) -> bool:
         """Check if the word manager is in test mode."""
         return self._is_test_mode
+
+    def reset(self) -> None:
+        """
+        Reset method for compatibility with legacy code.
+
+        In a truly stateless implementation, this would not be needed,
+        but we include it for compatibility with code that expects to be able
+        to call reset() on the word manager.
+        """
+        # In a stateless implementation, there's no mutable state to reset
+        # This method exists purely for API compatibility
+        pass
 
     # Functional composition methods for complex filtering
     @log_method("DEBUG")

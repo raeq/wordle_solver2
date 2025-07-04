@@ -1,7 +1,8 @@
 # src/frontend/cli/input_handler.py
 """
-Input handling and user interaction for the CLI interface.
-Centralizes all user input operations and validation.
+Input handler for the CLI interface.
+
+This module handles all user input and validation for the CLI interface.
 """
 
 from typing import Optional, Tuple
@@ -10,7 +11,7 @@ from rich.prompt import Confirm, Prompt
 
 # Import StrategyFactory from the centralized __init__.py
 from src.modules.backend.solver import StrategyFactory
-from src.modules.backend.word_manager import WordManager
+from src.modules.backend.stateless_word_manager import StatelessWordManager
 
 from .constants import DEFAULT_PROMPTS, SPECIAL_COMMANDS
 from .formatters import MessageFormatter, TextFormatter
@@ -49,7 +50,7 @@ class InputHandler:
     def get_guess_input(
         self,
         prompt_text: str = DEFAULT_PROMPTS["guess_input"],
-        word_manager: Optional[WordManager] = None,
+        word_manager: Optional[StatelessWordManager] = None,
     ) -> str:
         """Get a guess from the user with validation."""
         formatted_prompt = TextFormatter.format_prompt(prompt_text)

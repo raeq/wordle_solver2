@@ -2,111 +2,82 @@
 """
 Enhanced game state manager that supports both legacy and stateless solver strategies.
 """
-from typing import List, Optional, Tuple
-
-from .game_state_manager import GameStateManager
+from typing import List, Optional, Tuple, Union
 
 # Import from the centralized __init__.py
 from .solver import StatelessSolverStrategy
 
 # Keep the LegacyStrategyAdapter import since it's not in __init__.py
 from .solver.stateless_solver_strategy import LegacyStrategyAdapter
-from .solver.strategy_migration_factory import strategy_factory
+
+# Import strategy_factory for the StatelessGameStateManager class
+from .solver.strategy_migration_factory import (
+    StrategyMigrationManager,
+    strategy_factory,
+)
 from .stateless_word_manager import StatelessWordManager
-from .word_manager import WordManager
 
 
-class EnhancedGameStateManager(GameStateManager):
-    """
-    Enhanced game state manager with support for stateless strategies.
-
-    This extends the existing GameStateManager to work with both legacy
-    and stateless solver strategies, providing a smooth migration path.
-    """
+class EnhancedGameStateManager:
+    """Enhanced game state manager with support for stateless strategies."""
 
     def __init__(
         self,
-        word_manager: WordManager,
-        strategy_name: str = "frequency",
-        max_guesses: int = 6,
+        word_manager: StatelessWordManager,
+        strategy_name: str = "hybrid",
         use_stateless: bool = True,
         stateless_word_manager: Optional[StatelessWordManager] = None,
     ):
-        """
-        Initialize enhanced game state manager.
+        """Initialize the enhanced game state manager.
 
         Args:
-            word_manager: WordManager instance for legacy compatibility
-            strategy_name: Name of the strategy to use
-            max_guesses: Maximum number of guesses allowed
-            use_stateless: Whether to prefer stateless strategy implementations
-            stateless_word_manager: Optional StatelessWordManager for pure stateless operations
+            word_manager: Word manager instance.
+            strategy_name: Name of the strategy to use.
+            use_stateless: Whether to use stateless strategy.
+            stateless_word_manager: Optional stateless word manager.
         """
-        # Initialize parent class with just word_manager
-        super().__init__(word_manager)
-
-        # Set max_guesses after initialization
-        self.max_guesses = max_guesses
-
-        self.strategy_name = strategy_name
+        self.word_manager = word_manager
+        self.stateless_word_manager = stateless_word_manager or word_manager
         self.use_stateless = use_stateless
-        self.stateless_word_manager = stateless_word_manager
+        self.guesses: List[Tuple[str, str]] = []
+        self.max_guesses = 6
 
-        # Get strategy using the migration factory
-        self.strategy = strategy_factory.create_strategy(
+        # Initialize strategy migration manager
+        self._strategy_manager = StrategyMigrationManager()
+        self._strategy_name = strategy_name
+        self._current_strategy = self._create_strategy(strategy_name, use_stateless)
+
+    def _create_strategy(
+        self, strategy_name: str, use_stateless: bool
+    ) -> Union[StatelessSolverStrategy, LegacyStrategyAdapter]:
+        """Create and return the appropriate strategy instance."""
+        return self._strategy_manager.get_strategy(
             strategy_name=strategy_name,
             use_stateless=use_stateless,
-            word_manager=word_manager,
-            stateless_word_manager=stateless_word_manager,
-        )
-
-        # Override the parent's strategy
-        self.set_strategy(self.strategy)
-
-        # Track if we're using a stateless strategy
-        self.is_stateless_strategy = isinstance(
-            self.strategy, (StatelessSolverStrategy, LegacyStrategyAdapter)
+            fallback_to_legacy=True,
         )
 
     def get_top_suggestions(self, count: int = 10) -> List[str]:
         """Get top N suggestions using the current strategy (enhanced version)."""
-        if self.is_stateless_strategy:
-            # Use stateless interface
-            return self._get_suggestions_stateless(count)
+        if isinstance(self._current_strategy, StatelessSolverStrategy):
+            # Pure stateless strategy
+            return self._current_strategy.get_top_suggestions(
+                constraints=self.guesses.copy(),
+                count=count,
+                word_manager=self.word_manager,
+                stateless_word_manager=self.stateless_word_manager,
+                prefer_common=True,
+            )
+        elif isinstance(self._current_strategy, LegacyStrategyAdapter):
+            # Legacy strategy with stateless adapter
+            return self._current_strategy.get_top_suggestions(
+                constraints=self.guesses.copy(),
+                count=count,
+                word_manager=self.word_manager,
+                stateless_word_manager=self.stateless_word_manager,
+            )
         else:
-            # Use legacy interface (fallback)
-            return self._get_suggestions_legacy(count)
-
-    def _get_suggestions_stateless(self, count: int = 10) -> List[str]:
-        """Get suggestions using stateless strategy interface."""
-        try:
-            # Convert current game state to constraints
-            constraints = self.guesses.copy()
-
-            # Get suggestions using stateless interface
-            if isinstance(self.strategy, StatelessSolverStrategy):
-                # Pure stateless strategy
-                return self.strategy.get_top_suggestions(
-                    constraints=constraints,
-                    count=count,
-                    word_manager=self.word_manager,
-                    stateless_word_manager=self.stateless_word_manager,
-                    prefer_common=True,
-                )
-            elif isinstance(self.strategy, LegacyStrategyAdapter):
-                # Legacy strategy with stateless adapter
-                return self.strategy.get_top_suggestions(
-                    constraints=constraints,
-                    count=count,
-                    word_manager=self.word_manager,
-                    stateless_word_manager=self.stateless_word_manager,
-                )
-            else:
-                # Fallback to legacy
-                return self._get_suggestions_legacy(count)
-
-        except Exception as e:
-            print(f"Warning: Stateless strategy failed ({e}), falling back to legacy")
+            # Fallback to legacy
             return self._get_suggestions_legacy(count)
 
     def _get_suggestions_legacy(self, count: int = 10) -> List[str]:
@@ -123,9 +94,9 @@ class EnhancedGameStateManager(GameStateManager):
             return common_words + other_possible
 
         # Use the legacy strategy interface
-        if hasattr(self.strategy, "get_top_suggestions"):
+        if hasattr(self._current_strategy, "get_top_suggestions"):
             try:
-                return self.strategy.get_top_suggestions(
+                return self._current_strategy.get_top_suggestions(
                     possible_words, common_words, self.guesses, count, self.word_manager
                 )
             except Exception as e:
@@ -153,20 +124,12 @@ class EnhancedGameStateManager(GameStateManager):
                 use_stateless = self.use_stateless
 
             # Get new strategy
-            new_strategy = strategy_factory.create_strategy(
-                strategy_name=strategy_name,
-                use_stateless=use_stateless,
-                word_manager=self.word_manager,
-                stateless_word_manager=self.stateless_word_manager,
-            )
+            new_strategy = self._create_strategy(strategy_name, use_stateless)
 
             # Update strategy
-            self.strategy = new_strategy
-            self.strategy_name = strategy_name
+            self._current_strategy = new_strategy
+            self._strategy_name = strategy_name
             self.use_stateless = use_stateless
-            self.is_stateless_strategy = isinstance(
-                new_strategy, (StatelessSolverStrategy, LegacyStrategyAdapter)
-            )
 
             return True
 
@@ -177,14 +140,39 @@ class EnhancedGameStateManager(GameStateManager):
     def get_strategy_info(self) -> dict:
         """Get information about the current strategy."""
         return {
-            "strategy_name": self.strategy_name,
-            "is_stateless": self.is_stateless_strategy,
+            "strategy_name": self._strategy_name,
+            "is_stateless": isinstance(
+                self._current_strategy, (StatelessSolverStrategy, LegacyStrategyAdapter)
+            ),
             "use_stateless_preference": self.use_stateless,
-            "strategy_class": self.strategy.__class__.__name__,
-            "migration_status": strategy_factory.migration_manager.get_migration_status().get(
-                self.strategy_name, "unknown"
+            "strategy_class": self._current_strategy.__class__.__name__,
+            "migration_status": self._strategy_manager.get_migration_status().get(
+                self._strategy_name, "unknown"
             ),
         }
+
+    def make_guess(self, guess: str, result: str) -> None:
+        """Add a guess and its result to the game state.
+
+        Args:
+            guess: The word that was guessed
+            result: The result pattern (G/Y/B for Green/Yellow/Black)
+        """
+        # Add the guess-result pair to the list of guesses
+        self.guesses.append((guess, result))
+
+        # Update the word manager if it has a method to apply constraints
+        if hasattr(self.word_manager, "apply_single_constraint"):
+            self.word_manager.apply_single_constraint(guess, result)
+
+    def add_guess(self, guess: str, result: str) -> None:
+        """Alias for make_guess to maintain backward compatibility with tests.
+
+        Args:
+            guess: The word that was guessed
+            result: The result pattern (G/Y/B for Green/Yellow/Black)
+        """
+        self.make_guess(guess, result)
 
     def validate_strategy_performance(self) -> dict:
         """Validate current strategy performance against alternatives."""
@@ -193,15 +181,15 @@ class EnhancedGameStateManager(GameStateManager):
 
         try:
             # Run validation with current game state
-            validation_results = strategy_factory.run_migration_validation(
+            validation_results = self._strategy_manager.run_migration_validation(
                 word_manager=self.word_manager,
                 stateless_word_manager=self.stateless_word_manager,
             )
 
-            current_strategy_result = validation_results.get(self.strategy_name, {})
+            current_strategy_result = validation_results.get(self._strategy_name, {})
 
             return {
-                "current_strategy": self.strategy_name,
+                "current_strategy": self._strategy_name,
                 "validation_result": current_strategy_result,
                 "all_results": validation_results,
             }
@@ -211,11 +199,11 @@ class EnhancedGameStateManager(GameStateManager):
 
     def get_available_strategies(self) -> dict:
         """Get information about available strategies."""
-        return strategy_factory.migration_manager.get_available_strategies()
+        return self._strategy_manager.get_available_strategies()
 
     def get_recommendations(self) -> dict:
         """Get strategy recommendations."""
-        return strategy_factory.get_recommendations()
+        return self._strategy_manager.get_recommendations()
 
     def benchmark_current_strategy(self, iterations: int = 10) -> dict:
         """Benchmark the current strategy performance."""
@@ -235,8 +223,11 @@ class EnhancedGameStateManager(GameStateManager):
             duration = end_time - start_time
 
             return {
-                "strategy_name": self.strategy_name,
-                "is_stateless": self.is_stateless_strategy,
+                "strategy_name": self._strategy_name,
+                "is_stateless": isinstance(
+                    self._current_strategy,
+                    (StatelessSolverStrategy, LegacyStrategyAdapter),
+                ),
                 "iterations": iterations,
                 "total_time": duration,
                 "avg_time_per_call": duration / iterations,
@@ -245,6 +236,13 @@ class EnhancedGameStateManager(GameStateManager):
 
         except Exception as e:
             return {"error": f"Benchmark failed: {e}"}
+
+    def reset(self) -> None:
+        """Reset the game state manager for a new game."""
+        self.guesses = []
+        # Reset the word manager if it's not stateless
+        self.word_manager.reset()
+        # No need to reset the strategy as it should be stateless
 
 
 class StatelessGameStateManager:
@@ -257,7 +255,6 @@ class StatelessGameStateManager:
 
     def __init__(
         self,
-        word_manager: Optional[WordManager] = None,
         stateless_word_manager: Optional[StatelessWordManager] = None,
         default_strategy: str = "frequency",
     ):
@@ -265,11 +262,9 @@ class StatelessGameStateManager:
         Initialize stateless game state manager.
 
         Args:
-            word_manager: Optional WordManager for legacy compatibility
             stateless_word_manager: Optional StatelessWordManager for pure stateless operations
             default_strategy: Default strategy to use
         """
-        self.word_manager = word_manager
         self.stateless_word_manager = stateless_word_manager
         self.default_strategy = default_strategy
 
@@ -301,7 +296,6 @@ class StatelessGameStateManager:
         strategy = strategy_factory.create_strategy(
             strategy_name=strategy_name,
             use_stateless=True,
-            word_manager=self.word_manager,
             stateless_word_manager=self.stateless_word_manager,
         )
 
@@ -310,26 +304,13 @@ class StatelessGameStateManager:
             return strategy.get_top_suggestions(
                 constraints=constraints,
                 count=count,
-                word_manager=self.word_manager,
                 stateless_word_manager=self.stateless_word_manager,
                 prefer_common=prefer_common,
                 word_set=word_set,
             )
         else:
-            # Fallback for legacy strategies
-            if self.word_manager:
-                possible_words = self.word_manager.apply_multiple_constraints(
-                    constraints, word_set
-                )
-                common_words = [
-                    w for w in possible_words if w in self.word_manager.common_words
-                ]
-
-                return strategy.get_top_suggestions(
-                    possible_words, common_words, constraints, count, self.word_manager
-                )
-            else:
-                raise ValueError("Legacy strategy requires WordManager")
+            # This should not happen since we're requesting stateless=True
+            raise ValueError("Expected stateless strategy but got legacy strategy")
 
     def analyze_game_state(
         self, constraints: List[Tuple[str, str]], word_set: Optional[set] = None
@@ -351,15 +332,8 @@ class StatelessGameStateManager:
             common_words = self.stateless_word_manager.get_common_words_from_set(
                 set(possible_words)
             )
-        elif self.word_manager:
-            possible_words = self.word_manager.apply_multiple_constraints(
-                constraints, word_set
-            )
-            common_words = [
-                w for w in possible_words if w in self.word_manager.common_words
-            ]
         else:
-            raise ValueError("Either word_manager or stateless_word_manager required")
+            raise ValueError("StatelessWordManager is required")
 
         return {
             "total_possible_words": len(possible_words),

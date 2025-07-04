@@ -14,7 +14,6 @@ from src.modules.backend.solver.stateless_frequency_strategy import (
 )
 from src.modules.backend.solver.stateless_hybrid_strategy import StatelessHybridStrategy
 from src.modules.backend.stateless_word_manager import StatelessWordManager
-from src.modules.backend.word_manager import WordManager
 
 
 class TestStatelessSolverStrategies(unittest.TestCase):
@@ -41,10 +40,7 @@ class TestStatelessSolverStrategies(unittest.TestCase):
             f.write("SLATE 40000 6.8\n")
             f.write("CRANE 38000 7.2\n")
 
-        # Initialize word managers
-        self.word_manager = WordManager(words_file=self.words_path)
-        self.word_manager.set_test_mode(True)
-
+        # Initialize stateless word manager only
         self.stateless_word_manager = StatelessWordManager(words_file=self.words_path)
         self.stateless_word_manager.set_test_mode(True)
 
@@ -63,7 +59,9 @@ class TestStatelessSolverStrategies(unittest.TestCase):
     def test_stateless_frequency_strategy_basic(self):
         """Test basic functionality of stateless frequency strategy."""
         suggestions = self.stateless_frequency_strategy.get_top_suggestions(
-            constraints=self.constraints, count=3, word_manager=self.word_manager
+            constraints=self.constraints,
+            count=3,
+            stateless_word_manager=self.stateless_word_manager,
         )
 
         self.assertIsInstance(suggestions, list)
@@ -85,17 +83,23 @@ class TestStatelessSolverStrategies(unittest.TestCase):
         """Test that different stateless strategies produce different results."""
         # Get results from frequency strategy
         frequency_suggestions = self.stateless_frequency_strategy.get_top_suggestions(
-            constraints=self.constraints, count=5, word_manager=self.word_manager
+            constraints=self.constraints,
+            count=5,
+            stateless_word_manager=self.stateless_word_manager,
         )
 
         # Get results from entropy strategy
         entropy_suggestions = self.stateless_entropy_strategy.get_top_suggestions(
-            constraints=self.constraints, count=5, word_manager=self.word_manager
+            constraints=self.constraints,
+            count=5,
+            stateless_word_manager=self.stateless_word_manager,
         )
 
         # Get results from hybrid strategy
         hybrid_suggestions = self.stateless_hybrid_strategy.get_top_suggestions(
-            constraints=self.constraints, count=5, word_manager=self.word_manager
+            constraints=self.constraints,
+            count=5,
+            stateless_word_manager=self.stateless_word_manager,
         )
 
         # All should return some suggestions
@@ -112,7 +116,7 @@ class TestStatelessSolverStrategies(unittest.TestCase):
     def test_stateless_empty_constraints(self):
         """Test stateless strategy with no constraints."""
         suggestions = self.stateless_frequency_strategy.get_top_suggestions(
-            constraints=[], count=5, word_manager=self.word_manager
+            constraints=[], count=5, stateless_word_manager=self.stateless_word_manager
         )
 
         self.assertIsInstance(suggestions, list)
@@ -126,7 +130,7 @@ class TestStatelessSolverStrategies(unittest.TestCase):
             self.stateless_frequency_strategy.get_top_suggestions(
                 constraints=[],  # Use empty constraints
                 count=5,
-                word_manager=self.word_manager,
+                stateless_word_manager=self.stateless_word_manager,
                 prefer_common=True,
             )
         )
@@ -135,7 +139,7 @@ class TestStatelessSolverStrategies(unittest.TestCase):
             self.stateless_frequency_strategy.get_top_suggestions(
                 constraints=[],  # Use empty constraints
                 count=5,
-                word_manager=self.word_manager,
+                stateless_word_manager=self.stateless_word_manager,
                 prefer_common=False,
             )
         )
@@ -154,7 +158,7 @@ class TestStatelessSolverStrategies(unittest.TestCase):
         suggestions = self.stateless_frequency_strategy.get_top_suggestions(
             constraints=[],
             count=5,
-            word_manager=self.word_manager,
+            stateless_word_manager=self.stateless_word_manager,
             word_set=custom_word_set,
         )
 
@@ -171,7 +175,9 @@ class TestStatelessSolverStrategies(unittest.TestCase):
         # Run multiple iterations
         for _ in range(10):
             self.stateless_frequency_strategy.get_top_suggestions(
-                constraints=self.constraints, count=3, word_manager=self.word_manager
+                constraints=self.constraints,
+                count=3,
+                stateless_word_manager=self.stateless_word_manager,
             )
 
         end_time = time.time()
@@ -183,11 +189,15 @@ class TestStatelessSolverStrategies(unittest.TestCase):
     def test_stateless_consistency(self):
         """Test that stateless strategy produces consistent results."""
         suggestions1 = self.stateless_frequency_strategy.get_top_suggestions(
-            constraints=self.constraints, count=3, word_manager=self.word_manager
+            constraints=self.constraints,
+            count=3,
+            stateless_word_manager=self.stateless_word_manager,
         )
 
         suggestions2 = self.stateless_frequency_strategy.get_top_suggestions(
-            constraints=self.constraints, count=3, word_manager=self.word_manager
+            constraints=self.constraints,
+            count=3,
+            stateless_word_manager=self.stateless_word_manager,
         )
 
         self.assertEqual(
@@ -210,7 +220,9 @@ class TestStatelessSolverStrategies(unittest.TestCase):
         ]
 
         suggestions = self.stateless_frequency_strategy.get_top_suggestions(
-            constraints=complex_constraints, count=3, word_manager=self.word_manager
+            constraints=complex_constraints,
+            count=3,
+            stateless_word_manager=self.stateless_word_manager,
         )
 
         self.assertIsInstance(suggestions, list)

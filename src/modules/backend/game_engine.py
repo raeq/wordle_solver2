@@ -2,7 +2,7 @@
 """
 Game engine module for handling the game logic when the computer selects a target word.
 """
-import random
+import secrets  # More secure random number generation
 import string
 from typing import Dict, List, Tuple
 
@@ -15,20 +15,36 @@ from .exceptions import (
 )
 from .result_color import ResultColor
 from .solver.constants import DEFAULT_GAME_ID_LENGTH, DEFAULT_MAX_ATTEMPTS
-from .word_manager import WordManager
 
 
 class GameEngine:
     """Handles the computer vs player game mode."""
 
     @log_method("DEBUG")
-    def __init__(self, word_manager: WordManager):
-        self.word_manager = word_manager
+    def __init__(self):
+        """
+        Initialize a new GameEngine instance.
+
+        The GameEngine maintains strict encapsulation by creating and controlling
+        its own WordManager and StatsManager instances.
+        """
+        from .stateless_word_manager import (
+            StatelessWordManager,  # Import for internal use
+        )
+        from .stats_manager import StatsManager  # Import here to avoid circular imports
+
+        self.word_manager = (
+            StatelessWordManager()
+        )  # GameEngine creates and controls its own WordManager
+        self.stats_manager = (
+            StatsManager()
+        )  # GameEngine creates and controls its own StatsManager
         self.target_word = ""
         self.guesses: List[Tuple[str, str]] = []
         self.max_guesses = DEFAULT_MAX_ATTEMPTS
         self.game_active = False
         self._game_id = ""
+        self.game_mode = "auto"  # Default game mode
 
     @property
     def game_id(self) -> str:
@@ -47,7 +63,7 @@ class GameEngine:
             # Generate a new game ID
             characters = string.ascii_uppercase + string.digits
             self._game_id = "".join(
-                random.choice(characters) for _ in range(DEFAULT_GAME_ID_LENGTH)
+                secrets.choice(characters) for _ in range(DEFAULT_GAME_ID_LENGTH)
             )
         else:
             self._game_id = value
@@ -64,12 +80,12 @@ class GameEngine:
 
         if common_words:
             # 70% chance to pick from common words, 30% from all words
-            if random.random() < 0.7:
-                self.target_word = random.choice(common_words)
+            if secrets.randbelow(10) < 7:  # 7 out of 10 = 70%
+                self.target_word = secrets.choice(common_words)
             else:
-                self.target_word = random.choice(all_words)
+                self.target_word = secrets.choice(all_words)
         else:
-            self.target_word = random.choice(all_words) if all_words else "AUDIO"
+            self.target_word = secrets.choice(all_words) if all_words else "AUDIO"
 
         self.guesses = []
         self.game_active = True
@@ -81,13 +97,23 @@ class GameEngine:
         return self.target_word
 
     @log_method("DEBUG")
-    def make_guess(self, guess: str) -> Tuple[str, bool]:
+    def make_guess(self, guess: str, mode: str = None) -> Tuple[str, bool]:
         """
         Make a guess and return the result pattern and whether the game is won.
-        Returns: (result_pattern, is_solved)
+
+        Args:
+            guess: The word being guessed
+            mode: Optional game mode identifier (manual, solver, etc.)
+
+        Returns:
+            (result_pattern, is_solved)
         """
         if not self.game_active:
             raise GameStateError("No active game. Call start_new_game() first.")
+
+        # Update game mode if provided
+        if mode:
+            self.game_mode = mode
 
         guess = guess.upper()
         if len(guess) != 5:
@@ -106,11 +132,37 @@ class GameEngine:
         self.guesses.append((guess, result))
 
         is_solved = result == ResultColor.GREEN.value * 5
+        game_over = is_solved or len(self.guesses) >= self.max_guesses
 
-        if is_solved or len(self.guesses) >= self.max_guesses:
+        if game_over:
             self.game_active = False
+            # Automatically save the game when it ends
+            self._save_game(is_solved)
 
         return result, is_solved
+
+    @log_method("DEBUG")
+    def _save_game(self, is_solved: bool) -> None:
+        """
+        Save the completed game to history.
+
+        Args:
+            is_solved: Whether the game was won
+        """
+        if self.stats_manager:
+            try:
+                self.stats_manager._record_game(
+                    self.guesses,
+                    is_solved,
+                    len(self.guesses),
+                    game_id=self._game_id,
+                    target_word=self.target_word,
+                    mode=self.game_mode,
+                )
+            except Exception as e:
+                # Log the error but don't prevent game from ending
+                if logger:
+                    logger.error(f"Failed to save game: {e}")
 
     @log_method("DEBUG")
     def _calculate_result(self, guess: str, target: str) -> str:
@@ -191,7 +243,7 @@ class GameEngine:
 
         if not self.guesses:
             # For first guess, hint at a random letter from the target
-            pos = random.randint(0, 4)
+            pos = secrets.randbelow(5)  # Generate number between 0 and 4 inclusive
             return (
                 f"The word contains the letter '{self.target_word[pos]}'. "
                 f"Try starting with a word like 'ADIEU' or 'AUDIO' that contains many vowels."
@@ -207,6 +259,7 @@ class GameEngine:
             return "You've already guessed all letters correctly!"
 
         # Choose a random incorrect position
-        pos = random.choice(incorrect_positions)
+        # Need to implement secrets.choice as it's not directly available
+        pos = incorrect_positions[secrets.randbelow(len(incorrect_positions))]
 
         return f"The letter in position {pos+1} is '{self.target_word[pos]}'."

@@ -74,11 +74,33 @@ class ReviewModeHandler:
 
     def _display_game_summary(self, game: Dict[str, Any]) -> None:
         """Display a summary of a single game."""
-        game_id = game.get("game_id", "Unknown")
-        mode = game.get("mode", "Unknown")
+        # Get game ID, use N/A if empty
+        game_id = game.get("game_id")
+        if not game_id:
+            game_id = "N/A"
+
+        # Get or determine mode
+        mode = game.get("mode", "Manual")  # Default to Manual if not specified
+
+        # Get win status and attempts
         won = game.get("won", False)
         attempts = game.get("attempts", 0)
-        target_word = game.get("target_word", "Unknown")
+
+        # Get target word - try different possible sources
+        target_word = game.get("target_word")
+
+        # If target_word is missing but the game was won, extract from last successful guess
+        if (not target_word or target_word == "Unknown") and won and "guesses" in game:
+            guesses = game.get("guesses", [])
+            if guesses and len(guesses[-1]) >= 1:
+                last_guess = guesses[-1][0]  # Get the word from the last guess
+                target_word = last_guess
+
+        # Default if still not found
+        if not target_word:
+            target_word = "Unknown"
+
+        # Get timestamp
         timestamp = game.get("timestamp", "Unknown")
 
         # Format timestamp for display

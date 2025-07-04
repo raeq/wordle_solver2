@@ -7,7 +7,7 @@ This is not a formal unit test but rather a simple showcase of the modules worki
 # Use absolute imports instead of relative imports
 from src.modules.backend.game_engine import GameEngine
 from src.modules.backend.solver.strategy_factory import StrategyFactory
-from src.modules.backend.word_manager import WordManager
+from src.modules.backend.stateless_word_manager import StatelessWordManager
 
 
 def run_simple_test():
@@ -16,7 +16,8 @@ def run_simple_test():
 
     # Initialize word manager
     print("\n1. Testing WordManager...")
-    word_manager = WordManager()
+    word_manager = StatelessWordManager()  # Using StatelessWordManager now
+    word_manager._is_test_mode = True  # Enable test mode
     all_words_count = len(word_manager.all_words)
     common_words_count = len(word_manager.common_words)
     print(
@@ -58,7 +59,10 @@ def run_simple_test():
 
     # Test game engine
     print("\n3. Testing GameEngine...")
-    game_engine = GameEngine(WordManager())  # Fresh word manager
+    game_engine = GameEngine()  # GameEngine now creates its own WordManager
+    game_engine.word_manager._is_test_mode = (
+        True  # Set test mode for internal WordManager
+    )
     target = game_engine.start_new_game()
     print(f"   Started new game with target: {target}")
 

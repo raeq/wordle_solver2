@@ -24,9 +24,7 @@ class GameHistoryManager:
             project_root = os.path.dirname(
                 os.path.dirname(os.path.dirname(current_dir))
             )
-            self.history_file_path = os.path.join(
-                project_root, "src", "game_history.json"
-            )
+            self.history_file_path = os.path.join(project_root, "game_history.json")
         else:
             self.history_file_path = history_file_path
 
@@ -55,9 +53,11 @@ class GameHistoryManager:
             pages.append(games[i : i + page_size])
         return pages
 
-    def get_game_by_id(self, games: List[Dict], game_id: str) -> Optional[Dict]:
+    def get_game_by_id(self, game_id: str) -> Optional[Dict]:
         """Find and return a game by its ID."""
         game_id = game_id.upper().strip()
+        # Load games first if needed
+        games = self.load_game_history()
         for game in games:
             if game.get("game_id", "").upper() == game_id:
                 return game

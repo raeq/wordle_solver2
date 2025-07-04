@@ -6,8 +6,8 @@ import os
 import tempfile
 import unittest
 
+from src.modules.backend.legacy_word_manager import WordManager
 from src.modules.backend.stateless_word_manager import StatelessWordManager
-from src.modules.backend.word_manager import WordManager
 
 
 class TestWordManagerIntegration(unittest.TestCase):

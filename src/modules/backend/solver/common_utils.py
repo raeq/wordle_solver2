@@ -17,7 +17,7 @@ from .constants import (
 from .solver_utils import calculate_pattern
 
 if TYPE_CHECKING:
-    from ..word_manager import WordManager
+    from ..legacy_word_manager import WordManager
 
 
 class WordSorter:

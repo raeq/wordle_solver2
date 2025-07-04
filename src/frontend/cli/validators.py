@@ -6,7 +6,7 @@ Input validation logic for the CLI interface.
 from typing import Optional
 
 from src.modules.backend.result_color import ResultColor
-from src.modules.backend.word_manager import WordManager
+from src.modules.backend.stateless_word_manager import StatelessWordManager
 
 from .constants import GAME_MODES, SPECIAL_COMMANDS
 from .types import UserInput, ValidationResult
@@ -17,7 +17,7 @@ class InputValidator:
 
     @staticmethod
     def validate_guess(
-        guess: str, word_manager: Optional[WordManager] = None
+        guess: str, word_manager: Optional[StatelessWordManager] = None
     ) -> ValidationResult:
         """Validate a guess input."""
         try:

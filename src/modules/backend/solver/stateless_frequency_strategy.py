@@ -8,8 +8,8 @@ from typing import TYPE_CHECKING, List, Optional, Set, Tuple
 from .stateless_solver_strategy import StatelessSolverStrategy
 
 if TYPE_CHECKING:
+    from ..legacy_word_manager import WordManager
     from ..stateless_word_manager import StatelessWordManager
-    from ..word_manager import WordManager
 
 
 class StatelessFrequencyStrategy(StatelessSolverStrategy):

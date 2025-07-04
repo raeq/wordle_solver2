@@ -6,7 +6,7 @@ import json
 from datetime import datetime
 from typing import Any, Dict, List, Optional, cast
 
-from ..logging_utils import log_method
+from ..logging_utils import log_method, logger
 
 
 class StatsManager:
@@ -31,11 +31,16 @@ class StatsManager:
     @log_method("DEBUG")
     def save_history(self) -> None:
         """Save game history to file."""
-        with open(self.history_file, "w", encoding="utf-8") as f:
-            json.dump(self.history, f, indent=2)
+        try:
+            with open(self.history_file, "w", encoding="utf-8") as f:
+                json.dump(self.history, f, indent=2)
+        except (PermissionError, OSError) as e:
+            # Log the error but don't crash - this allows tests to run without writing files
+            if logger is not None:
+                logger.warning(f"Could not save history file: {e}")
 
     @log_method("INFO")
-    def record_game(
+    def _record_game(
         self,
         guesses: List[List[str]],
         won: bool,
@@ -43,10 +48,10 @@ class StatsManager:
         *,  # Force keyword-only arguments
         game_id: str = "",
         target_word: str = "",
-        mode: str = "manual"
+        mode: str = "manual",
     ) -> None:
         """
-        Record a completed game in history.
+        Private method to record a completed game in history.
 
         Args:
             guesses: List of [guess, result] pairs
@@ -55,7 +60,21 @@ class StatsManager:
             game_id: Unique ID for the game session (keyword-only)
             target_word: The target word for the game (keyword-only)
             mode: The game mode (solver/manual) (keyword-only)
+
+        Raises:
+            ValueError: If no valid game_id is provided
         """
+        # Validate game ID - it's the GameEngine's responsibility to generate IDs
+        if not game_id:
+            error_msg = "Missing game ID: GameEngine must provide a valid game_id when recording games"
+            try:
+                if logger is not None:
+                    logger.error(error_msg)
+            except (NameError, AttributeError):
+                # Logger may not be available in test environments
+                pass
+            raise ValueError(error_msg)
+
         # Update history
         game_record = {
             "timestamp": datetime.now().isoformat(),
@@ -138,7 +157,7 @@ class StatsManager:
         Search for games matching specific criteria.
 
         Args:
-            game_id: Filter by game ID (can be partial)
+            game_id: Filter by game ID (exact match)
             won: Filter by game outcome (won/lost)
             target_word: Filter by target word
             max_attempts: Return only games with attempts <= this value
@@ -152,7 +171,7 @@ class StatsManager:
             # Check if game matches all provided filters
             match = True
 
-            if game_id is not None and game.get("game_id", "").find(game_id) == -1:
+            if game_id is not None and game.get("game_id") != game_id:
                 match = False
 
             if won is not None and game.get("won") != won:
@@ -180,17 +199,29 @@ class StatsManager:
         Returns:
             bool: True if successful, False if there was an error
         """
+        # Store the original history for potential restoration
+        original_history = self.history.copy() if self.history else []
+
         try:
             # Clear the in-memory history
             self.history = []
 
-            # Save empty history to file
-            self.save_history()
-
-            return True
-        except Exception:
-            # If there's an error saving, restore the history and return False
-            self.history = self._load_history()
+            # Try to save empty history to file
+            try:
+                with open(self.history_file, "w", encoding="utf-8") as f:
+                    json.dump(self.history, f, indent=2)
+                return True
+            except (PermissionError, OSError, IOError) as e:
+                # If there's an error saving, restore the original history
+                self.history = original_history
+                if logger is not None:
+                    logger.warning(f"Could not save history file during clear: {e}")
+                return False
+        except Exception as e:
+            # For any other errors, also restore and return False
+            self.history = original_history
+            if logger is not None:
+                logger.error(f"Unexpected error during history clear: {e}")
             return False
 
     @log_method("DEBUG")

@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """
 Entry point script for the Wordle Solver application.
+
+The application now uses the enhanced implementation with stateless architecture,
+providing better performance and additional features like analysis mode and benchmarking.
 """
 
 import os

@@ -4,11 +4,10 @@ Dependency injection container for the Wordle Solver application.
 
 from typing import Any, Callable, Dict, Optional, Type, TypeVar
 
-from src.frontend.cli import CLIInterface
+from src.frontend.cli import CLIInterface, GameStateManager
 from src.modules.backend.game_engine import GameEngine
-from src.modules.backend.game_state_manager import GameStateManager
+from src.modules.backend.stateless_word_manager import StatelessWordManager
 from src.modules.backend.stats_manager import StatsManager
-from src.modules.backend.word_manager import WordManager
 
 T = TypeVar("T")
 
@@ -71,16 +70,17 @@ def _create_default_container() -> DIContainer:
     container = DIContainer()
 
     # Register singletons with direct constructor calls instead of lambdas
-    container.register_singleton(WordManager, WordManager)
+    container.register_singleton(StatelessWordManager, StatelessWordManager)
     container.register_singleton(StatsManager, StatsManager)
     container.register_singleton(CLIInterface, CLIInterface)
 
     # Register factories that depend on singletons
     def create_game_state_manager():
-        return GameStateManager(container.get(WordManager))
+        return GameStateManager(container.get(StatelessWordManager))
 
     def create_game_engine():
-        return GameEngine(container.get(WordManager))
+        # GameEngine now creates its own WordManager internally
+        return GameEngine()
 
     container.register_factory(GameStateManager, create_game_state_manager)
     container.register_factory(GameEngine, create_game_engine)

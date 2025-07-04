@@ -8,9 +8,9 @@ Tests the sequence:
 """
 import unittest
 
+from src.frontend.cli.game_state_manager import GameStateManager
 from src.modules.backend.game_engine import GameEngine
-from src.modules.backend.game_state_manager import GameStateManager
-from src.modules.backend.word_manager import WordManager
+from src.modules.backend.stateless_word_manager import StatelessWordManager
 
 
 class TestGameSequence(unittest.TestCase):
@@ -18,21 +18,18 @@ class TestGameSequence(unittest.TestCase):
 
     def setUp(self):
         """Set up test fixtures."""
-        # Create a real WordManager with a custom word list that ensures our test works
-        self.word_manager = WordManager()
-
-        # Enable test mode to bypass word validation
+        # Create a stateless word manager for the game state manager
+        self.word_manager = StatelessWordManager()
         self.word_manager._is_test_mode = True
 
-        # Ensure THRUM is in the word list for the test
-        self.word_manager.all_words.add("THRUM")
-        self.word_manager.possible_words.add("THRUM")
-
-        # Create a real Solver
+        # Create a game state manager
         self.solver = GameStateManager(self.word_manager)
 
-        # Create a game engine with our target word
-        self.game_engine = GameEngine(self.word_manager)
+        # Create a game engine with its own internal WordManager
+        self.game_engine = GameEngine()
+
+        # Enable test mode on the internal word manager
+        self.game_engine.word_manager._is_test_mode = True
 
         # The specific sequence we're testing
         self.test_sequence = [
@@ -43,9 +40,10 @@ class TestGameSequence(unittest.TestCase):
 
     def test_successful_game_sequence(self):
         """Test that the specified sequence leads to a successful game."""
-        # Make sure THRUM is in the word list
+        # Make sure THRUM is in the word list - for stateless implementation
+        # we check this differently
         self.assertTrue(
-            "THRUM" in self.word_manager.all_words,
+            self.word_manager.is_valid_word("THRUM"),
             "Test word 'THRUM' must be in the word list",
         )
 
@@ -61,8 +59,10 @@ class TestGameSequence(unittest.TestCase):
             self.solver.is_game_won(), "Game should be won after the sequence"
         )
 
-        # Check that THRUM is in the remaining possible words
-        possible_words = self.word_manager.get_possible_words()
+        # With stateless implementation, we need to get possible words from the game state manager
+        # not directly from the word manager
+        possible_words = self.solver.get_possible_words()
+
         self.assertIn(
             "THRUM",
             possible_words,

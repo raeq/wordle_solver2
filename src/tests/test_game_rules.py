@@ -15,7 +15,6 @@ from src.modules.backend.exceptions import (
     InvalidGuessError,
 )
 from src.modules.backend.game_engine import GameEngine
-from src.modules.backend.word_manager import WordManager
 
 
 class TestGameRules:
@@ -23,10 +22,11 @@ class TestGameRules:
 
     @pytest.fixture
     def game_engine(self):
-        """Create a test game engine with a word manager in test mode"""
-        word_manager = WordManager()
-        word_manager._is_test_mode = True
-        game = GameEngine(word_manager)
+        """Create a test game engine"""
+        # GameEngine now creates and manages its own WordManager internally
+        game = GameEngine()
+        # Configure the internal WordManager for testing
+        game.word_manager._is_test_mode = True
         game.start_new_game()
         # Override the random target word for testing
         game.target_word = "TESTS"  # Default target word

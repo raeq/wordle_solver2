@@ -9,8 +9,8 @@ import unittest
 from unittest.mock import Mock, patch
 
 from ..frontend.cli import CLIInterface
-from ..modules.app import WordleSolverApp
 from ..modules.backend.game_history_manager import GameHistoryManager
+from ..modules.enhanced_app import EnhancedWordleSolverApp
 
 
 class TestReviewIntegration(unittest.TestCase):
@@ -73,7 +73,9 @@ class TestReviewIntegration(unittest.TestCase):
             self.assertEqual(len(pages), 2)  # Should create 2 pages with 1 game each
 
             # Test game retrieval by ID
-            game = manager.get_game_by_id(games, "CGVWFZ")
+            # Mock the load_game_history method to return our test games
+            manager.load_game_history = lambda: games
+            game = manager.get_game_by_id("CGVWFZ")
             self.assertIsNotNone(game)
             self.assertEqual(game["target_word"], "BEGUN")
 
@@ -89,8 +91,8 @@ class TestReviewIntegration(unittest.TestCase):
 
             os.unlink(temp_file_path)
 
-    @patch("src.modules.app.get_container")
-    @patch("src.modules.app.get_settings")
+    @patch("src.modules.enhanced_app.get_container")
+    @patch("src.modules.enhanced_app.get_settings")
     def test_app_review_mode_integration(self, mock_settings, mock_container):
         """Test the app's review mode integration."""
         # Mock the container and settings
@@ -99,7 +101,7 @@ class TestReviewIntegration(unittest.TestCase):
         mock_settings.return_value.solver.default_strategy = "entropy"
 
         # Create app instance
-        app = WordleSolverApp()
+        app = EnhancedWordleSolverApp()
 
         # Mock the UI component
         app._components["ui"] = Mock()
@@ -134,9 +136,12 @@ class TestReviewIntegration(unittest.TestCase):
 
             # Test game simulation display with mocked input
             game = games[0]
-            with patch("rich.console.Console.print") as mock_print, patch(
-                "src.frontend.cli.input_handler.InputHandler.get_continue_prompt"
-            ) as mock_input:
+            with (
+                patch("rich.console.Console.print") as mock_print,
+                patch(
+                    "src.frontend.cli.input_handler.InputHandler.get_continue_prompt"
+                ) as mock_input,
+            ):
                 mock_input.return_value = ""
                 cli.simulate_game_display(game)
                 mock_print.assert_called()
