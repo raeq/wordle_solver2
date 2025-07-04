@@ -194,3 +194,114 @@ class GameStateChangedEvent(GameEvent):
             }
         )
         return data
+
+
+class GameStartedEvent(GameEvent):
+    """Event fired when a new game is started."""
+
+    event_type = EventType.GAME_STARTED
+
+    def __init__(self, game_id: str, mode: str = None, source: str = None):
+        """Initialize a game started event.
+
+        Args:
+            game_id: The unique identifier for the game
+            mode: The mode in which the game is played (optional)
+            source: Identifier of the component that generated the event
+        """
+        super().__init__(source)
+        self.game_id = game_id
+        self.mode = mode
+
+    def get_event_data(self) -> Dict[str, Any]:
+        """Get game started event data.
+
+        Returns:
+            Dictionary containing event data including game ID and mode
+        """
+        data = super().get_event_data()
+        data.update({"game_id": self.game_id, "mode": self.mode})
+        return data
+
+
+class GameEndedEvent(GameEvent):
+    """Event fired when a game ends (won or lost)."""
+
+    event_type = EventType.GAME_ENDED
+
+    def __init__(
+        self,
+        game_id: str,
+        state: GameState,
+        guesses: int,
+        is_won: bool,
+        target_word: str = None,
+        mode: str = None,
+        source: str = None,
+    ):
+        """Initialize a game ended event.
+
+        Args:
+            game_id: The unique identifier for the game
+            state: The final state of the game (GameState enum value)
+            guesses: The number of guesses taken
+            is_won: Whether the game was won or lost
+            target_word: The target word (optional, for lost games)
+            mode: The mode in which the game was played (optional)
+            source: Identifier of the component that generated the event
+
+        Raises:
+            EventValidationError: If state is not a GameState enum value
+        """
+        super().__init__(source)
+        self.game_id = game_id
+        self.state = state
+        self.guesses = guesses
+        self.is_won = is_won
+        self.target_word = target_word
+        self.mode = mode
+
+    def get_event_data(self) -> Dict[str, Any]:
+        """Get game ended event data.
+
+        Returns:
+            Dictionary containing event data including game ID, final state, and guesses
+        """
+        data = super().get_event_data()
+        data.update(
+            {
+                "game_id": self.game_id,
+                "state": str(self.state),
+                "guesses": self.guesses,
+                "is_won": self.is_won,
+                "target_word": self.target_word,
+                "mode": self.mode,
+            }
+        )
+        return data
+
+
+class GameSaveSuccessEvent(GameEvent):
+    """Event fired when a game is successfully saved by StatsManager."""
+
+    event_type = EventType.GAME_SAVE_SUCCESS
+
+    def __init__(self, game_record: Dict[str, Any], source: str = None):
+        """Initialize a game save success event.
+
+        Args:
+            game_record: The record of the game that was saved
+            source: Identifier of the component that generated the event
+        """
+        super().__init__(source)
+        self.game_record = game_record
+
+    def get_event_data(self) -> Dict[str, Any]:
+        """Get game save success event data.
+
+        Returns:
+            Dictionary containing event data including the saved game record
+        """
+        data = super().get_event_data()
+        data.update({"game_record": self.game_record})
+        return data

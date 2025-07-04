@@ -6,18 +6,38 @@ import json
 from datetime import datetime
 from typing import Any, Dict, List, Optional, cast
 
+from ...events.event import GameEndedEvent, GameSaveSuccessEvent
+from ...events.observer import GameEventBus, GameStateObserver
 from ..logging_utils import log_method, logger
 
 
-class StatsManager:
+class StatsManager(GameStateObserver):
     """Handles game statistics and history storage/retrieval."""
 
     def __init__(
         self,
         history_file: str = "game_history.json",
+        event_bus: "GameEventBus" = None,
     ):
         self.history_file = history_file
         self.history = self._load_history()
+        self.event_bus = event_bus
+        if self.event_bus:
+            self.event_bus.subscribe(self, event_type="game_ended")
+
+    def notify(self, event):
+        if isinstance(event, GameEndedEvent):
+            self._record_game_event(event)
+
+    def _record_game_event(self, event: GameEndedEvent):
+        self._record_game(
+            guesses=[],  # Not available from event, but could be extended
+            won=event.is_won,
+            attempts=event.guesses,
+            game_id=event.game_id,
+            target_word=event.target_word,
+            mode=event.mode or "manual",
+        )
 
     @log_method("DEBUG")
     def _load_history(self) -> List[Dict[str, Any]]:
@@ -91,6 +111,11 @@ class StatsManager:
 
         self.history.append(game_record)
         self.save_history()
+        # Publish game save success event
+        if self.event_bus:
+            self.event_bus.publish(
+                GameSaveSuccessEvent(game_record=game_record, source="StatsManager")
+            )
 
     @log_method("DEBUG")
     def get_stats(self) -> Dict[str, Any]:

@@ -6,6 +6,9 @@ import secrets  # More secure random number generation
 import string
 from typing import Dict, List, Tuple
 
+from ...events.enums import GameState
+from ...events.event import GameEndedEvent, GameStartedEvent
+from ...events.observer import GameEventBus
 from ..logging_utils import log_method, logger, set_game_id
 from .exceptions import (
     GameStateError,
@@ -21,7 +24,7 @@ class GameEngine:
     """Handles the computer vs player game mode."""
 
     @log_method("DEBUG")
-    def __init__(self):
+    def __init__(self, event_bus: "GameEventBus" = None):
         """
         Initialize a new GameEngine instance.
 
@@ -33,12 +36,9 @@ class GameEngine:
         )
         from .stats_manager import StatsManager  # Import here to avoid circular imports
 
-        self.word_manager = (
-            StatelessWordManager()
-        )  # GameEngine creates and controls its own WordManager
-        self.stats_manager = (
-            StatsManager()
-        )  # GameEngine creates and controls its own StatsManager
+        self.event_bus = event_bus or GameEventBus()
+        self.word_manager = StatelessWordManager()
+        self.stats_manager = StatsManager(event_bus=self.event_bus)
         self.target_word = ""
         self.guesses: List[Tuple[str, str]] = []
         self.max_guesses = DEFAULT_MAX_ATTEMPTS
@@ -94,6 +94,14 @@ class GameEngine:
         # Set the game ID in the logging context
         set_game_id(self._game_id)
 
+        # Publish game started event
+        if self.event_bus:
+            self.event_bus.publish(
+                GameStartedEvent(
+                    game_id=self._game_id, mode=self.game_mode, source="GameEngine"
+                )
+            )
+
         return self.target_word
 
     @log_method("DEBUG")
@@ -138,7 +146,19 @@ class GameEngine:
             self.game_active = False
             # Automatically save the game when it ends
             self._save_game(is_solved)
-
+            # Publish game ended event
+            if self.event_bus:
+                self.event_bus.publish(
+                    GameEndedEvent(
+                        game_id=self._game_id,
+                        state=GameState.GAME_OVER,
+                        guesses=len(self.guesses),
+                        is_won=is_solved,
+                        target_word=self.target_word,
+                        mode=self.game_mode,
+                        source="GameEngine",
+                    )
+                )
         return result, is_solved
 
     @log_method("DEBUG")

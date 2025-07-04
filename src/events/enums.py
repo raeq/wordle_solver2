@@ -30,6 +30,9 @@ class EventType(WordleEnum):
     LETTER_GUESSED = 310
     WORD_GUESSED = 320
     GAME_STATE_CHANGED = 330
+    GAME_STARTED = 340
+    GAME_ENDED = 350
+    GAME_SAVE_SUCCESS = 360
 
 
 class GameState(WordleEnum):
