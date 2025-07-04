@@ -10,6 +10,7 @@ from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
 from .enums import EventType, GameState, LetterState
+from .exceptions import EventValidationError
 
 
 class GameEvent:
@@ -77,8 +78,15 @@ class LetterGuessedEvent(GameEvent):
             letter: The guessed letter
             result: The result (LetterState.CORRECT, LetterState.PRESENT, or LetterState.ABSENT)
             source: Identifier of the component that generated the event
+
+        Raises:
+            TypeError: If letter is not a string
         """
         super().__init__(source)
+        if not isinstance(letter, str):
+            raise EventValidationError(
+                f"Letter must be a string, got {type(letter).__name__}"
+            )
         self.letter = letter
         self.result = result
 
@@ -107,8 +115,15 @@ class WordGuessedEvent(GameEvent):
             word: The guessed word
             results: List of results for each letter (LetterState values)
             source: Identifier of the component that generated the event
+
+        Raises:
+            TypeError: If word is not a string
         """
         super().__init__(source)
+        if not isinstance(word, str):
+            raise EventValidationError(
+                f"Word must be a string, got {type(word).__name__}"
+            )
         self.word = word
         self.results = results
 
@@ -144,8 +159,22 @@ class GameStateChangedEvent(GameEvent):
             new_state: New game state
             metadata: Additional data about the state change
             source: Identifier of the component that generated the event
+
+        Raises:
+            EventValidationError: If either state is not a GameState enum value
         """
         super().__init__(source)
+        if not isinstance(old_state, GameState):
+            raise EventValidationError(
+                f"Old state must be a GameState enum value, got {type(old_state).__name__}",
+                "old_state",
+            )
+        if not isinstance(new_state, GameState):
+            raise EventValidationError(
+                f"New state must be a GameState enum value, got {type(new_state).__name__}",
+                "new_state",
+            )
+
         self.old_state = old_state
         self.new_state = new_state
         self.metadata = metadata or {}
