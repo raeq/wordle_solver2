@@ -88,10 +88,8 @@ class EnhancedGameStateManager:
         if not possible_words:
             return []
 
-        if len(possible_words) <= count:
-            # If we have few words left, prioritize common ones first
-            other_possible = [w for w in possible_words if w not in common_words]
-            return common_words + other_possible
+        # Always use the strategy's logic, even if there are few words left
+        # Rather than bypassing the strategy when len(possible_words) <= count
 
         # Use the legacy strategy interface
         if hasattr(self._current_strategy, "get_top_suggestions"):
@@ -100,13 +98,27 @@ class EnhancedGameStateManager:
                     possible_words, common_words, self.guesses, count, self.word_manager
                 )
             except Exception as e:
-                print(
-                    f"Warning: Legacy strategy failed ({e}), returning possible words"
-                )
-                return possible_words[:count]
+                # Log the error properly instead of just printing
+                import logging
+
+                logger = logging.getLogger(__name__)
+                logger.error(f"Legacy strategy failed: {e}", exc_info=True)
+                # Fallback to a simple prioritization (common words first, then others)
+                prioritized = [w for w in possible_words if w in common_words]
+                other_words = [w for w in possible_words if w not in common_words]
+                return (prioritized + other_words)[:count]
         else:
-            # Ultimate fallback
-            return possible_words[:count]
+            # Ultimate fallback with warning
+            import logging
+
+            logger = logging.getLogger(__name__)
+            logger.warning(
+                f"Strategy {self._strategy_name} does not implement get_top_suggestions"
+            )
+            # Prioritize common words first as a basic fallback strategy
+            prioritized = [w for w in possible_words if w in common_words]
+            other_words = [w for w in possible_words if w not in common_words]
+            return (prioritized + other_words)[:count]
 
     def switch_strategy(self, strategy_name: str, use_stateless: bool = None) -> bool:
         """

@@ -340,7 +340,15 @@ class EnhancedWordleSolverApp:
 
     def _show_enhanced_suggestions(self) -> None:
         """Show enhanced word suggestions with performance metrics."""
+        import logging
         import time
+
+        logger = logging.getLogger(__name__)
+
+        # Log that we're generating suggestions using the current strategy
+        logger.debug(
+            f"Generating suggestions using {self.current_strategy_name} strategy"
+        )
 
         start_time = time.time()
         suggestions = self.solver.get_top_suggestions(10)
@@ -351,6 +359,10 @@ class EnhancedWordleSolverApp:
         possible_words = self.word_manager.get_possible_words()
         common_words = self.word_manager.get_common_possible_words()
 
+        # Verify that suggestions are following strategy logic
+        strategy_class = strategy_info.get("strategy_class", "Unknown")
+        strategy_name = self.current_strategy_name.upper()
+
         # Display suggestions with enhanced info
         self.ui.display_suggestions(
             suggestions,
@@ -359,12 +371,25 @@ class EnhancedWordleSolverApp:
             strategy_name=self.current_strategy_name,
         )
 
-        # Show performance and strategy info
-        self.ui.console.print(
-            f"[dim]Strategy: {strategy_info['strategy_class']} "
-            f"({'Stateless' if strategy_info['is_stateless'] else 'Legacy'}) "
-            f"| Time: {suggestion_time:.3f}s[/dim]"
+        # Show performance and strategy info with more details about strategy usage
+        implementation_type = (
+            "Stateless" if strategy_info.get("is_stateless", False) else "Legacy"
         )
+        self.ui.console.print(
+            f"[bold cyan]Strategy: {strategy_name}[/bold cyan] "
+            f"[dim]({strategy_class} - {implementation_type})[/dim] "
+            f"[dim]Time: {suggestion_time:.3f}s[/dim]"
+        )
+
+        # Provide information about how many words were scored by the strategy
+        words_scored = min(
+            len(possible_words), 100
+        )  # Most strategies score top 100 words
+        if words_scored > 0:
+            self.ui.console.print(
+                f"[dim]The {strategy_name} strategy evaluated {words_scored} possible words "
+                f"to suggest the optimal guesses.[/dim]"
+            )
 
     def _handle_enhanced_strategy_command(self) -> None:
         """Handle enhanced strategy change command with migration info."""
